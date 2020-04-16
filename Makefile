@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/04/12 11:11:07 by rlucas        #+#    #+#                  #
-#    Updated: 2020/04/14 14:01:36 by rlucas        ########   odam.nl          #
+#    Updated: 2020/04/16 16:54:18 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,8 +18,14 @@ OBJDIR = obj/
 INCLUDES = -Iincludes/ -I$(LIBDIR)includes/
 
 SRC = $(SRCDIR)main.c \
-	  $(SRCDIR)builtins.c \
-	  $(SRCDIR)util1.c
+	  $(SRCDIR)read_input.c \
+	  $(SRCDIR)init.c \
+	  $(SRCDIR)exit.c \
+	  $(SRCDIR)lists.c \
+	  $(SRCDIR)hashutils1.c \
+	  $(SRCDIR)tables.c \
+	  $(SRCDIR)hashtable.c \
+	  $(SRCDIR)test.c 
 
 OBJ = $(patsubst $(SRCDIR)%.c,$(OBJDIR)%.o,$(SRC))
 
@@ -51,5 +57,12 @@ clean:
 	@$(MAKE) -C $(LIBDIR) clean
 	@echo "Removing objects directory..."
 	@rm -rf obj/
+
+fclean: clean
+	@echo "Removing libraries and minishell executable..."
+	@$(MAKE) -C $(LIBDIR) fclean
+	@rm -rf $(NAME)
+
+re: fclean all
 
 .PHONY: clean fclean all re bonus compile_library

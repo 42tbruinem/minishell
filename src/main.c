@@ -1,47 +1,51 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   tokens.c                                           :+:    :+:            */
+/*   main.c                                             :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/04/15 13:15:44 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/15 14:53:29 by rlucas        ########   odam.nl         */
+/*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
+/*   Updated: 2020/04/16 16:52:16 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-/* A file testing some of the basic ideas behind "tokens". */
-
 #include <libft.h>
+#include <minishell.h>
 
-#define BUF_SIZE 64
+void	prompt(t_msh *prog)
+{
+	char	*user;
 
-/* strtok() tokenizes strings: takes strings, and splits it up into
- * individual chunks based on a provided divider. */
+	user = get_env_value("USER", prog->env);
+	if (user != NULL)
+		ft_printf("%s:~$ ", user);
+	else
+		ft_printf(":~$ ");
+}
 
-/* Most languages have some functionality to do this, in C, this */
-/* is strtok(...) */
+int	msh_main(t_msh *prog)
+{
+	int		status;
+	char	*input;
+
+	status = 1;
+	while (status)
+	{
+		prompt(prog);
+		status = read_input(&input);
+	}
+	std_exit(prog);
+	return (0);
+}
 
 int	main(void)
 {
-	char	input[BUF_SIZE] = "Goku, Bulma, Vegeta: Trunks, Muten-Roshi";
-	int		i;
-	char	*token;
+	t_msh	*prog;
 
-	i = 0;
-	token = ft_strtok(input, "/");
-	/* Each call to strtok returns a new string (separated by delimiter), */
-	/* until there are no more. */
-	ft_printf("%d:[%p] --- %s\n", i, token, token);
-
-	token = ft_strtok(input, ",: ");
-	ft_printf("%d:[%p] --- %s\n", i, token, token);
-
-	while (token != NULL)
-	{
-		token = ft_strtok(NULL, ",: ");
-		ft_printf("%d:[%p] --- %s\n", i, token, token);
-	}
-	ft_printf("Original string: %s\n", input);
-	return (0);
+	prog = (t_msh *)malloc(sizeof(t_msh));
+	if (!prog)
+		error_exit(prog, MEM_FAIL);
+	init_env(prog);
+	return (msh_main(prog));
 }
