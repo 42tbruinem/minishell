@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/11/11 17:37:15 by rlucas        #+#    #+#                 */
-/*   Updated: 2019/11/20 11:15:18 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/16 20:10:18 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ char		*type_s(t_opts *options, va_list arg)
 
 	temp = va_arg(arg, char *);
 	if (!temp)
-		temp = ft_strdup("(null)");
+		temp = "(null)";
 	len = ft_strlen(temp);
 	if (options->prcs != -1 && (size_t)options->prcs < len)
 		result = (char *)malloc(options->prcs + 1);

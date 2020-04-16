@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 11:54:12 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/16 16:32:04 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/16 18:08:20 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void		free_hashtable(t_env table[ENV_SIZE])
 	i = 0;
 	while (i < ENV_SIZE)
 	{
-		if (table[i].varname != 0)
+		if (table[i].varname != NULL)
 		{
 			free(table[i].varname);
 			free(table[i].value);

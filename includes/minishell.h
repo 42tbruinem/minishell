@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/16 16:36:36 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/16 19:51:42 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct	s_env
 {
 	char		*varname;
 	char		*value;
+	int			duprange;
 }				t_env;
 
 typedef	struct	s_msh
@@ -53,13 +54,16 @@ void			test_list(t_node *head);
 
 unsigned int	hash_42(const char *str);
 int				hashtable_insert(t_env table[ENV_SIZE], char *var, char *value);
+int				check_var_in_range(t_env table[ENV_SIZE], char *var, int range,
+		unsigned int hash_val);
 void			hashtable_print(t_env table[ENV_SIZE]);
+int				hashtable_remove(t_env table[ENV_SIZE], char *var);
 
 /*
 ** Functions to use with hashtables in hashutils*.c.
 */
 
-char			*get_env_value(const char *targetvar, t_env table[ENV_SIZE]);
+char			*get_env_value(char *targetvar, t_env table[ENV_SIZE]);
 
 /*
 ** List functions in lists.c.

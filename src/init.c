@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 11:42:21 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/16 16:32:46 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/16 18:25:31 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	init_hashtable(t_env table[ENV_SIZE])
 	{
 		table[i].varname = NULL;
 		table[i].value = NULL;
+		table[i].duprange = 0;
 		i++;
 	}
 }
