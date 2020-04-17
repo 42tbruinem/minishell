@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/16 20:13:36 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/17 23:48:58 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,9 @@ int	msh_main(t_msh *prog)
 
 int	main(void)
 {
-	t_msh	*prog;
+	t_msh	prog;
 
-	prog = (t_msh *)malloc(sizeof(t_msh));
-	if (!prog)
-		error_exit(prog, MEM_FAIL);
-	init_env(prog);
-	return (msh_main(prog));
+	env_init(&prog);
+	env_print(prog.env);
+//	return (msh_main(&prog));
 }
