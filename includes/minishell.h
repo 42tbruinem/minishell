@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/17 23:52:30 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/18 14:05:05 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,6 @@ enum			e_error
 ** Functions to use with lists in listutils*.c. CURRENTLY OBSOLETE.
 */
 
-// char			*get_env_value(const char *targetvar, t_node *head);
-
 /*
 ** Lookup tables in tables.c.
 */
@@ -55,9 +53,10 @@ char			*error_lookup(int err);
 ** normally.
 */
 
+char			*env_val_get(const char *name, t_var *env);
+void			env_clear(t_var *env, void (*del)(void *));
 void			env_init(t_msh *prog);
 void			env_print(t_var *env);
-
 
 void			error_exit(t_msh *prog, int err);
 void			std_exit(t_msh *prog);

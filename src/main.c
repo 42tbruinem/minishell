@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/17 23:48:58 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/18 14:07:57 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ void	prompt(t_msh *prog)
 {
 	char	*user;
 
-	user = get_env_value("USER", prog->env);
-	if (user != NULL)
+	user = env_val_get("USER", prog->env);
+	if (user)
 		ft_printf("%s:~$ ", user);
 	else
 		ft_printf(":~$ ");
@@ -44,6 +44,5 @@ int	main(void)
 	t_msh	prog;
 
 	env_init(&prog);
-	env_print(prog.env);
-//	return (msh_main(&prog));
+	return (msh_main(&prog));
 }

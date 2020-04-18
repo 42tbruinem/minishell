@@ -14,19 +14,13 @@
 #include <minishell.h>
 #include <libft.h>
 
-char	*get_env_value(const char *targetvar, t_node *head)
+char	*get_env_value(const char *name, t_var *env)
 {
-	t_node		*current;
-	char		*value;
-
-	current = head;
-	while (current != NULL)
+	while (env)
 	{
-		value = (char *)current->data;
-		if(ft_strncmp(targetvar, value, ft_strlen(targetvar)) == 0)
-			if (value[ft_strlen(targetvar)] == '=')
-				return (ft_strchr(value, '=') + 1);
-		current = current->next;
+		if (ft_strcmp(env->name, name) == 0)
+			return (env->val);
+		env = env->next;
 	}
 	return (NULL);
 }

@@ -6,13 +6,37 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/17 23:13:43 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/04/17 23:58:05 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/18 14:07:46 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdlib.h>
 #include "libft.h"
+
+char	*env_val_get(const char *name, t_var *env)
+{
+	while (env)
+	{
+		if (ft_strcmp(env->name, name) == 0)
+			return (env->val);
+		env = env->next;
+	}
+	return (NULL);
+}
+
+void	env_clear(t_var *env, void (*del)(void *))
+{
+	t_var	*delete;
+
+	while (env)
+	{
+		delete = env;
+		env = env->next;
+		del(delete->name);
+		del(delete->val);
+	}
+}
 
 void	env_print(t_var *env)
 {
@@ -48,9 +72,7 @@ char	*var_name(char **str)
 t_var	*var_init(char *str)
 {
 	t_var	*new;
-	size_t	i;
 
-	i = 0;
 	new = malloc(sizeof(t_var));
 	if (!new)
 		return (NULL);

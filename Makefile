@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/04/12 11:11:07 by rlucas        #+#    #+#                  #
-#    Updated: 2020/04/16 16:54:18 by rlucas        ########   odam.nl          #
+#    Updated: 2020/04/18 14:07:28 by tbruinem      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,15 +17,16 @@ SRCDIR = src/
 OBJDIR = obj/
 INCLUDES = -Iincludes/ -I$(LIBDIR)includes/
 
-SRC = $(SRCDIR)main.c \
-	  $(SRCDIR)read_input.c \
-	  $(SRCDIR)init.c \
-	  $(SRCDIR)exit.c \
-	  $(SRCDIR)lists.c \
-	  $(SRCDIR)hashutils1.c \
-	  $(SRCDIR)tables.c \
-	  $(SRCDIR)hashtable.c \
-	  $(SRCDIR)test.c 
+SRC =	$(SRCDIR)main.c \
+	  	$(SRCDIR)read_input.c \
+		$(SRCDIR)init.c \
+		$(SRCDIR)exit.c \
+		$(SRCDIR)lists.c \
+		$(SRCDIR)hashutils1.c \
+		$(SRCDIR)tables.c \
+		$(SRCDIR)hashtable.c \
+		$(SRCDIR)env.c \
+		$(SRCDIR)test.c 
 
 OBJ = $(patsubst $(SRCDIR)%.c,$(OBJDIR)%.o,$(SRC))
 
