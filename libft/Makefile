@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/10/28 15:06:46 by rlucas        #+#    #+#                  #
-#    Updated: 2020/04/16 16:43:09 by rlucas        ########   odam.nl          #
+#    Updated: 2020/04/18 12:08:19 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,7 +63,8 @@ SRCS = ft_isalpha.c ft_memset.c ft_bzero.c \
 	   ft_strcspn.c \
 	   ft_strtok_r.c \
 	   ft_strtok.c \
-	   ft_strcmp.c
+	   ft_strcmp.c \
+	   ft_putchar.c
 
 OBJ = $(notdir $(SRCS:.c=.o))
 

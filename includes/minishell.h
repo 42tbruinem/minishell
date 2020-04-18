@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/16 19:51:42 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/18 21:25:04 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,23 @@
 # define STDOUT 1
 # define STDERR 2
 
+/*
+** Key codes
+*/
+
+# define CTRL_D 4
+# define DEL 127
+# define NEWLINE 10
+# define ESC 27
+# define CTRL 49
+# define LEFT_KEY 68
+# define RIGHT_KEY 67
+# define UP_KEY 65
+# define DOWN_KEY 66
+
 # define ENV_SIZE 200
+
+# include <unistd.h>
 
 typedef struct	s_node
 {
@@ -32,6 +48,26 @@ typedef struct	s_env
 	int			duprange;
 }				t_env;
 
+typedef struct	s_coord
+{
+	int			row;
+	int			col;
+}				t_coord;
+
+typedef struct	s_line
+{
+	char			*prompt;
+	size_t			promptlen;
+	char			*cmd;
+	char			*termtype;
+	char			cap_table[1024];
+	char			*tableptr;
+	size_t			cmd_len;
+	t_coord			max;
+	t_coord			cursor;
+	struct termios	*term;
+}				t_line;
+
 typedef	struct	s_msh
 {
 	t_env		env[ENV_SIZE];
@@ -39,7 +75,9 @@ typedef	struct	s_msh
 
 enum			e_error
 {
-	MEM_FAIL
+	MEM_FAIL,
+	TERM_FAIL,
+	CAP_FAIL
 };
 
 /*
@@ -104,6 +142,6 @@ void			init_env(t_msh *prog);
 ** Core shell functions.
 */
 
-int				read_input(char **input);
+int				read_input(t_line *line, t_msh *prog);
 
 #endif

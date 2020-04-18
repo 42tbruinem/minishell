@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/28 15:16:43 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/16 16:46:34 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/18 12:08:47 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,5 +99,6 @@ size_t				ft_strcspn(const char *s, const char *reject);
 char				*ft_strtok_r(char *str, const char *delim, char **save_ptr);
 char				*ft_strtok(char *str, const char *delim);
 int					ft_strcmp(const char *s1, const char *s2);
+int					ft_putchar(int c);
 
 #endif
