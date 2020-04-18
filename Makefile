@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/04/12 11:11:07 by rlucas        #+#    #+#                  #
-#    Updated: 2020/04/18 14:07:28 by tbruinem      ########   odam.nl          #
+#    Updated: 2020/04/18 14:24:20 by tbruinem      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ SRC =	$(SRCDIR)main.c \
 		$(SRCDIR)tables.c \
 		$(SRCDIR)hashtable.c \
 		$(SRCDIR)env.c \
+		$(SRCDIR)tok.c \
 		$(SRCDIR)test.c 
 
 OBJ = $(patsubst $(SRCDIR)%.c,$(OBJDIR)%.o,$(SRC))

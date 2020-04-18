@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/17 23:13:43 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/04/18 14:07:46 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/18 14:13:33 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ char	*var_name(char **str)
 	if (!end_of_name)
 		return (NULL); //error
 	new = malloc(sizeof(char) * ((end_of_name - *str) + 1));
+	if (!new)
+		return (NULL); //error
 	while (**str && *str < end_of_name)
 	{
 		new[i] = **str;
@@ -78,7 +80,11 @@ t_var	*var_init(char *str)
 		return (NULL);
 	new->len = ft_strlen(str);
 	new->name = var_name(&str);
+	if (!new->name)
+		return (NULL);//error
 	new->val = ft_strdup(str);
+	if (!new->val)
+		return (NULL);//error
 	new->next = NULL;
 	return (new);
 }
@@ -97,6 +103,8 @@ void	env_init(t_msh *prog)
 	while (environ[i])
 	{
 		env->next = var_init(environ[i]);
+		if (!env->next)
+			return ;//error
 		env = env->next;
 		i++;
 	}

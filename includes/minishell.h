@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/18 14:05:05 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/18 14:22:22 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # define STDOUT 1
 # define STDERR 2
 
+# define MAX_TOKSIZE 300
+
 typedef struct s_var	t_var;
 
 struct	s_var
@@ -26,6 +28,22 @@ struct	s_var
 	char		*val;
 	size_t		len;
 	t_var		*next;
+};
+
+typedef struct	s_lexer
+{
+	char	token[MAX_TOKSIZE];
+	char	*raw;
+	size_t	index;
+}				t_lexer;
+
+typedef struct s_token	t_token;
+
+struct	s_token
+{
+	char	*content;
+	int		type;
+	t_token	*next;
 };
 
 typedef	struct	s_msh
@@ -60,6 +78,10 @@ void			env_print(t_var *env);
 
 void			error_exit(t_msh *prog, int err);
 void			std_exit(t_msh *prog);
+
+
+t_token			*tokenize(char *raw);
+void			tokprint(t_token *list);
 
 /*
 ** Initialization functions in init.c.
