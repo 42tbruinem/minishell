@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/14 17:15:28 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/04/18 14:29:39 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/18 15:35:03 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,20 +25,6 @@ enum	e_tokentypes
 	ENDOFARG,
 	DEFAULT,
 };
-
-int		ft_chrmatchs(char c, char *set)
-{
-	size_t	i;
-
-	i = 0;
-	while (set[i])
-	{
-		if (c == set[i])
-			return (1);
-		i++;
-	}
-	return (c == set[i]) ? (1) : (0);
-}
 
 void	tokprint(t_token *list)
 {
@@ -127,7 +113,7 @@ t_token	*new_tok(char *tok, size_t type)
 
 void	add_to_tok(t_lexer *lex, char *last, char *exception)
 {
-	if (!ft_chrmatchs(*lex->raw, exception))
+	if (!ft_strchr(exception, *lex->raw))
 	{
 		lex->token[lex->index] = *lex->raw;
 		lex->index++;
@@ -151,8 +137,10 @@ void	stringquote(t_lexer *lex)
 	{
 		if (last == '\\')
 			escaper(lex, &last);
-		else
+		else if (*(lex->raw + 1) == '\"')
 			add_to_tok(lex, &last, "\\");
+		else
+			add_to_tok(lex, &last, "");
 	}
 	if (*lex->raw != '"')
 	{
@@ -225,10 +213,10 @@ t_token	*gen_token(char *raw)
 	if (raw)
 		lex.raw = raw;
 	lex.index = 0;
-	if (ft_chrmatchs(*lex.raw, ";|><"))
+	if (ft_strchr(";|><", *lex.raw))
 		return (special_tok(&lex));
 	while (lex.index < MAX_TOKSIZE && *lex.raw &&
-	(!ft_chrmatchs(*lex.raw, "; |><") || last == '\\'))
+	(!ft_strchr("; |><", *lex.raw) || last == '\\'))
 		token_creation(&lex, &last);
 	lex.token[lex.index] = '\0';
 	if (lex.index == 0 && *lex.raw != ' ')
