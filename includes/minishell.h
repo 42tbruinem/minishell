@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/18 21:25:04 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/20 14:11:01 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ typedef struct	s_line
 	size_t			promptlen;
 	char			*cmd;
 	char			*termtype;
-	char			cap_table[1024];
+	char			cap_table[2048];
 	char			*tableptr;
 	size_t			cmd_len;
 	t_coord			max;
@@ -79,6 +79,16 @@ enum			e_error
 	TERM_FAIL,
 	CAP_FAIL
 };
+
+/*
+** TERMCAPS FUNCTIONS: in tc_funcs*.c
+*/
+
+void			refresh(t_line *line);
+int				add_char(t_line *line, char buf[6]);
+int				delete_char(t_line *line);
+int				cursor_left(t_line *line, int specialcase);
+int				cursor_right(t_line *line);
 
 /*
 ** Test functions in test.c that will be removed prior to submission.
@@ -113,7 +123,7 @@ int				new_node_at_front(void *data, t_node **head);
 int				new_node_at_back(void *data, t_node **head);
 
 /*
-** Functions to use with lists in listutils*.c. CURRENTLY OBSOLETE.
+** Functions to use with lists in listutils*.c. CURRENTLY deprecated.
 */
 
 // char			*get_env_value(const char *targetvar, t_node *head);

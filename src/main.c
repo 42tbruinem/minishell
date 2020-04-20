@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/18 21:54:51 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/20 14:40:26 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ char	*prompt(t_msh *prog, t_line *line)
 	{
 		line->promptlen = ft_strlen(user) + 4;
 		prompt = ft_str3join("\033[32m", user, "\033[39m:~$ ");
-		free(user);
 		if (!prompt)
 			return (NULL);
 		return (prompt);
@@ -128,6 +127,7 @@ int	msh_main(t_msh *prog)
 		status = read_input(line, prog);
 		/* status = exec_input(&input); */
 	}
+	ft_printf("\nInput was: %s\n", line->cmd);
 	std_exit(prog);
 	return (0);
 }
