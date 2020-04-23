@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/20 14:45:00 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/23 21:11:25 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,17 @@ int		handle_in(t_line *line, char buf[6])
 	return (0);
 }
 
+void	refresh_cursor(t_line *line)
+{
+	if (line->scroll == SCROLLDOWN)
+	{
+		tputs(tgetstr("sf", NULL), 1, &ft_putchar);
+		line->scroll = 0;
+	}
+	tputs(tgoto(tgetstr("ch", NULL), line->cursor.row, line->cursor.col),
+			1, &ft_putchar);
+}
+
 int		read_input(t_line *line, t_msh *prog)
 {
 	char		buf[6];
@@ -60,6 +71,7 @@ int		read_input(t_line *line, t_msh *prog)
 
 	line->cursor.col = line->promptlen;
 	line->cursor.row = 0;
+	line->total_rows = 0;
 	tputs(tgoto(tgetstr("ch", NULL), 0, line->cursor.col), 1, &ft_putchar);
 	line->cmd_len = 0;
 	send = 0;
@@ -70,8 +82,8 @@ int		read_input(t_line *line, t_msh *prog)
 		ft_bzero(buf, 6);
 		read(STDIN, buf, 6);
 		send = handle_in(line, buf);
-		tputs(tgoto(tgetstr("ch", NULL), line->cursor.row, line->cursor.col),
-				1, &ft_putchar);
+		line->total_rows = (line->cmd_len + line->promptlen) / 88;
+		refresh_cursor(line);
 	}
 	return (0);
 }

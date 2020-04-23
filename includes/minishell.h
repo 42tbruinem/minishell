@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/20 14:11:01 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/23 20:36:31 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,12 @@
 # define RIGHT_KEY 67
 # define UP_KEY 65
 # define DOWN_KEY 66
+
+/*
+** For scroll direction when using SCROLL in tputs.
+*/
+
+# define SCROLLDOWN 1
 
 # define ENV_SIZE 200
 
@@ -65,6 +71,8 @@ typedef struct	s_line
 	size_t			cmd_len;
 	t_coord			max;
 	t_coord			cursor;
+	int				scroll;
+	int				total_rows;
 	struct termios	*term;
 }				t_line;
 
