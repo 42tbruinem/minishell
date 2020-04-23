@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/23 20:36:31 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/23 23:19:22 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # define STDIN 0
 # define STDOUT 1
 # define STDERR 2
+
 
 /*
 ** Key codes
@@ -40,6 +41,7 @@
 # define ENV_SIZE 200
 
 # include <unistd.h>
+# include <termios.h>
 
 typedef struct	s_node
 {
@@ -73,7 +75,7 @@ typedef struct	s_line
 	t_coord			cursor;
 	int				scroll;
 	int				total_rows;
-	struct termios	*term;
+	struct termios	term;
 }				t_line;
 
 typedef	struct	s_msh

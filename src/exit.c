@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 11:54:12 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/16 18:08:20 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/23 23:19:53 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,11 @@ void		error_exit(t_msh *prog, int err)
 	ft_printf_fd(2, "Error %d - ", err);
 	ft_printf_fd(2, error_lookup(err));
 	free_hashtable(prog->env);
-	free(prog);
 	exit(err);
 }
 
 void		std_exit(t_msh *prog)
 {
 	free_hashtable(prog->env);
-	free(prog);
 	exit(0);
 }

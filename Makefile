@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/04/12 11:11:07 by rlucas        #+#    #+#                  #
-#    Updated: 2020/04/20 11:05:00 by rlucas        ########   odam.nl          #
+#    Updated: 2020/04/23 23:12:35 by tbruinem      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,9 @@ SRC = $(SRCDIR)main.c \
 OBJ = $(patsubst $(SRCDIR)%.c,$(OBJDIR)%.o,$(SRC))
 
 FLAGS = -Wall -Wextra -Werror
+ifdef DEBUG
+FLAGS += -g -fsanitize=address
+endif
 
 all: $(NAME)
 

@@ -6,12 +6,12 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/23 21:11:25 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/23 22:46:31 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
-#include <minishell.h>
+#include "minishell.h"
 #include <termcap.h>
 #include <termios.h>
 
@@ -38,13 +38,13 @@ int		esc_cursor_or_history(t_line *line, char buf[6])
 int		handle_in(t_line *line, char buf[6])
 {
 	if (ft_isalnum(buf[0]) || buf[0] == ' ')
-		if(add_char(line, buf) == -1)
+		if (add_char(line, buf) == -1)
 			return (-1);
 	if (buf[0] == DEL)
-		if(delete_char(line) == -1)
+		if (delete_char(line) == -1)
 			return (-1);
 	if (buf[0] == ESC)
-		if(esc_cursor_or_history(line, buf) == -1)
+		if (esc_cursor_or_history(line, buf) == -1)
 			return (-1);
 	if (buf[0] == NEWLINE)
 		return (1);

@@ -6,13 +6,12 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/23 20:06:59 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/23 23:18:46 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <minishell.h>
-
 #include <termcap.h>
 #include <termios.h>
 
@@ -64,81 +63,57 @@ static int	init_caps(t_line *line)
 	return (0);
 }
 
-static struct termios	*init_term(void)
+int	init_term(struct termios *term)
 {
-	struct termios	*term;
-
-	term = (struct termios *)ft_calloc(1, sizeof(struct termios));
-	if (!term)
-		return (NULL);
-	if (!isatty(STDIN))
-	{
-		free(term);
-		return (NULL);
-	}
-	if (tcgetattr(STDIN, term) < 0)
-	{
-		free(term);
-		return (NULL);
-	}
+	if (!isatty(STDIN) || tcgetattr(STDIN, term) < 0)
+		return (1);
 	/* term->c_iflag &= ~(INLCR) */
-	term->c_iflag &= ~(IMAXBEL);
+	term->c_iflag &= ~(IMAXBEL); //change certain attributes in termios 1/4
 	/* INLCR - When \n is input, program recieves it as \r. */
 	/* IMAXBEL - If input buffer is filled, send a BEL to the terminal. */
-	term->c_lflag &= ~(ECHO | ICANON);
+	term->c_lflag &= ~(ECHO | ICANON); //change certain attributes in termios 2/4
 	/* ECHO - display input characters. */
 	/* ICANON - NON-CANONICAL Input. This is required to allow our program to */
 	/* 	control input editing facilities. */
-	term->c_cc[VMIN] = 1;
-	term->c_cc[VTIME] = 0;
-	if (cfsetispeed(term, B9600) < 0 || cfsetospeed(term, B9600) < 0)
-	{
-		free(term);
-		return (NULL);
-	}
-	if (tcsetattr(STDIN, TCSAFLUSH, term) < 0)
-	{
-		free(term);
-		return (NULL);
-	}
-	return (term);
+	term->c_cc[VMIN] = 1; //change certain attributes in termios 3/4
+	term->c_cc[VTIME] = 0; //change certain attributes in termios  4/4
+
+//The change occurs after all output written to the file descriptor has been transmitted, and all input so far received but not read is discarded before the change is made
+	if (cfsetispeed(term, B9600) < 0 || cfsetospeed(term, B9600) < 0 || 
+		tcsetattr(STDIN, TCSAFLUSH, term) < 0)
+		return (1);
+	return (0);
 }
 
 int	msh_main(t_msh *prog)
 {
 	int		status;
-	t_line	*line;
+	t_line	line;
 
-	line = (t_line *)ft_calloc(1, sizeof(t_line));
-	if (!line)
-		error_exit(prog, MEM_FAIL);
-	line->term = init_term();
-	if (!line->term)
-		error_exit(prog, TERM_FAIL);
-	if (init_caps(line) == -1)
+	line = (t_line){0};
+	if (init_term(&line.term))
+		return (1);
+	if (init_caps(&line) == -1)
 		error_exit(prog, CAP_FAIL);
 	status = 1;
-	line->prompt = prompt(prog, line);
-	line->max.col = tgetnum("co");
-	ft_printf("maxcols = %d\n", line->max.col);
-	line->max.row = tgetnum("li");
+	line.prompt = prompt(prog, &line);
+	line.max.col = tgetnum("co");
+	ft_printf("maxcols = %d\n", line.max.col);
+	line.max.row = tgetnum("li");
 	while (status)
 	{
-		status = read_input(line, prog);
+		status = read_input(&line, prog);
 		/* status = exec_input(&input); */
 	}
-	ft_printf("\nInput was: %s\n", line->cmd);
+	ft_printf("\nInput was: %s\n", line.cmd);
 	std_exit(prog);
 	return (0);
 }
 
 int	main(void)
 {
-	t_msh	*prog;
+	t_msh	prog;
 
-	prog = (t_msh *)malloc(sizeof(t_msh));
-	if (!prog)
-		error_exit(prog, MEM_FAIL);
-	init_env(prog);
-	return (msh_main(prog));
+	init_env(&prog);
+	return (msh_main(&prog));
 }
