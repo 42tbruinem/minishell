@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/24 15:58:57 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/24 18:14:08 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	refresh_cursor(t_line *line)
 		tputs(tgetstr("sf", NULL), 1, &ft_putchar);
 		line->scroll = 0;
 	}
-	tputs(tgoto(tgetstr("ch", NULL), line->cursor.row, line->cursor.col),
+	tputs(tgoto(tgetstr("cm", NULL), line->cursor.col, line->cursor.row),
 			1, &ft_putchar);
 }
 
@@ -72,10 +72,9 @@ int		read_input(t_line *line, t_msh *prog)
 	line->cursor.col = line->promptlen;
 	line->cursor.row = 0;
 	line->total_rows = 0;
-	tputs(tgoto(tgetstr("ch", NULL), 0, line->cursor.col), 1, &ft_putchar);
-	line->cmd_len = 0;
 	send = 0;
 	(void)prog;
+	tputs(tgetstr("cl", NULL), 1, &ft_putchar);
 	refresh(line);
 	while (!send)
 	{
@@ -83,6 +82,8 @@ int		read_input(t_line *line, t_msh *prog)
 		read(STDIN, buf, 6);
 		send = handle_in(line, buf);
 		refresh_cursor(line);
+		line->total_rows = (line->cmd_len + line->promptlen) /
+			(line->max.col);
 	}
 	return (0);
 }
