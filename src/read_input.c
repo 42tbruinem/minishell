@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/24 18:14:08 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/24 20:03:52 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,5 +85,6 @@ int		read_input(t_line *line, t_msh *prog)
 		line->total_rows = (line->cmd_len + line->promptlen) /
 			(line->max.col);
 	}
+	line->cursor.row = line->total_rows + 1;
 	return (0);
 }

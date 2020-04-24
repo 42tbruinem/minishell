@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/20 10:59:21 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/24 18:19:59 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/24 20:01:25 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,15 +79,15 @@ void	insert_char(t_line *line, char c)
 
 int		add_char(t_line *line, char buf[6])
 {
+	int		i;
+
 	line->cmd = ft_realloc(line->cmd, 1);
 	if (!line->cmd)
 		return (-1);
 	insert_char(line, buf[0]);
 	line->cmd_len++;
 	line->cursor.col++;
-	line->total_rows = (line->cmd_len + line->promptlen) /
-		(line->max.col);
-	if (line->cursor.col >= line->max.col)
+	if (line->cursor.col > line->max.col)
 	{
 		line->cursor.col = 0;
 		line->cursor.row++;
@@ -96,6 +96,18 @@ int		add_char(t_line *line, char buf[6])
 	tputs(tgetstr("im", NULL), 1, &ft_putchar);
 	ft_putchar(buf[0]);
 	tputs(tgetstr("ei", NULL), 1, &ft_putchar);
+	line->total_rows = (line->cmd_len + line->promptlen) /
+		(line->max.col);
+	i = (line->cursor.col == 0) ? line->cursor.row : line->cursor.row + 1;
+	while (i <= line->total_rows)
+	{
+		tputs(tgoto(tgetstr("cm", NULL),
+				0, i), 1, &ft_putchar);
+		tputs(tgetstr("im", NULL), 1, &ft_putchar);
+		ft_putchar(line->cmd[(i) * (line->max.col) - line->promptlen]);
+		tputs(tgetstr("ei", NULL), 1, &ft_putchar);
+		i++;
+	}
 	return (0);
 }
 
