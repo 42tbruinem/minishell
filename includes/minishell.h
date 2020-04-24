@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/23 23:19:22 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/24 15:21:14 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ enum			e_error
 void			refresh(t_line *line);
 int				add_char(t_line *line, char buf[6]);
 int				delete_char(t_line *line);
-int				cursor_left(t_line *line, int specialcase);
+int				cursor_left(t_line *line);
 int				cursor_right(t_line *line);
 
 /*

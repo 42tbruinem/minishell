@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/23 23:18:46 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/24 12:59:15 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,9 @@ int	init_term(struct termios *term)
 	term->c_cc[VMIN] = 1; //change certain attributes in termios 3/4
 	term->c_cc[VTIME] = 0; //change certain attributes in termios  4/4
 
-//The change occurs after all output written to the file descriptor has been transmitted, and all input so far received but not read is discarded before the change is made
+	/* The change occurs after all output written to the file descriptor has been */
+	/* 	transmitted, and all input so far received but not read is discarded */
+	/* 	before the change is made */
 	if (cfsetispeed(term, B9600) < 0 || cfsetospeed(term, B9600) < 0 || 
 		tcsetattr(STDIN, TCSAFLUSH, term) < 0)
 		return (1);

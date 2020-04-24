@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/23 22:46:31 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/24 15:58:57 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int		cursor_move_or_history(t_line *line, int c)
 	if (c == RIGHT_KEY)
 		cursor_right(line);
 	if (c == LEFT_KEY)
-		cursor_left(line, 0);
+		cursor_left(line);
 	return (0);
 }
 
@@ -82,7 +82,6 @@ int		read_input(t_line *line, t_msh *prog)
 		ft_bzero(buf, 6);
 		read(STDIN, buf, 6);
 		send = handle_in(line, buf);
-		line->total_rows = (line->cmd_len + line->promptlen) / 88;
 		refresh_cursor(line);
 	}
 	return (0);

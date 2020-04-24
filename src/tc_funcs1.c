@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/20 10:59:21 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/23 21:11:04 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/24 16:07:45 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@ int		add_char(t_line *line, char buf[6])
 	insert_char(line, buf[0]);
 	line->cmd_len++;
 	line->cursor.col++;
+	line->total_rows = (line->cmd_len + line->promptlen) /
+		(line->max.col);
 	if (line->cursor.col >= line->max.col)
 	{
 		line->cursor.col = 0;
@@ -118,13 +120,14 @@ int		delete_char(t_line *line)
 {
 	int		i;
 
-	i = 0;
 	if (line->cmd_len == 0)
 		return (0);
 	remove_char(line);
 	line->cmd = ft_realloc(line->cmd, -1);
 	line->cursor.col--;
 	line->cmd_len--;
+	line->total_rows = (line->cmd_len + line->promptlen) /
+		(line->max.col);
 	if (!line->cmd)
 		return (-1);
 	if (line->cursor.col < 0)
@@ -134,17 +137,24 @@ int		delete_char(t_line *line)
 		tputs(tgetstr("sr", NULL), 1, &ft_putchar);
 	}
 	tputs(tgoto(tgetstr("ch", NULL),
-				0, line->cursor.col), 1, &ft_putchar);
-	tputs(tgetstr("dm", NULL), 1, &ft_putchar);
+				line->cursor.row, line->cursor.col), 1, &ft_putchar);
 	tputs(tgoto(tgetstr("dc", NULL), 1, 0), 1, &ft_putchar);
-	while (i < line->total_rows)
-	{
-		tputs(tgoto(tgetstr("ch", NULL),
-					i, 0), 1, &ft_putchar);
-		tputs(tgetstr("bc", NULL), 1, &ft_putchar);
-		i++;
-	}
-	tputs(tgetstr("ed", NULL), 1, &ft_putchar);
+	i = line->cursor.row;
+	(void)i;
+	/* while (i < line->total_rows) */
+	/* { */
+	/* 	tputs(tgoto(tgetstr("ch", NULL), */
+	/* 			i, line->max.col), 1, &ft_putchar); */
+	/* 	tputs(tgetstr("im", NULL), 1, &ft_putchar); */
+	/* 	tputs(line->cmd + (i + 1) * (line->max.col) - line->promptlen, 1, &ft_putchar); */
+	/* 	tputs(tgetstr("ei", NULL), 1, &ft_putchar); */
+	/* 	tputs(tgoto(tgetstr("ch", NULL), */
+	/* 			i + 1, 0), 1, &ft_putchar); */
+	/* 	tputs(tgoto(tgetstr("dc", NULL), 1, 0), 1, &ft_putchar); */
+	/* 	i++; */
+	/* } */
+	/* if (i != line->cursor.row) */
+	/* 	tputs(tgetstr("sr", NULL), 1, &ft_putchar); */
 	return (0);
 }
 
@@ -152,15 +162,14 @@ int		delete_char(t_line *line)
 ** cursor_left() moves the cursor one position to the left
 */
 
-int		cursor_left(t_line *line, int specialcase)
+int		cursor_left(t_line *line)
 {
-	if (line->cursor.row == 0 && line->cursor.col <= (int)line->promptlen &&
-			specialcase != 1)
+	if (line->cursor.row == 0 && line->cursor.col <= (int)line->promptlen)
 		return (0);
 	line->cursor.col--;
 	if (line->cursor.col < 0)
 	{
-		line->cursor.col = line->max.col;
+		line->cursor.col = line->max.col - 1;
 		line->cursor.row--;
 		tputs(tgetstr("sr", NULL), 1, &ft_putchar);
 	}
@@ -175,11 +184,11 @@ int		cursor_right(t_line *line)
 			(int)(line->promptlen + line->cmd_len))
 		return (0);
 	line->cursor.col++;
-	if (line->cursor.col > line->max.col)
+	if (line->cursor.col >= line->max.col)
 	{
 		line->cursor.col = 0;
 		line->cursor.row++;
-		tputs(tgetstr("sf", NULL), 1, &ft_putchar);
+		line->scroll = SCROLLDOWN;
 	}
 	tputs(tgoto(tgetstr("ch", NULL),
 				line->cursor.row, line->cursor.col), 1, &ft_putchar);
