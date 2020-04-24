@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/20 10:59:21 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/24 20:01:25 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/24 20:30:44 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int		add_char(t_line *line, char buf[6])
 	insert_char(line, buf[0]);
 	line->cmd_len++;
 	line->cursor.col++;
-	if (line->cursor.col > line->max.col)
+	if (line->cursor.col >= line->max.col)
 	{
 		line->cursor.col = 0;
 		line->cursor.row++;
