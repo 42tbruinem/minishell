@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/17 23:13:43 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/04/27 14:47:43 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/27 22:31:43 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,40 @@ char	*var_name(char **str)
 	new[i] = 0;
 	(*str)++;
 	return (new);
+}
+
+size_t	lstsize(t_var *env)
+{
+	size_t	len;
+
+	len = 0;
+	while (env)
+	{
+		len++;
+		env = env->next;
+	}
+	return (len);
+}
+
+char	**env_to_str(t_var *env)
+{
+	size_t	len;
+	size_t	i;
+	char	**str;
+
+	i = 0;
+	len = lstsize(env);
+	str = malloc(sizeof(char *) * (len + 1));
+	if (!str)
+		return (NULL);
+	while (i < len)
+	{
+		str[i] = ft_str3join(env->name, "=", env->val);
+		i++;
+		env = env->next;
+	}
+	str[i] = 0;
+	return (str);
 }
 
 t_var	*var_init(char *str)

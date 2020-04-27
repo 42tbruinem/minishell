@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/27 22:04:57 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/27 22:44:47 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <termcap.h>
 #include <termios.h>
 
-static char	*ft_str3join(const char *s1, const char *s2, const char *s3)
+char	*ft_str3join(const char *s1, const char *s2, const char *s3)
 {
 	char		*newstring;
 
@@ -87,27 +87,39 @@ int	init_term(struct termios *term)
 	return (0);
 }
 
-int	msh_main(t_msh *prog)
+void	init_line(t_msh *prog, t_line *line)
 {
-	int		status;
-	t_line	line;
-
-	line = (t_line){0};
-	if (init_term(&line.term))
-		return (1);
-	if (init_caps(&line) == -1)
+	*line = (t_line){0};
+	if (init_term(&line->term) || init_caps(line) == -1)
 		error_exit(prog, CAP_FAIL);
+	line->prompt = prompt(prog, line);
+	line->max.col = tgetnum("co");
+	ft_printf("maxcols = %d\n", line->max.col);
+	line->max.row = tgetnum("li");
+}
+
+void	get_cmd(t_msh *prog, t_line *line)
+{
+	int	status;
+
 	status = 1;
-	line.prompt = prompt(prog, &line);
-	line.max.col = tgetnum("co");
-	ft_printf("maxcols = %d\n", line.max.col);
-	line.max.row = tgetnum("li");
 	while (status)
 	{
-		status = read_input(&line, prog);
+		status = read_input(line, prog);
 		/* status = exec_input(&input); */
 	}
+}
+
+int	msh_main(t_msh *prog)
+{
+	t_line	line;
+	t_token	*args;
+
+	init_line(prog, &line);
+	get_cmd(prog, &line);
 	ft_printf("\nInput was: %s\n", line.cmd);
+	args = tokenize(line.cmd);
+	tokprint(args);
 	std_exit(prog);
 	return (0);
 }

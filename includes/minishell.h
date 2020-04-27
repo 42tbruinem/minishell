@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/27 22:06:04 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/27 22:44:55 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,16 @@ enum			e_error
 	CAP_FAIL
 };
 
+enum			e_tokentypes
+{
+	PIPE,
+	TRUNC,
+	APPEND,
+	REDIRECT,
+	ENDOFARG,
+	DEFAULT,
+};
+
 /*
 ** TERMCAPS FUNCTIONS: in tc_funcs*.c
 */
@@ -124,12 +134,20 @@ char			*error_lookup(int err);
 ** normally.
 */
 
+typedef void	(*t_escapef)(t_lexer *lex, char *last);
+
+char			*ft_str3join(const char *s1, const char *s2, const char *s3);
+
 void			error_exit(t_msh *prog, int err);
 void			std_exit(t_msh *prog);
+
+void			tokprint(t_token *list);
+t_token			*tokenize(char *raw);
 
 void			env_init(t_msh *prog);
 char			*env_val_get(const char *name, t_var *env);
 void			env_clear(t_var *env, void (*del)(void *));
+void			env_print(t_var *env);
 
 /*
 ** Core shell functions.

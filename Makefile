@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/04/12 11:11:07 by rlucas        #+#    #+#                  #
-#    Updated: 2020/04/27 22:15:46 by tbruinem      ########   odam.nl          #
+#    Updated: 2020/04/27 22:45:08 by tbruinem      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ SRC =	$(SRCDIR)main.c \
 		$(SRCDIR)read_input.c \
 		$(SRCDIR)exit.c \
 		$(SRCDIR)tc_funcs1.c \
+		$(SRCDIR)tok.c \
 		$(SRCDIR)tables.c \
 		$(SRCDIR)env.c
 
