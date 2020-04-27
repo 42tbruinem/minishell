@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/24 12:59:15 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/27 22:04:57 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	*prompt(t_msh *prog, t_line *line)
 	char	*user;
 	char	*prompt;
 
-	user = get_env_value("USER", prog->env);
+	user = env_val_get("USER", prog->env);
 	if (user != NULL)
 	{
 		line->promptlen = ft_strlen(user) + 4;
@@ -81,7 +81,7 @@ int	init_term(struct termios *term)
 	/* The change occurs after all output written to the file descriptor has been */
 	/* 	transmitted, and all input so far received but not read is discarded */
 	/* 	before the change is made */
-	if (cfsetispeed(term, B9600) < 0 || cfsetospeed(term, B9600) < 0 || 
+	if (cfsetispeed(term, B9600) < 0 || cfsetospeed(term, B9600) < 0 ||
 		tcsetattr(STDIN, TCSAFLUSH, term) < 0)
 		return (1);
 	return (0);
@@ -116,6 +116,6 @@ int	main(void)
 {
 	t_msh	prog;
 
-	init_env(&prog);
+	env_init(&prog);
 	return (msh_main(&prog));
 }

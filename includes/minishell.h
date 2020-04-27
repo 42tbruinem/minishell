@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/24 15:21:14 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/27 22:06:04 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # define STDIN 0
 # define STDOUT 1
 # define STDERR 2
-
 
 /*
 ** Key codes
@@ -39,22 +38,36 @@
 # define SCROLLDOWN 1
 
 # define ENV_SIZE 200
+# define MAX_TOKSIZE 300
 
 # include <unistd.h>
 # include <termios.h>
 
-typedef struct	s_node
-{
-	void			*data;
-	struct s_node	*next;
-}				t_node;
+typedef struct s_var	t_var;
 
-typedef struct	s_env
+struct	s_var
 {
-	char		*varname;
-	char		*value;
-	int			duprange;
-}				t_env;
+	char		*name;
+	char		*val;
+	size_t		len;
+	t_var		*next;
+};
+
+typedef struct	s_lexer
+{
+	char		token[MAX_TOKSIZE];
+	char		*raw;
+	size_t		index;
+}				t_lexer;
+
+typedef struct s_token	t_token;
+
+struct			s_token
+{
+	char		*content;
+	int			type;
+	t_token		*next;
+};
 
 typedef struct	s_coord
 {
@@ -80,7 +93,7 @@ typedef struct	s_line
 
 typedef	struct	s_msh
 {
-	t_env		env[ENV_SIZE];
+	t_var		*env;
 }				t_msh;
 
 enum			e_error
@@ -101,44 +114,6 @@ int				cursor_left(t_line *line);
 int				cursor_right(t_line *line);
 
 /*
-** Test functions in test.c that will be removed prior to submission.
-*/
-
-void			test_list(t_node *head);
-
-/*
-** Hashtable functions in hashtable.c.
-*/
-
-unsigned int	hash_42(const char *str);
-int				hashtable_insert(t_env table[ENV_SIZE], char *var, char *value);
-int				check_var_in_range(t_env table[ENV_SIZE], char *var, int range,
-		unsigned int hash_val);
-void			hashtable_print(t_env table[ENV_SIZE]);
-int				hashtable_remove(t_env table[ENV_SIZE], char *var);
-
-/*
-** Functions to use with hashtables in hashutils*.c.
-*/
-
-char			*get_env_value(char *targetvar, t_env table[ENV_SIZE]);
-
-/*
-** List functions in lists.c.
-*/
-
-t_node			*new_node(void *data);
-t_node			*new_list(void *data);
-int				new_node_at_front(void *data, t_node **head);
-int				new_node_at_back(void *data, t_node **head);
-
-/*
-** Functions to use with lists in listutils*.c. CURRENTLY deprecated.
-*/
-
-// char			*get_env_value(const char *targetvar, t_node *head);
-
-/*
 ** Lookup tables in tables.c.
 */
 
@@ -152,11 +127,9 @@ char			*error_lookup(int err);
 void			error_exit(t_msh *prog, int err);
 void			std_exit(t_msh *prog);
 
-/*
-** Initialization functions in init.c.
-*/
-
-void			init_env(t_msh *prog);
+void			env_init(t_msh *prog);
+char			*env_val_get(const char *name, t_var *env);
+void			env_clear(t_var *env, void (*del)(void *));
 
 /*
 ** Core shell functions.
