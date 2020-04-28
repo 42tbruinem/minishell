@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/27 22:44:55 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/28 01:28:14 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@
 
 # include <unistd.h>
 # include <termios.h>
+
+extern char	**g_termbuff;
 
 typedef struct s_var	t_var;
 
@@ -81,8 +83,7 @@ typedef struct	s_line
 	size_t			promptlen;
 	char			*cmd;
 	char			*termtype;
-	char			cap_table[2048];
-	char			*tableptr;
+	char			*cap_table;
 	size_t			cmd_len;
 	t_coord			max;
 	t_coord			cursor;
@@ -94,6 +95,7 @@ typedef struct	s_line
 typedef	struct	s_msh
 {
 	t_var		*env;
+	t_line		line;
 }				t_msh;
 
 enum			e_error

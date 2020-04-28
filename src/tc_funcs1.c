@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/20 10:59:21 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/24 20:30:44 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/28 02:00:13 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <minishell.h>
 #include <termcap.h>
 #include <termios.h>
+#include "msh_term.h"
 
 /*
 ** ft_realloc() creates a new string, copies the contents from a previous
@@ -50,14 +51,13 @@ void	refresh(t_line *line)
 	i = 0;
 	while (i < line->cursor.row)
 	{
-		tputs(tgetstr("dl", NULL), 1, &ft_putchar);
-		tputs(tgetstr("up", NULL), 1, &ft_putchar);
+		termcmd(DELETE_LINE, 0, 0, 1);
+		termcmd(MOVE_ROWUP, 0, 0, 1);
 		i++;
 	}
-	tputs(tgetstr("cr", NULL), 1, &ft_putchar);
+	termcmd(CARRIAGE_RETURN, 0, 0, 1);
 	ft_printf("%s%s", line->prompt, line->cmd);
-	tputs(tgoto(tgetstr("cm", NULL), line->cursor.col, line->cursor.row),
-			1, &ft_putchar);
+	termcmd(MOVE_COLROW, line->cursor.col, line->cursor.row, 1);
 }
 
 /*
@@ -93,19 +93,18 @@ int		add_char(t_line *line, char buf[6])
 		line->cursor.row++;
 		line->scroll = SCROLLDOWN;
 	}
-	tputs(tgetstr("im", NULL), 1, &ft_putchar);
+	termcmd(INSERT_START, 0, 0, 1);
 	ft_putchar(buf[0]);
-	tputs(tgetstr("ei", NULL), 1, &ft_putchar);
+	termcmd(INSERT_END, 0, 0, 1);
 	line->total_rows = (line->cmd_len + line->promptlen) /
 		(line->max.col);
 	i = (line->cursor.col == 0) ? line->cursor.row : line->cursor.row + 1;
 	while (i <= line->total_rows)
 	{
-		tputs(tgoto(tgetstr("cm", NULL),
-				0, i), 1, &ft_putchar);
-		tputs(tgetstr("im", NULL), 1, &ft_putchar);
+		termcmd(MOVE_COLROW, 0, i, 1);
+		termcmd(INSERT_START, 0, 0, 1);
 		ft_putchar(line->cmd[(i) * (line->max.col) - line->promptlen]);
-		tputs(tgetstr("ei", NULL), 1, &ft_putchar);
+		termcmd(INSERT_END, 0, 0, 1);
 		i++;
 	}
 	return (0);
@@ -145,22 +144,17 @@ int		delete_char(t_line *line)
 	{
 		line->cursor.col = line->max.col - 1;
 		line->cursor.row--;
-		tputs(tgetstr("sr", NULL), 1, &ft_putchar);
+		termcmd(SCROLL_REV, 0, 0, 1);
 	}
-	tputs(tgoto(tgetstr("cm", NULL),
-				line->cursor.col, line->cursor.row), 1, &ft_putchar);
-	tputs(tgoto(tgetstr("dc", NULL), 1, 0), 1, &ft_putchar);
+	termcmd(MOVE_COLROW, line->cursor.col, line->cursor.row, 1);
+	termcmd(DELETE_CHAR, 1, 0, 1);
 	i = line->cursor.row;
 	while (i < line->total_rows)
 	{
-		tputs(tgoto(tgetstr("cm", NULL),
-				line->max.col, i), 1, &ft_putchar);
-		/* tputs(tgetstr("im", NULL), 1, &ft_putchar); */
+		termcmd(MOVE_COLROW, line->max.col, i, 1);
 		ft_putchar(line->cmd[(i + 1) * (line->max.col) - line->promptlen - 1]);
-		/* tputs(tgetstr("ei", NULL), 1, &ft_putchar); */
-		tputs(tgoto(tgetstr("cm", NULL),
-				0, i + 1), 1, &ft_putchar);
-		tputs(tgoto(tgetstr("dc", NULL), 1, 0), 1, &ft_putchar);
+		termcmd(MOVE_COLROW, 0, i + 1, 1);
+		termcmd(DELETE_CHAR, 1, 0, 1);
 		i++;
 	}
 	return (0);
@@ -179,10 +173,9 @@ int		cursor_left(t_line *line)
 	{
 		line->cursor.col = line->max.col - 1;
 		line->cursor.row--;
-		tputs(tgetstr("sr", NULL), 1, &ft_putchar);
+		termcmd(SCROLL_REV, 0, 0, 1);
 	}
-	tputs(tgoto(tgetstr("cm", NULL),
-				line->cursor.col, line->cursor.row), 1, &ft_putchar);
+	termcmd(MOVE_COLROW, line->cursor.col, line->cursor.row, 1);
 	return (0);
 }
 
@@ -198,7 +191,6 @@ int		cursor_right(t_line *line)
 		line->cursor.row++;
 		line->scroll = SCROLLDOWN;
 	}
-	tputs(tgoto(tgetstr("cm", NULL),
-				line->cursor.col, line->cursor.row), 1, &ft_putchar);
+	termcmd(MOVE_COLROW, line->cursor.col, line->cursor.row, 1);
 	return (0);
 }

@@ -1,5 +1,6 @@
 {
 	"files.associations": {
-		"termcap.h": "c"
+		"termcap.h": "c",
+		"term.h": "c"
 	}
 }

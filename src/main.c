@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/27 22:44:47 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/28 01:30:57 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #include <minishell.h>
 #include <termcap.h>
 #include <termios.h>
+
+char	**g_termbuff;
 
 char	*ft_str3join(const char *s1, const char *s2, const char *s3)
 {
@@ -57,9 +59,12 @@ static int	init_caps(t_line *line)
 	line->termtype = getenv("TERM");
 	if (!line->termtype)
 		return (-1);
+	line->cap_table = malloc(sizeof(char) * (2048));
+	if (!line->cap_table)
+		return (-1);
 	if (tgetent(line->cap_table, line->termtype) != 1)
 		return (-1);
-	line->tableptr = line->cap_table;
+	g_termbuff = &line->cap_table;
 	return (0);
 }
 
@@ -87,38 +92,37 @@ int	init_term(struct termios *term)
 	return (0);
 }
 
-void	init_line(t_msh *prog, t_line *line)
+void	init_line(t_msh *prog)
 {
-	*line = (t_line){0};
-	if (init_term(&line->term) || init_caps(line) == -1)
+	prog->line = (t_line){0};
+	if (init_term(&prog->line.term) || init_caps(&prog->line) == -1)
 		error_exit(prog, CAP_FAIL);
-	line->prompt = prompt(prog, line);
-	line->max.col = tgetnum("co");
-	ft_printf("maxcols = %d\n", line->max.col);
-	line->max.row = tgetnum("li");
+	prog->line.prompt = prompt(prog, &prog->line);
+	prog->line.max.col = tgetnum("co");
+	ft_printf("maxcols = %d\n", prog->line.max.col);
+	prog->line.max.row = tgetnum("li");
 }
 
-void	get_cmd(t_msh *prog, t_line *line)
+void	get_cmd(t_msh *prog)
 {
 	int	status;
 
 	status = 1;
 	while (status)
 	{
-		status = read_input(line, prog);
+		status = read_input(&prog->line, prog);
 		/* status = exec_input(&input); */
 	}
 }
 
 int	msh_main(t_msh *prog)
 {
-	t_line	line;
 	t_token	*args;
 
-	init_line(prog, &line);
-	get_cmd(prog, &line);
-	ft_printf("\nInput was: %s\n", line.cmd);
-	args = tokenize(line.cmd);
+	init_line(prog);
+	get_cmd(prog);
+	ft_printf("\nInput was: %s\n", prog->line.cmd);
+	args = tokenize(prog->line.cmd);
 	tokprint(args);
 	std_exit(prog);
 	return (0);

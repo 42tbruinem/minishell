@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/24 20:32:17 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/28 02:05:29 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,12 @@
 #include "minishell.h"
 #include <termcap.h>
 #include <termios.h>
+
+void	termcmd(char *command, int p1, int p2, int lines_affected)
+{
+	tputs(tgoto(tgetstr(command, NULL), p1, p2),
+		lines_affected, &ft_putchar);
+}
 
 int		cursor_move_or_history(t_line *line, int c)
 {
@@ -31,7 +37,7 @@ int		esc_cursor_or_history(t_line *line, char buf[6])
 	else if (buf[4] != 0)
 	{}// CTRL-ARROW pressed - more complicated cursor movement
 	else
-		return(cursor_move_or_history(line, buf[2]));
+		return (cursor_move_or_history(line, buf[2]));
 	return (0);
 }
 
@@ -60,8 +66,7 @@ void	refresh_cursor(t_line *line)
 		tputs(tgetstr("sf", NULL), 1, &ft_putchar);
 		line->scroll = 0;
 	}
-	tputs(tgoto(tgetstr("cm", NULL), line->cursor.col, line->cursor.row),
-			1, &ft_putchar);
+	termcmd("cm", line->cursor.col, line->cursor.row, 1);
 }
 
 int		read_input(t_line *line, t_msh *prog)
@@ -74,7 +79,7 @@ int		read_input(t_line *line, t_msh *prog)
 	line->total_rows = 0;
 	send = 0;
 	(void)prog;
-	tputs(tgetstr("cl", NULL), 1, &ft_putchar);
+	termcmd("cl", 0, 0, 1);
 	refresh(line);
 	while (!send)
 	{
