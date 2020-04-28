@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/28 01:36:41 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/04/28 02:01:06 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/28 02:14:49 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,7 @@ void	termcmd(char *command, int p1, int p2, int lines_affected);
 # define MOVE_ROWUP "up"
 # define DELETE_CHAR "dc"
 # define DELETE_CHARS "DC"
+# define SCROLL_LINE "sf"
+# define SCROLL_LINES "SF"
 
 #endif
