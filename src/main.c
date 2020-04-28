@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/28 01:30:57 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/28 15:56:48 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,6 @@ char	*prompt(t_msh *prog, t_line *line)
 
 static int	init_caps(t_line *line)
 {
-	line->cmd = ft_strdup("");
-	if (!line->cmd)
-		return (-1);
 	line->termtype = getenv("TERM");
 	if (!line->termtype)
 		return (-1);
@@ -110,7 +107,8 @@ void	get_cmd(t_msh *prog)
 	status = 1;
 	while (status)
 	{
-		status = read_input(&prog->line, prog);
+		ft_printf("%s", prog->line.prompt);
+		status = read_input(&prog->line);
 		/* status = exec_input(&input); */
 	}
 }

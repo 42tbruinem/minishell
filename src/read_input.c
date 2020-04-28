@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/28 02:14:57 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/28 17:29:32 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ int		esc_cursor_or_history(t_line *line, char buf[6])
 
 int		handle_in(t_line *line, char buf[6])
 {
-	if (ft_isalnum(buf[0]) || buf[0] == ' ')
-		if (add_char(line, buf) == -1)
+	if (buf[0] >= 32 && buf[0] <= 126)
+		if (add_char(line, buf[0]) == -1)
 			return (-1);
 	if (buf[0] == DEL)
 		if (delete_char(line) == -1)
@@ -62,34 +62,51 @@ int		handle_in(t_line *line, char buf[6])
 
 void	refresh_cursor(t_line *line)
 {
-	if (line->scroll == SCROLLDOWN)
+	if (line->cursor.row > line->max.row - 1)
 	{
-		tputs(tgetstr(SCROLL_LINE, NULL), 1, &ft_putchar);
-		line->scroll = 0;
+		line->cursor.row--;
+		termcmd(SCROLL_LINES, 1, 0, 1);
 	}
 	termcmd(MOVE_COLROW, line->cursor.col, line->cursor.row, 1);
 }
 
-int		read_input(t_line *line, t_msh *prog)
+/*
+** For troubleshooting purposes only, delete later.
+*/
+
+int		get_row(void)
+{
+	char		buf[8];
+	int			row;
+
+	ft_printf_fd(2, "\033[6n");
+	read(STDIN, buf, 8);
+	row = ft_atoi(buf + 2);
+	return (row);
+}
+
+int		read_input(t_line *line)
 {
 	char		buf[6];
 	int			send;
 
 	line->cursor.col = line->promptlen;
-	line->cursor.row = 0;
+	line->cursor.row = get_row() - 1;
 	line->total_rows = 0;
+	line->cmd = (char *)ft_calloc(1, 100);
+	if (!line->cmd)
+		return (-1);
+	line->alloced_cmd = 100;
+	line->cmd_len = 0;
+	line->inputrow = 0;
 	send = 0;
-	(void)prog;
-	termcmd(CLEAR_SCREEN, 0, 0, 1);
-	refresh(line);
+	refresh_cursor(line);
 	while (!send)
 	{
 		ft_bzero(buf, 6);
 		read(STDIN, buf, 6);
 		send = handle_in(line, buf);
 		refresh_cursor(line);
-		line->total_rows = (line->cmd_len + line->promptlen) /
-			(line->max.col);
 	}
 	line->total_rows = (line->cmd_len + line->promptlen) /
 		(line->max.col);

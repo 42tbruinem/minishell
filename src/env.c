@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/17 23:13:43 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/04/27 22:31:43 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/28 14:45:16 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,13 +132,13 @@ void	env_init(t_msh *prog)
 	i = 0;
 	prog->env = var_init(environ[i]);
 	if (!prog->env)
-		return ;//error
+		return (env_clear(prog->env, &free));//error
 	env = prog->env;
 	while (environ[i])
 	{
 		env->next = var_init(environ[i]);
 		if (!env->next)
-			return ;//error
+			return (env_clear(prog->env, &free));//error
 		env = env->next;
 		i++;
 	}

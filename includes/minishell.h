@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/28 01:28:14 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/28 16:41:50 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ struct			s_token
 
 typedef struct	s_coord
 {
-	int			row;
-	int			col;
+	size_t		row;
+	size_t		col;
 }				t_coord;
 
 typedef struct	s_line
@@ -85,10 +85,12 @@ typedef struct	s_line
 	char			*termtype;
 	char			*cap_table;
 	size_t			cmd_len;
+	size_t			alloced_cmd;
+	size_t			inputrow;
 	t_coord			max;
 	t_coord			cursor;
 	int				scroll;
-	int				total_rows;
+	size_t			total_rows;
 	struct termios	term;
 }				t_line;
 
@@ -119,8 +121,7 @@ enum			e_tokentypes
 ** TERMCAPS FUNCTIONS: in tc_funcs*.c
 */
 
-void			refresh(t_line *line);
-int				add_char(t_line *line, char buf[6]);
+int				add_char(t_line *line, char c);
 int				delete_char(t_line *line);
 int				cursor_left(t_line *line);
 int				cursor_right(t_line *line);
@@ -155,6 +156,6 @@ void			env_print(t_var *env);
 ** Core shell functions.
 */
 
-int				read_input(t_line *line, t_msh *prog);
+int				read_input(t_line *line);
 
 #endif
