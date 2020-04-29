@@ -6,12 +6,16 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/28 01:36:41 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/04/28 02:14:49 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/29 19:23:49 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MSH_TERM_H
 # define MSH_TERM_H
+
+/*
+** Enter commands to the terminal with termcaps. In terminal.c.
+*/
 
 void	termcmd(char *command, int p1, int p2, int lines_affected);
 

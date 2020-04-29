@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/04/12 11:11:07 by rlucas        #+#    #+#                  #
-#    Updated: 2020/04/29 17:13:19 by rlucas        ########   odam.nl          #
+#    Updated: 2020/04/29 17:59:46 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,12 +19,17 @@ INCLUDES = -Iincludes/ -I$(LIBDIR)includes/
 
 SRC =	$(SRCDIR)main.c \
 		$(SRCDIR)read_input.c \
+		$(SRCDIR)handle_input.c \
+		$(SRCDIR)input1.c \
 		$(SRCDIR)exit.c \
-		$(SRCDIR)tc_funcs1.c \
+		$(SRCDIR)add_char.c \
+		$(SRCDIR)delete_char.c \
+		$(SRCDIR)move_cursor.c \
 		$(SRCDIR)tok.c \
 		$(SRCDIR)tables.c \
 		$(SRCDIR)env.c \
 		$(SRCDIR)prompt.c \
+		$(SRCDIR)terminal.c \
 		$(SRCDIR)utils.c
 
 OBJ = $(patsubst $(SRCDIR)%.c,$(OBJDIR)%.o,$(SRC))

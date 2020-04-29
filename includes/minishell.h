@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/29 17:15:39 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/29 19:21:11 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,9 @@
 # define RIGHT_KEY 67
 # define UP_KEY 65
 # define DOWN_KEY 66
+# define HOME 72
+# define END 70
 
-/*
-** For scroll direction when using SCROLL in tputs.
-*/
-
-# define SCROLLDOWN 1
-
-# define ENV_SIZE 200
 # define MAX_TOKSIZE 300
 
 # include <unistd.h>
@@ -82,15 +77,15 @@ typedef struct	s_line
 	char			*prompt;
 	size_t			promptlen;
 	char			*cmd;
-	char			*termtype;
-	char			*cap_table;
 	size_t			cmd_len;
 	size_t			alloced_cmd;
 	size_t			inputrow;
 	t_coord			max;
 	t_coord			cursor;
-	int				scroll;
 	size_t			total_rows;
+	int				escmode;
+	char			*termtype;
+	char			*cap_table;
 	struct termios	term;
 }				t_line;
 
@@ -117,13 +112,14 @@ enum			e_tokentypes
 	DEFAULT,
 };
 
+typedef int		(*t_inputf)(t_line *line, char buf[6]);
+
 /*
 ** Utility functions in utils.c
 */
 
 char			*ft_realloc(char *str, size_t newsize);
 char			*ft_str3join(const char *s1, const char *s2, const char *s3);
-
 
 /*
 ** Add a prompt to the shell, in prompt.c 
@@ -132,13 +128,23 @@ char			*ft_str3join(const char *s1, const char *s2, const char *s3);
 char			*prompt(t_msh *prog, t_line *line);
 
 /*
-** TERMCAPS FUNCTIONS: in tc_funcs*.c
+** Initialise terminal, in terminal.c
+*/
+
+int				init_term(struct termios *term);
+void			init_readline(t_msh *prog);
+
+/*
+** Functions to handle input and line editing. In add_char.c, delete_char.c,
+** and move_cursor.c.
 */
 
 int				add_char(t_line *line, char c);
 int				delete_char(t_line *line);
-int				cursor_left(t_line *line);
-int				cursor_right(t_line *line);
+void			cursor_left(t_line *line);
+void			cursor_right(t_line *line);
+void			cursor_home(t_line *line);
+void			cursor_end(t_line *line);
 
 /*
 ** Lookup tables in tables.c.
@@ -165,9 +171,17 @@ void			env_clear(t_var *env, void (*del)(void *));
 void			env_print(t_var *env);
 
 /*
-** Core shell functions.
+** Functions to read input and handle line-editing. In read_input.c,
+** handle_input.c, and input*.c.
 */
 
-int				read_input(t_line *line, t_msh *prog);
+int				handle_input(t_line *line, char buf[6]);
+int				read_input(t_msh *prog);
+int				send_EOF(t_line *line, char buf[6]);
+int				cursor_move(t_line *line, int c);
+int				special_command(t_line *line, char buf[6]);
+int				send_input(t_line *line, char buf[6]);
+int				char_input(t_line *line, char buf[6]);
+int				backspace(t_line *line, char buf[6]);
 
 #endif
