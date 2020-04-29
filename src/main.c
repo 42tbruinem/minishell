@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/29 19:17:21 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/29 20:34:25 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ char	**g_termbuff;
 
 int	msh_main(t_msh *prog)
 {
-	t_token	*args;
+	t_cmd	*commands;
+	t_cmd	*current;
 	int		status;
 
 	status = 1;
@@ -26,8 +27,13 @@ int	msh_main(t_msh *prog)
 	{
 		if (read_input(prog) == -1)
 			error_exit(prog, MEM_FAIL);
-		args = tokenize(prog->line.cmd);
-		tokprint(args);
+		commands = get_commands(tokenize(prog->line.cmd));
+		current = commands;
+		while (current)
+		{
+			print_command(current);
+			current = current->next;
+		}
 	}
 	std_exit(prog);
 	return (0);

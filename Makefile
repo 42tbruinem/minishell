@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/04/12 11:11:07 by rlucas        #+#    #+#                  #
-#    Updated: 2020/04/29 17:59:46 by rlucas        ########   odam.nl          #
+#    Updated: 2020/04/29 20:43:31 by tbruinem      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,22 +17,25 @@ SRCDIR = src/
 OBJDIR = obj/
 INCLUDES = -Iincludes/ -I$(LIBDIR)includes/
 
-SRC =	$(SRCDIR)main.c \
-		$(SRCDIR)read_input.c \
-		$(SRCDIR)handle_input.c \
-		$(SRCDIR)input1.c \
-		$(SRCDIR)exit.c \
-		$(SRCDIR)add_char.c \
-		$(SRCDIR)delete_char.c \
-		$(SRCDIR)move_cursor.c \
-		$(SRCDIR)tok.c \
-		$(SRCDIR)tables.c \
-		$(SRCDIR)env.c \
-		$(SRCDIR)prompt.c \
-		$(SRCDIR)terminal.c \
-		$(SRCDIR)utils.c
+SRC =	main.c \
+		read_input.c \
+		handle_input.c \
+		input1.c \
+		exit.c \
+		add_char.c \
+		delete_char.c \
+		move_cursor.c \
+		tok.c \
+		tables.c \
+		commands.c \
+		env.c \
+		prompt.c \
+		terminal.c \
+		utils.c
 
-OBJ = $(patsubst $(SRCDIR)%.c,$(OBJDIR)%.o,$(SRC))
+OBJ := $(addprefix $(OBJDIR), $(SRC:%.c=%.o))
+
+SRC := $(addprefix $(SRCDIR), $(SRC))
 
 FLAGS = -Wall -Wextra -Werror
 ifdef DEBUG

@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/29 19:21:11 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/29 20:45:31 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,15 @@ struct	s_var
 	char		*val;
 	size_t		len;
 	t_var		*next;
+};
+
+typedef struct s_cmd	t_cmd;
+
+struct			s_cmd
+{
+	char	**args;
+	size_t	type;
+	t_cmd	*next;
 };
 
 typedef struct	s_lexer
@@ -159,9 +168,13 @@ char			*error_lookup(int err);
 
 typedef void	(*t_escapef)(t_lexer *lex, char *last);
 
+t_cmd			*get_commands(t_token *tokens);
+void			print_command(t_cmd *command);
+
 void			error_exit(t_msh *prog, int err);
 void			std_exit(t_msh *prog);
 
+void			tokclear(t_token *list, void (*del)(void *));
 void			tokprint(t_token *list);
 t_token			*tokenize(char *raw);
 
