@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/28 17:29:32 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/29 14:08:36 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,11 @@ int		handle_in(t_line *line, char buf[6])
 			return (-1);
 	if (buf[0] == NEWLINE)
 		return (1);
+	if (buf[0] == 4 && line->cmd_len == 0)
+	{
+		ft_printf("exit\n");
+		return (-2);
+	}
 	/* ft_printf("entered key = {%d,%d,%d,%d,%d,%d}\n", buf[0], buf[1], buf[2], */
 	/* 		buf[3], buf[4], buf[5]); */
 	return (0);
@@ -85,7 +90,7 @@ int		get_row(void)
 	return (row);
 }
 
-int		read_input(t_line *line)
+int		read_input(t_line *line, t_msh *prog)
 {
 	char		buf[6];
 	int			send;
@@ -106,10 +111,12 @@ int		read_input(t_line *line)
 		ft_bzero(buf, 6);
 		read(STDIN, buf, 6);
 		send = handle_in(line, buf);
+		if (send == -2)
+			std_exit(prog);
 		refresh_cursor(line);
 	}
 	line->total_rows = (line->cmd_len + line->promptlen) /
 		(line->max.col);
 	line->cursor.row = line->total_rows + 1;
-	return (0);
+	return (1);
 }

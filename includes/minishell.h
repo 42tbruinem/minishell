@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/28 16:41:50 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/29 14:03:53 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,6 @@ void			env_print(t_var *env);
 ** Core shell functions.
 */
 
-int				read_input(t_line *line);
+int				read_input(t_line *line, t_msh *prog);
 
 #endif

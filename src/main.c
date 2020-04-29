@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/28 15:56:48 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/29 14:07:28 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,8 @@ void	get_cmd(t_msh *prog)
 	while (status)
 	{
 		ft_printf("%s", prog->line.prompt);
-		status = read_input(&prog->line);
+		status = read_input(&prog->line, prog);
+		ft_printf("\nInput was: %s\n", prog->line.cmd);
 		/* status = exec_input(&input); */
 	}
 }
@@ -119,7 +120,6 @@ int	msh_main(t_msh *prog)
 
 	init_line(prog);
 	get_cmd(prog);
-	ft_printf("\nInput was: %s\n", prog->line.cmd);
 	args = tokenize(prog->line.cmd);
 	tokprint(args);
 	std_exit(prog);
