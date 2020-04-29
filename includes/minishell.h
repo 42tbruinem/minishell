@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/29 23:29:04 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/30 00:02:11 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ enum			e_tokentypes
 	DEFAULT,
 };
 
-typedef int		(*t_builtin)(int argc, char **argv, t_var *env);
+typedef void	(*t_builtin)(int argc, char **argv, t_var **env);
 typedef int		(*t_inputf)(t_line *line, char buf[6]);
 
 /*
@@ -180,6 +180,7 @@ char			*error_lookup(int err);
 
 typedef void	(*t_escapef)(t_lexer *lex, char *last);
 
+int				execute(char **args, t_var *env);
 char			**ft_str2clear(char **str);
 t_cmd			*clear_commands(t_cmd *commands);
 t_cmd			*get_commands(t_token *tokens);
@@ -191,6 +192,14 @@ void			std_exit(t_msh *prog);
 void			tokclear(t_token *list, void (*del)(void *));
 void			tokprint(t_token *list);
 t_token			*tokenize(char *raw);
+
+void			ft_cd(int argc, char **argv, t_var **env);
+void			ft_pwd(int argc, char **argv, t_var **env);
+void			ft_env(int argc, char **argv, t_var **env);
+void			ft_echo(int argc, char **argv, t_var **env);
+void			ft_unset(int argc, char **argv, t_var **env);
+void			ft_exit(int argc, char **argv, t_var **env);
+void			ft_export(int argc, char **argv, t_var **env);
 
 void			env_unset(t_var **env, char *name);
 t_var			*env_val_set(const char *name, t_var *env, const char *val);

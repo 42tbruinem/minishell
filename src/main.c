@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/29 22:19:19 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/30 00:04:14 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,12 @@
 
 char	**g_termbuff;
 
-int	run_commands(t_cmd *commands)
+int	run_commands(t_cmd *commands, t_var *env)
 {
 	while (commands)
 	{
 		print_command(commands);
+		(void)execute(commands->args, env);
 		commands = commands->next;
 	}
 	return (1);
@@ -37,7 +38,7 @@ int	msh_main(t_msh *prog)
 		if (read_input(prog) == -1)
 			error_exit(prog, MEM_FAIL);
 		commands = get_commands(tokenize(prog->line.cmd));
-		if (!run_commands(commands))
+		if (!run_commands(commands, prog->env))
 			break ;
 	}
 	std_exit(prog);

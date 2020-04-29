@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 22:22:24 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/04/29 23:00:48 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/29 23:53:26 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,16 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+
+size_t		ft_str2len(char **str)
+{
+	size_t	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
+}
 
 long long	ft_str2cmpstr(const char **str2, char *str)
 {
@@ -48,10 +58,11 @@ long long	is_builtin(char *program)
 
 int		is_executable(char *program, char **abspath_to_exe, t_var *env)
 {
-	char	*path;
-	char	**entries;
-	char	*tmp;
-	size_t	i;
+	char		*path;
+	char		**entries;
+	char		*tmp;
+	struct stat	unused;
+	size_t		i;
 
 	i = 0;
 	path = env_val_get("PATH", env);
@@ -62,14 +73,17 @@ int		is_executable(char *program, char **abspath_to_exe, t_var *env)
 		return (0); //error
 	while (entries[i])
 	{
-		tmp = ft_str3join(entries[i], "/", *abspath_to_exe);
-		if (stat(tmp, NULL) != -1)
+		tmp = ft_str3join(entries[i], "/", program);
+		if (stat(tmp, &unused) != -1)
 		{
 			*abspath_to_exe = tmp;
+			ft_str2clear(entries);
 			return (1);
 		}
+		i++;
 		free(tmp);
 	}
+	ft_str2clear(entries);
 	return (0);
 }
 
@@ -101,26 +115,20 @@ int		run_builtin(char **args, t_var *env, int id)
 	[B_CD] = &ft_cd};
 
 //	printf("Executing builtin!\n");
-	builtins[id](ft_str2len(args), args, env);
+	builtins[id](ft_str2len(args), args, &env);
+	return (0);
 }
 
 int		execute(char **args, t_var *env)
 {
-	char	*name;
 	char	*abspath;
-	char	**envp;
 	int		builtin;
 
 	abspath = NULL;
-	name = ft_strdup(*args);
-	if (!name)
-		return (1); //error
 	if (is_executable(args[0], &abspath, env))
 		return (run_program(abspath, args, env));
 	builtin = is_builtin(args[0]);
 	if (builtin < 0)
 		return (1); //error (not an executable or a builtin)
-
-
-
+	return (run_builtin(args, env, builtin));
 }

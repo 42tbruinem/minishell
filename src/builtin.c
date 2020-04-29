@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 23:02:16 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/04/29 23:37:08 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/30 00:01:27 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include <sys/types.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <stdio.h>
+#include <string.h>
 
 extern int errno;
 
@@ -40,7 +42,7 @@ char	*get_cwd(void)
 	return (path);
 }
 
-void	ft_export(int argc, char **argv, t_list *env)
+void	ft_export(int argc, char **argv, t_var **env)
 {
 	size_t	i;
 	size_t	tmp;
@@ -51,20 +53,23 @@ void	ft_export(int argc, char **argv, t_list *env)
 	while (argv[i])
 	{
 		tmp = ft_strclen(argv[i], '=');
+		argv[i][tmp] = '\0';
 		if (tmp != ft_strlen(argv[i]))
-			(void)env_val_set(argv[i][tmp], env);
+			(void)env_val_set(argv[i], *env, &argv[i][tmp + 1]);
 		i++;
 	}
 }
 
-void	ft_exit(int argc, char **argv, t_list *env)
+void	ft_exit(int argc, char **argv, t_var **env)
 {
+	(void)argc;
+	(void)argv;
+	(void)env;
 	std_exit(NULL); //euhm, yea..
 }
 
-void	ft_unset(int argc, char **argv, t_list *env)
+void	ft_unset(int argc, char **argv, t_var **env)
 {
-	t_var	*var;
 	size_t	i;
 
 	if (argc == 1)
@@ -72,16 +77,17 @@ void	ft_unset(int argc, char **argv, t_list *env)
 	i = 1;
 	while (argv[i])
 	{
-		env_unset(&env, argv[i]);
+		env_unset(env, argv[i]);
 		i++;
 	}
 }
 
-void	ft_echo(int argc, char **argv, t_list *env)
+void	ft_echo(int argc, char **argv, t_var **env)
 {
-	size_t	i;
+	int	i;
 
 	i = 1;
+	(void)env;
 	while (argc >= 2 && argv[i])
 	{
 		if (i != 1 || ft_strncmp(argv[1], "-n", 2) != 0)
@@ -96,19 +102,22 @@ void	ft_echo(int argc, char **argv, t_list *env)
 		write(1, "\n", 1);
 }
 
-void	ft_env(int argc, char **argv, t_list *env)
+void	ft_env(int argc, char **argv, t_var **env)
 {
 	if (argc != 1 || !argv)
 		return ;
-	env_print(env);
+	env_print(*env);
 }
 
-void	ft_pwd(int argc, char **argv, t_list *env)
+void	ft_pwd(int argc, char **argv, t_var **env)
 {
 	char	*path;
 	char	*res;
 	size_t	size;
 
+	(void)argc;
+	(void)argv;
+	(void)env;
 	size = 20;
 	path = malloc(sizeof(char) * (size + 1));
 	res = getcwd(path, size + 1);
@@ -126,11 +135,9 @@ void	ft_pwd(int argc, char **argv, t_list *env)
 	free(path);
 }
 
-void	ft_cd(int argc, char **argv, t_list *env)
+void	ft_cd(int argc, char **argv, t_var **env)
 {
 	char	*path;
-	char	*pwd;
-	char	*oldpwd;
 
 	if (argc <= 1 || argc > 3)
 		return ;
@@ -150,7 +157,7 @@ void	ft_cd(int argc, char **argv, t_list *env)
 		free(path);
 		return (perror(strerror(errno)));
 	}
-	env_val_set("OLDPWD", env, env_val_get("PWD", env));
-	env_val_set(&env, "PWD", get_cwd());
+	env_val_set("OLDPWD", *env, env_val_get("PWD", *env));
+	env_val_set("PWD", *env, get_cwd());
 	free(path);
 }

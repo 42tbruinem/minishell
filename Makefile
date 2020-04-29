@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/04/12 11:11:07 by rlucas        #+#    #+#                  #
-#    Updated: 2020/04/29 20:43:31 by tbruinem      ########   odam.nl          #
+#    Updated: 2020/04/29 23:46:51 by tbruinem      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,8 @@ SRC =	main.c \
 		add_char.c \
 		delete_char.c \
 		move_cursor.c \
+		execute.c \
+		builtin.c \
 		tok.c \
 		tables.c \
 		commands.c \
@@ -34,7 +36,6 @@ SRC =	main.c \
 		utils.c
 
 OBJ := $(addprefix $(OBJDIR), $(SRC:%.c=%.o))
-
 SRC := $(addprefix $(SRCDIR), $(SRC))
 
 FLAGS = -Wall -Wextra -Werror
