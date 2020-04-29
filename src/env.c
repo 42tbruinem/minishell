@@ -6,13 +6,82 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/17 23:13:43 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/04/28 14:45:16 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/29 23:34:25 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdlib.h>
 #include "libft.h"
+
+void	env_del(t_var *delete)
+{
+	free(delete->name);
+	free(delete->val);
+	free(delete);
+}
+
+void	env_unset(t_var **env, char *name)
+{
+	t_var	*iter;
+	t_var	*last;
+
+	iter = *env;
+	last = iter;
+	if (ft_strcmp(name, (*env)->name) == 0)
+	{
+		*env = (*env)->next;
+		env_del(iter);
+		return ;
+	}
+	while (iter)
+	{
+		if (ft_strcmp(name, iter->name) == 0)
+		{
+			last->next = iter->next;
+			env_del(iter);
+			iter = last;
+		}
+		last = iter;
+		iter = iter->next;
+	}
+}
+
+t_var	*env_new(const char *name, const char *val)
+{
+	t_var	*new;
+
+	new = malloc(sizeof(t_var));
+	if (!new)
+		return (NULL);
+	new->len = ft_strlen(name) + ft_strlen(val) + 1;
+	new->name = ft_strdup(name);
+	if (!new->name)
+		return (NULL);//error
+	new->val = ft_strdup(val);
+	if (!new->val)
+		return (NULL);//error
+	new->next = NULL;
+	return (new);
+}
+
+t_var	*env_val_set(const char *name, t_var *env, const char *val)
+{
+	while (env && env->next)
+	{
+		if (ft_strcmp(env->name, name) == 0)
+		{
+			free(env->val);
+			env->val = ft_strdup(val);
+			if (!env->val)
+				return (NULL);
+			return (env);
+		}
+		env = env->next;
+	}
+	env->next = env_new(name, val);
+	return (NULL);
+}
 
 char	*env_val_get(const char *name, t_var *env)
 {
@@ -71,7 +140,7 @@ char	*var_name(char **str)
 	return (new);
 }
 
-size_t	lstsize(t_var *env)
+size_t	env_size(t_var *env)
 {
 	size_t	len;
 
@@ -82,27 +151,6 @@ size_t	lstsize(t_var *env)
 		env = env->next;
 	}
 	return (len);
-}
-
-char	**env_to_str(t_var *env)
-{
-	size_t	len;
-	size_t	i;
-	char	**str;
-
-	i = 0;
-	len = lstsize(env);
-	str = malloc(sizeof(char *) * (len + 1));
-	if (!str)
-		return (NULL);
-	while (i < len)
-	{
-		str[i] = ft_str3join(env->name, "=", env->val);
-		i++;
-		env = env->next;
-	}
-	str[i] = 0;
-	return (str);
 }
 
 t_var	*var_init(char *str)
@@ -121,6 +169,29 @@ t_var	*var_init(char *str)
 		return (NULL);//error
 	new->next = NULL;
 	return (new);
+}
+
+char	**env_convert(t_var *env)
+{
+	size_t	i;
+	size_t	len;
+	char	**envp;
+
+	i = 0;
+	len = env_size(env);
+	envp = malloc(sizeof(char *) * (len + 1));
+	if (!envp)
+		return (NULL);
+	while (i < len)
+	{
+		envp[i] = ft_str3join(env->name, "=", env->val);
+		if (!envp[i])
+			return (ft_str2clear(envp));
+		env = env->next;
+		i++;
+	}
+	envp[i] = 0;
+	return (envp);
 }
 
 void	env_init(t_msh *prog)

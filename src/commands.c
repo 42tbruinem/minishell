@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 19:22:44 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/04/29 20:46:46 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/29 23:37:44 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	print_command(t_cmd *command)
 	}
 }
 
-void	ft_str2clear(char **str)
+char	**ft_str2clear(char **str)
 {
 	size_t	i;
 
@@ -46,6 +46,7 @@ void	ft_str2clear(char **str)
 		i++;
 	}
 	free(str);
+	return (NULL);
 }
 
 char	**populate_args(t_cmd *command, t_token **start, size_t len)
@@ -58,7 +59,7 @@ char	**populate_args(t_cmd *command, t_token **start, size_t len)
 		command->args[i] = ft_strdup((*start)->content);
 		if (!command->args[i])
 		{
-			ft_str2clear(command->args);
+			(void)ft_str2clear(command->args);
 			return (NULL);
 		}
 		i++;
@@ -123,7 +124,7 @@ t_cmd	*push_command(t_cmd **commands, t_cmd *new)
 	return (new);
 }
 
-t_cmd	*clear_commands(t_cmd *commands, t_token *tokens)
+t_cmd	*clear_commands(t_cmd *commands)
 {
 	t_cmd	*iter;
 	t_cmd	*del;
@@ -133,10 +134,9 @@ t_cmd	*clear_commands(t_cmd *commands, t_token *tokens)
 	{
 		del = iter;
 		iter = iter->next;
-		ft_str2clear(del->args);
+		(void)ft_str2clear(del->args);
 		free(del);
 	}
-	tokclear(tokens, &free);
 	return (NULL);
 }
 
@@ -155,7 +155,10 @@ t_cmd	*get_commands(t_token *tokens)
 		type = (start == tokens) ? DEFAULT : start->type;
 		start = (start == tokens) ? start : start->next;
 		if (!push_command(&commands, new_command(&start, type)))
-			return (clear_commands(commands, tokens));
+		{
+			tokclear(tokens, &free);
+			return (clear_commands(commands));
+		}
 	}
 	tokclear(tokens, &free);
 	return (commands);

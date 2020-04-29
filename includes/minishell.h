@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/29 20:45:31 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/29 23:29:04 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,17 @@ enum			e_error
 	CAP_FAIL
 };
 
+enum			e_builtins
+{
+	B_CD,
+	B_ECHO,
+	B_PWD,
+	B_EXPORT,
+	B_ENV,
+	B_UNSET,
+	B_EXIT,
+};
+
 enum			e_tokentypes
 {
 	PIPE,
@@ -121,6 +132,7 @@ enum			e_tokentypes
 	DEFAULT,
 };
 
+typedef int		(*t_builtin)(int argc, char **argv, t_var *env);
 typedef int		(*t_inputf)(t_line *line, char buf[6]);
 
 /*
@@ -168,6 +180,8 @@ char			*error_lookup(int err);
 
 typedef void	(*t_escapef)(t_lexer *lex, char *last);
 
+char			**ft_str2clear(char **str);
+t_cmd			*clear_commands(t_cmd *commands);
 t_cmd			*get_commands(t_token *tokens);
 void			print_command(t_cmd *command);
 
@@ -178,6 +192,9 @@ void			tokclear(t_token *list, void (*del)(void *));
 void			tokprint(t_token *list);
 t_token			*tokenize(char *raw);
 
+void			env_unset(t_var **env, char *name);
+t_var			*env_val_set(const char *name, t_var *env, const char *val);
+char			**env_convert(t_var *env);
 void			env_init(t_msh *prog);
 char			*env_val_get(const char *name, t_var *env);
 void			env_clear(t_var *env, void (*del)(void *));
