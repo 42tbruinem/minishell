@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/20 10:59:21 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/28 18:26:28 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/29 15:49:04 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,13 +86,16 @@ int		add_char(t_line *line, char c)
 	row = line->inputrow;
 	while (row < line->total_rows)
 	{
-		termcmd(MOVE_COLROW, 0, line->cursor.row + row + 1, 1);
+		termcmd(MOVE_COLROW, 0, line->cursor.row - line->inputrow + row + 1, 1);
 		index = row * line->max.col + line->max.col - line->promptlen;
 		if (index > line->cmd_len)
 			break ;
-		termcmd(INSERT_START, 0, 0, 1);
-		ft_printf("%c", line->cmd[index]);
-		termcmd(INSERT_END, 0, 0, 1);
+		if (line->cmd[index] >= 32 && line->cmd[index] <= 126)
+		{
+			termcmd(INSERT_START, 0, 0, 1);
+			ft_printf("%c", line->cmd[index]);
+			termcmd(INSERT_END, 0, 0, 1);
+		}
 		row++;
 	}
 
@@ -106,7 +109,6 @@ int		add_char(t_line *line, char c)
 		line->cursor.row++;
 		line->inputrow++;
 	}
-	termcmd(MOVE_COLROW, line->cursor.col, line->cursor.row, 1);
 	return (0);
 }
 
@@ -130,7 +132,7 @@ int		delete_char(t_line *line)
 	size_t		index;
 
 	// Check if our command is already 0.
-	if (line->cmd_len == 0)
+	if (line->inputrow == 0 && line->cursor.col == line->promptlen)
 		return (0);
 
 	// Decrease length of command.
@@ -143,7 +145,7 @@ int		delete_char(t_line *line)
 	if (line->cursor.col == 0)
 	{
 		line->inputrow--;
-		line->cursor.col = line->max.col;
+		line->cursor.col = line->max.col - 1;
 		line->cursor.row--;
 	}
 	else
@@ -161,17 +163,18 @@ int		delete_char(t_line *line)
 	row = line->inputrow;
 	while (row < line->total_rows)
 	{
-		termcmd(MOVE_COLROW, line->max.col, line->cursor.row + row, 1);
+		termcmd(MOVE_COLROW, 0, line->cursor.row - line->inputrow + row + 1, 1);
+		termcmd(DELETE_START, 0, 0, 1);
+		termcmd(DELETE_CHAR, 0, 0, 1);
+		termcmd(DELETE_END, 0, 0, 1);
+		termcmd(MOVE_COLROW, line->max.col, line->cursor.row - line->inputrow +
+				row, 1);
 		index = row * line->max.col + line->max.col - line->promptlen - 1;
 		if (index > line->cmd_len)
 			break ;
 		termcmd(INSERT_START, 0, 0, 1);
 		ft_printf("%c", line->cmd[index]);
 		termcmd(INSERT_END, 0, 0, 1);
-		termcmd(MOVE_COLROW, 0, line->cursor.row + row + 1, 1);
-		termcmd(DELETE_START, 0, 0, 1);
-		termcmd(DELETE_CHAR, 0, 0, 1);
-		termcmd(DELETE_END, 0, 0, 1);
 		row++;
 	}
 	return (0);
@@ -188,7 +191,7 @@ int		cursor_left(t_line *line)
 	if (line->cursor.col == 0)
 	{
 		line->inputrow--;
-		line->cursor.col = line->max.col;
+		line->cursor.col = line->max.col - 1;
 		line->cursor.row--;
 	}
 	else

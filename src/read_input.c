@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/29 14:08:36 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/29 15:23:19 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,11 @@ int		handle_in(t_line *line, char buf[6])
 
 void	refresh_cursor(t_line *line)
 {
-	if (line->cursor.row > line->max.row - 1)
+	if (line->cursor.row >= line->max.row)
 	{
-		line->cursor.row--;
+		line->cursor.row -= 1;
 		termcmd(SCROLL_LINES, 1, 0, 1);
+		ft_printf("ALERT!");
 	}
 	termcmd(MOVE_COLROW, line->cursor.col, line->cursor.row, 1);
 }
