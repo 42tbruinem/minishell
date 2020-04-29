@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/29 14:07:28 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/29 17:13:06 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,39 +17,6 @@
 
 char	**g_termbuff;
 
-char	*ft_str3join(const char *s1, const char *s2, const char *s3)
-{
-	char		*newstring;
-
-	if (!s1 || !s2 || !s3)
-		return (NULL);
-	newstring = (char *)ft_calloc(ft_strlen(s1) + ft_strlen(s2) +
-			ft_strlen(s3) + 1, sizeof(char));
-	if (!newstring)
-		return (NULL);
-	ft_strlcpy(newstring, s1, ft_strlen(s1) + 1);
-	ft_strlcpy(newstring + ft_strlen(s1), s2, ft_strlen(s2) + 1);
-	ft_strlcpy(newstring + ft_strlen(s1) + ft_strlen(s2), s3, ft_strlen(s3) + 1);
-	return (newstring);
-}
-
-char	*prompt(t_msh *prog, t_line *line)
-{
-	char	*user;
-	char	*prompt;
-
-	user = env_val_get("USER", prog->env);
-	if (user != NULL)
-	{
-		line->promptlen = ft_strlen(user) + 4;
-		prompt = ft_str3join("\033[32m", user, "\033[39m:~$ ");
-		if (!prompt)
-			return (NULL);
-		return (prompt);
-	}
-	else
-		return (ft_strdup(":~$ "));
-}
 
 static int	init_caps(t_line *line)
 {

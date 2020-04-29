@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/20 10:59:21 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/29 15:49:04 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/29 16:46:26 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,6 @@
 #include <termcap.h>
 #include <termios.h>
 #include "msh_term.h"
-
-/*
-** ft_realloc() creates a new string, copies the contents from a previous
-** string, the frees the previous string.
-*/
-
-static char	*ft_realloc(char *str, size_t newsize)
-{
-	char	*new;
-
-	new = (char *)ft_calloc(1, newsize);
-	if (!new)
-	{
-		free(str);
-		return (NULL);
-	}
-	ft_strlcpy(new, str, newsize);
-	free(str);
-	return (new);
-}
 
 /*
 ** add_char() will reallocate a new length for the command string, then
@@ -63,6 +43,9 @@ int		add_char(t_line *line, char c)
 {
 	size_t		row;
 	size_t		index;
+
+	if (c == '\n')
+		c = ' ';
 
 	// Increase length of command string
 	line->cmd_len++;

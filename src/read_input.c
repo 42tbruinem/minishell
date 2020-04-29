@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/29 15:23:19 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/29 16:36:35 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,16 +44,36 @@ int		esc_cursor_or_history(t_line *line, char buf[6])
 
 int		handle_in(t_line *line, char buf[6])
 {
+	size_t		i;
+
 	if (buf[0] >= 32 && buf[0] <= 126)
+	{
+		i = 1;
 		if (add_char(line, buf[0]) == -1)
 			return (-1);
+		if (buf[1] != 0)
+		{
+			while (buf[i])
+			{
+				if (add_char(line, buf[i]) == -1)
+					return (-1);
+				i++;
+				if (i == 6)
+				{
+					ft_bzero(buf, 6);
+					read(STDIN, buf, 6);
+					i = 0;
+				}
+			}
+		}
+	}
 	if (buf[0] == DEL)
 		if (delete_char(line) == -1)
 			return (-1);
 	if (buf[0] == ESC)
 		if (esc_cursor_or_history(line, buf) == -1)
 			return (-1);
-	if (buf[0] == NEWLINE)
+	if (buf[0] == NEWLINE && buf[1] == 0)
 		return (1);
 	if (buf[0] == 4 && line->cmd_len == 0)
 	{
@@ -71,7 +91,6 @@ void	refresh_cursor(t_line *line)
 	{
 		line->cursor.row -= 1;
 		termcmd(SCROLL_LINES, 1, 0, 1);
-		ft_printf("ALERT!");
 	}
 	termcmd(MOVE_COLROW, line->cursor.col, line->cursor.row, 1);
 }

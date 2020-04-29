@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/29 14:03:53 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/29 17:15:39 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,20 @@ enum			e_tokentypes
 };
 
 /*
+** Utility functions in utils.c
+*/
+
+char			*ft_realloc(char *str, size_t newsize);
+char			*ft_str3join(const char *s1, const char *s2, const char *s3);
+
+
+/*
+** Add a prompt to the shell, in prompt.c 
+*/
+
+char			*prompt(t_msh *prog, t_line *line);
+
+/*
 ** TERMCAPS FUNCTIONS: in tc_funcs*.c
 */
 
@@ -138,8 +152,6 @@ char			*error_lookup(int err);
 */
 
 typedef void	(*t_escapef)(t_lexer *lex, char *last);
-
-char			*ft_str3join(const char *s1, const char *s2, const char *s3);
 
 void			error_exit(t_msh *prog, int err);
 void			std_exit(t_msh *prog);

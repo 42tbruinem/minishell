@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/04/12 11:11:07 by rlucas        #+#    #+#                  #
-#    Updated: 2020/04/27 22:45:08 by tbruinem      ########   odam.nl          #
+#    Updated: 2020/04/29 17:13:19 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,9 @@ SRC =	$(SRCDIR)main.c \
 		$(SRCDIR)tc_funcs1.c \
 		$(SRCDIR)tok.c \
 		$(SRCDIR)tables.c \
-		$(SRCDIR)env.c
+		$(SRCDIR)env.c \
+		$(SRCDIR)prompt.c \
+		$(SRCDIR)utils.c
 
 OBJ = $(patsubst $(SRCDIR)%.c,$(OBJDIR)%.o,$(SRC))
 
