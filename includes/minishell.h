@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/30 17:25:55 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/30 18:34:12 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 */
 
 # define CTRL_D 4
+# define CTRL_U 21
 # define DEL 127
 # define NEWLINE 10
 # define ESC 27
@@ -223,6 +224,7 @@ void			env_print(t_var *env);
 int				handle_input(t_line *line, char buf[6]);
 int				read_input(t_msh *prog);
 int				send_EOF(t_line *line, char buf[6]);
+int				clear_input(t_line *line, char buf[6]);
 int				cursor_move(t_line *line, int c);
 int				special_command(t_line *line, char buf[6]);
 int				send_input(t_line *line, char buf[6]);

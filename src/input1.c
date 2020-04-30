@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:59:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/30 16:48:46 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/30 18:37:34 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,19 @@ int		send_EOF(t_line *line, char buf[6])
 		ft_printf("exit\n");
 		return (CTRL_D);
 	}
+	return (0);
+}
+
+int		clear_input(t_line *line, char buf[6])
+{
+	(void)buf;
+	ft_bzero(line->cmd, line->alloced_cmd);
+	line->cmd_len = 0;
+	line->cursor.row -= line->inputrow;
+	termcmd(MOVE_COLROW, 0, line->cursor.row, 1);
+	termcmd(DELETE_LINES, line->total_rows + 1, 0, line->total_rows + 1);
+	ft_printf("%s", line->prompt);
+	line->cursor.col = line->promptlen;
 	return (0);
 }
 

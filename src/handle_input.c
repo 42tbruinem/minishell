@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:58:45 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/30 16:15:33 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/30 18:36:39 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ static void	create_jumptable(t_inputf func_table[128]){
 
 	func_table[0] = &send_EOF;
 	func_table[CTRL_D] = &send_EOF;
+	func_table[CTRL_U] = &clear_input;
 	func_table[NEWLINE] = &send_input;
 	func_table[ESC] = &special_command;
 	i = 32;
@@ -47,6 +48,8 @@ static int	is_valid_input(int c)
 	if (c == CTRL_D)
 		return (1);
 	if (c == DEL)
+		return (1);
+	if (c == CTRL_U)
 		return (1);
 	return (0);
 }
