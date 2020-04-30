@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:37:30 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/30 14:06:20 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/30 14:25:17 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int			esc_delete(t_line *line)
 {
 	size_t		index;
 	size_t		index2;
+	int			charfound;
 
 	// Check if our cursor is already at the very beginning.
 	if (line->inputrow == 0 && line->cursor.col == line->promptlen)
@@ -41,11 +42,19 @@ int			esc_delete(t_line *line)
 
 	index = line->inputrow * line->max.col + line->cursor.col - line->promptlen;
 	index2 = 1;
-	while (line->cmd[index - index2] != ' ')
+	charfound = 0;
+	while (1)
 	{
-		index2++;
 		if (index - index2 == 0)
+		{
+			index2++;
 			break ;
+		}
+		if (line->cmd[index - index2] != ' ' && charfound == 0)
+			charfound = 1;
+		if (line->cmd[index - index2] == ' ' && charfound == 1)
+			break ;
+		index2++;
 	}
 	while (index2 > 1)
 	{

@@ -6,12 +6,11 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/11/12 14:43:19 by rlucas        #+#    #+#                 */
-/*   Updated: 2019/11/20 13:00:44 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/30 14:33:11 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
-#include <printf.h>
 
 unsigned long long	upower(unsigned int number, int power)
 {
