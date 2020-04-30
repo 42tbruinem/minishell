@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:59:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/29 19:11:09 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/30 14:04:29 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,13 @@ int		char_input(t_line *line, char buf[6])
 int		backspace(t_line *line, char buf[6])
 {
 	(void)buf;
+	if (line->escmode == 1)
+	{
+		if (esc_delete(line) == -1)
+			return (-1);
+		line->escmode = 0;
+		return (0);
+	}
 	if (delete_char(line) == -1)
 		return (-1);
 	return (0);

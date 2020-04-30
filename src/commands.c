@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 19:22:44 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/04/29 23:37:44 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/30 12:30:58 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	print_command(t_cmd *command)
 		ft_printf("%s%c", command->args[i], command->args[i + 1] ? ' ' : '\n');
 		i++;
 	}
+	/* sleep(5); */
 }
 
 char	**ft_str2clear(char **str)

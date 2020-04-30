@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:37:30 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/29 17:38:32 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/30 14:06:20 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,38 @@ static void	remove_char(t_line *line)
 			index - 1);
 }
 
+int			esc_delete(t_line *line)
+{
+	size_t		index;
+	size_t		index2;
+
+	// Check if our cursor is already at the very beginning.
+	if (line->inputrow == 0 && line->cursor.col == line->promptlen)
+		return (0);
+
+	index = line->inputrow * line->max.col + line->cursor.col - line->promptlen;
+	index2 = 1;
+	while (line->cmd[index - index2] != ' ')
+	{
+		index2++;
+		if (index - index2 == 0)
+			break ;
+	}
+	while (index2 > 1)
+	{
+		if (delete_char(line) == -1)
+			return (-1);
+		index2--;
+	}
+	return (0);
+}
+
 int			delete_char(t_line *line)
 {
 	size_t		row;
 	size_t		index;
 
-	// Check if our command is already 0.
+	// Check if our cursor is already at the very beginning.
 	if (line->inputrow == 0 && line->cursor.col == line->promptlen)
 		return (0);
 

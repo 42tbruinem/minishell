@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:34:51 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/29 17:35:33 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/30 13:29:26 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static int	insert_char(t_line *line, char c)
 	}
 	index = line->inputrow * line->max.col + line->cursor.col - line->promptlen;
 	ft_memmove(line->cmd + index + 1, line->cmd + index,
-			line->alloced_cmd - index);
+			line->alloced_cmd - index - 1);
 	line->cmd[index] = c;
 	return (0);
 }

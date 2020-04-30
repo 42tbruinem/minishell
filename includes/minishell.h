@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/30 00:02:11 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/30 13:50:35 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,6 +161,7 @@ void			init_readline(t_msh *prog);
 */
 
 int				add_char(t_line *line, char c);
+int				esc_delete(t_line *line);
 int				delete_char(t_line *line);
 void			cursor_left(t_line *line);
 void			cursor_right(t_line *line);

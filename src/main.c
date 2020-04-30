@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/30 00:04:14 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/30 13:31:34 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,23 @@ int	run_commands(t_cmd *commands, t_var *env)
 	return (1);
 }
 
+/* static int	get_row2(void) */
+/* { */
+/* 	char		buf[8]; */
+/* 	int			row; */
+/*  */
+/* 	ft_printf_fd(STDOUT, "\033[6n"); */
+/* 	read(STDIN, buf, 8); */
+/* 	row = ft_atoi(buf + 2); */
+/* 	return (row); */
+/* } */
+/*  */
+
 int	msh_main(t_msh *prog)
 {
 	t_cmd	*commands;
 	int		status;
+	char	buf[8];
 
 	status = 1;
 	init_readline(prog);
@@ -38,8 +51,10 @@ int	msh_main(t_msh *prog)
 		if (read_input(prog) == -1)
 			error_exit(prog, MEM_FAIL);
 		commands = get_commands(tokenize(prog->line.cmd));
-		if (!run_commands(commands, prog->env))
-			break ;
+		status = run_commands(commands, prog->env);
+	/* This helps calibrate cursor following command output for some reason */
+		ft_printf_fd(STDOUT, "\033[6n");
+		read(STDIN, buf, 8);
 	}
 	std_exit(prog);
 	return (0);

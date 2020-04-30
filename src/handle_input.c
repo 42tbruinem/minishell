@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:58:45 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/29 19:36:00 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/30 13:40:09 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,11 @@ int			handle_input(t_line *line, char buf[6])
 	/* return (0); */
 
 	c = buf[0];
+	if (line->escmode == 1 && c != DEL)
+	{
+		line->escmode = 0;
+		return (0);
+	}
 	if (!is_valid_input(c))
 		return (0);
 	if (func_table[0] == 0)
