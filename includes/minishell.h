@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/30 14:40:11 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/30 17:25:55 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 # define STDIN 0
 # define STDOUT 1
 # define STDERR 2
+
+# define RIGHT -1
+# define LEFT 1
 
 /*
 ** Key codes
@@ -167,6 +170,8 @@ void			cursor_left(t_line *line);
 void			cursor_right(t_line *line);
 void			cursor_home(t_line *line);
 void			cursor_end(t_line *line);
+void			cursor_move_row(t_line *line, int c);
+void			cursor_move_word(t_line *line, int c);
 
 /*
 ** Lookup tables in tables.c.

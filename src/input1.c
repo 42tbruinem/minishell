@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:59:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/30 14:23:08 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/30 16:48:46 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,10 @@ int		special_command(t_line *line, char buf[6])
 {
 	if (buf[1] == 0)
 		line->escmode = 1;
-	else if (buf[4] != 0)
-	{}// CTRL-ARROW pressed - more complicated cursor movement
+	else if (buf[4] == 53)
+		cursor_move_word(line, buf[5]);
+	else if (buf[4] == 50)
+		cursor_move_row(line, buf[5]);
 	else
 		return (cursor_move(line, buf[2]));
 	return (0);

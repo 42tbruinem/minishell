@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/30 14:37:37 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/30 17:41:08 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,6 @@ int	run_commands(t_msh *prog, t_cmd *commands, t_var *env)
 	}
 	return (1);
 }
-
-/* static int	get_row2(void) */
-/* { */
-/* 	char		buf[8]; */
-/* 	int			row; */
-/*  */
-/* 	ft_printf_fd(STDOUT, "\033[6n"); */
-/* 	read(STDIN, buf, 8); */
-/* 	row = ft_atoi(buf + 2); */
-/* 	return (row); */
-/* } */
-/*  */
 
 int	msh_main(t_msh *prog)
 {

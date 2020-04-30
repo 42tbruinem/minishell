@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/04/12 11:11:07 by rlucas        #+#    #+#                  #
-#    Updated: 2020/04/29 23:46:51 by tbruinem      ########   odam.nl          #
+#    Updated: 2020/04/30 16:48:30 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ SRC =	main.c \
 		add_char.c \
 		delete_char.c \
 		move_cursor.c \
+		move_cursor2.c \
 		execute.c \
 		builtin.c \
 		tok.c \
