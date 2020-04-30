@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/30 13:50:35 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/30 14:40:11 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,7 @@ char			*error_lookup(int err);
 
 typedef void	(*t_escapef)(t_lexer *lex, char *last);
 
-int				execute(char **args, t_var *env);
+int				execute(t_msh *prog, char **args, t_var *env);
 char			**ft_str2clear(char **str);
 t_cmd			*clear_commands(t_cmd *commands);
 t_cmd			*get_commands(t_token *tokens);
@@ -199,7 +199,7 @@ void			ft_pwd(int argc, char **argv, t_var **env);
 void			ft_env(int argc, char **argv, t_var **env);
 void			ft_echo(int argc, char **argv, t_var **env);
 void			ft_unset(int argc, char **argv, t_var **env);
-void			ft_exit(int argc, char **argv, t_var **env);
+void			ft_exit(t_msh *prog, int argc, char **argv, t_var **env);
 void			ft_export(int argc, char **argv, t_var **env);
 
 void			env_unset(t_var **env, char *name);

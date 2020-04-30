@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 23:02:16 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/04/30 12:46:50 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/30 14:40:47 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,12 @@ void	ft_export(int argc, char **argv, t_var **env)
 	}
 }
 
-void	ft_exit(int argc, char **argv, t_var **env)
+void	ft_exit(t_msh *prog, int argc, char **argv, t_var **env)
 {
 	(void)argc;
 	(void)argv;
 	(void)env;
-	std_exit(NULL); //euhm, yea..
+	std_exit(prog); //euhm, yea..
 }
 
 void	ft_unset(int argc, char **argv, t_var **env)

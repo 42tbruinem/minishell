@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/30 13:31:34 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/30 14:37:37 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 
 char	**g_termbuff;
 
-int	run_commands(t_cmd *commands, t_var *env)
+int	run_commands(t_msh *prog, t_cmd *commands, t_var *env)
 {
 	while (commands)
 	{
 		print_command(commands);
-		(void)execute(commands->args, env);
+		(void)execute(prog, commands->args, env);
 		commands = commands->next;
 	}
 	return (1);
@@ -51,7 +51,7 @@ int	msh_main(t_msh *prog)
 		if (read_input(prog) == -1)
 			error_exit(prog, MEM_FAIL);
 		commands = get_commands(tokenize(prog->line.cmd));
-		status = run_commands(commands, prog->env);
+		status = run_commands(prog, commands, prog->env);
 	/* This helps calibrate cursor following command output for some reason */
 		ft_printf_fd(STDOUT, "\033[6n");
 		read(STDIN, buf, 8);
