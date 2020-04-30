@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 22:22:24 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/04/29 23:53:26 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/04/30 14:40:41 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int		run_program(char *abspath, char **args, t_var *env)
 	return (0);
 }
 
-int		run_builtin(char **args, t_var *env, int id)
+int		run_builtin(t_msh *prog, char **args, t_var *env, int id)
 {
 	static const t_builtin builtins[] = {
 	[B_ENV] = &ft_env,
@@ -111,15 +111,19 @@ int		run_builtin(char **args, t_var *env, int id)
 	[B_ECHO] = &ft_echo,
 	[B_EXPORT] = &ft_export,
 	[B_UNSET] = &ft_unset,
-	[B_EXIT] = &ft_exit,
 	[B_CD] = &ft_cd};
 
 //	printf("Executing builtin!\n");
+	if (id == B_EXIT)
+	{
+		ft_exit(prog, ft_str2len(args), args, &env);
+		return (0);
+	}
 	builtins[id](ft_str2len(args), args, &env);
 	return (0);
 }
 
-int		execute(char **args, t_var *env)
+int		execute(t_msh *prog, char **args, t_var *env)
 {
 	char	*abspath;
 	int		builtin;
@@ -130,5 +134,5 @@ int		execute(char **args, t_var *env)
 	builtin = is_builtin(args[0]);
 	if (builtin < 0)
 		return (1); //error (not an executable or a builtin)
-	return (run_builtin(args, env, builtin));
+	return (run_builtin(prog, args, env, builtin));
 }

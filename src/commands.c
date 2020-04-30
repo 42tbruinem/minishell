@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 19:22:44 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/04/30 12:30:58 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/04/30 14:28:44 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,8 @@ t_cmd	*get_commands(t_token *tokens)
 	{
 		type = (start == tokens) ? DEFAULT : start->type;
 		start = (start == tokens) ? start : start->next;
+		if (!start)
+			break ;
 		if (!push_command(&commands, new_command(&start, type)))
 		{
 			tokclear(tokens, &free);
