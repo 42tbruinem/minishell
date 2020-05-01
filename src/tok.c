@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/14 17:15:28 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/04/27 22:41:51 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/05/01 11:47:14 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ void	tokprint(t_token *list)
 {
 	size_t				i;
 	static const char	*tokentypes[] = {
+	[EOC] = "END_OF_COMMAND",
+	[IN_REDIR] = "IN_REDIR",
 	[PIPE] = "PIPE",
-	[ENDOFARG] = "END_OF_ARG",
-	[REDIRECT] = "<",
-	[TRUNC] = "TRUNC",
 	[APPEND] = "APPEND",
+	[TRUNC] = "TRUNC",
 	[DEFAULT] = "DEFAULT"
 	};
 
@@ -168,15 +168,23 @@ t_token	*special_tok(t_lexer *lex)
 	raw = lex->raw;
 	lex->raw++;
 	if (raw[0] == '>' && raw[1] == '>')
+	{
+		lex->raw++;
 		return (new_tok(ft_strdup(">>"), APPEND));
+	}
+	if (raw[0] == '&' && raw[1] == '&')
+	{
+		lex->raw++;
+		return (new_tok(ft_strdup("&&"), EOC));
+	}
 	if (raw[0] == '>')
 		return (new_tok(ft_strdup(">"), TRUNC));
 	if (raw[0] == '|')
 		return (new_tok(ft_strdup("|"), PIPE));
 	if (raw[0] == '<')
-		return (new_tok(ft_strdup("<"), REDIRECT));
+		return (new_tok(ft_strdup("<"), IN_REDIR));
 	if (raw[0] == ';')
-		return (new_tok(ft_strdup(";"), ENDOFARG));
+		return (new_tok(ft_strdup(";"), EOC));
 	return (NULL);
 }
 
@@ -201,10 +209,10 @@ t_token	*gen_token(char *raw)
 	if (raw)
 		lex.raw = raw;
 	lex.index = 0;
-	if (ft_strchr(";|><", *lex.raw))
+	if (ft_strchr(";|><&", *lex.raw))
 		return (special_tok(&lex));
 	while (lex.index < MAX_TOKSIZE && *lex.raw &&
-	(!ft_strchr("; |><", *lex.raw) || last == '\\'))
+	(!ft_strchr("; |><&", *lex.raw) || last == '\\'))
 		token_creation(&lex, &last);
 	lex.token[lex.index] = '\0';
 	if (lex.index == 0 && *lex.raw != ' ')

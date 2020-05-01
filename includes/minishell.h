@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/30 17:25:55 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/01 11:05:10 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,13 +125,19 @@ enum			e_builtins
 	B_EXIT,
 };
 
+enum			e_pipe
+{
+	READ,
+	WRITE,
+};
+
 enum			e_tokentypes
 {
 	PIPE,
-	TRUNC,
 	APPEND,
-	REDIRECT,
-	ENDOFARG,
+	TRUNC,
+	IN_REDIR,
+	EOC,
 	DEFAULT,
 };
 

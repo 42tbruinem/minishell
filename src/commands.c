@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 19:22:44 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/04/30 14:28:44 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/05/01 10:58:35 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ void	print_command(t_cmd *command)
 {
 	size_t				i;
 	static const char	*commandtypes[] = {
+	[EOC] = "END_OF_COMMAND",
 	[PIPE] = "PIPE",
-	[ENDOFARG] = "END_OF_ARG",
-	[REDIRECT] = "<",
-	[TRUNC] = "TRUNC",
 	[APPEND] = "APPEND",
+	[TRUNC] = "TRUNC",
+	[IN_REDIR] = "IN_REDIR",
 	[DEFAULT] = "DEFAULT"
 	};
 
@@ -77,7 +77,7 @@ size_t	command_len(t_token *tokens)
 	i = 0;
 	if (!tokens)
 		return (0);
-	while (tokens && tokens->type == DEFAULT)
+	while (tokens && (tokens->type != EOC && tokens->type != PIPE))
 	{
 		tokens = tokens->next;
 		i++;
@@ -96,6 +96,8 @@ t_cmd	*new_command(t_token **start, size_t type)
 		return (NULL);
 	new->type = type;
 	new->args = malloc(sizeof(char *) * (len + 1));
+	if (!new->args)
+		return (NULL);
 	new->next = NULL;
 	if (!new->args)
 	{
@@ -153,7 +155,7 @@ t_cmd	*get_commands(t_token *tokens)
 		return (NULL);
 	while (start)
 	{
-		type = (start == tokens) ? DEFAULT : start->type;
+		type = start->type;
 		start = (start == tokens) ? start : start->next;
 		if (!start)
 			break ;
