@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/01 11:54:07 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/05/01 12:10:28 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,11 +90,13 @@ void	in_out_redirection(t_msh *prog, int *pipe, t_cmd *command)
 	if (!stdfdsave[STDOUT])
 		if (dup(STDOUT) == -1)
 			error_exit(prog, 1);
+	dup2(stdfdsave[STDIN], STDIN);
+	dup2(stdfdsave[STDOUT], STDOUT);
 	if (command->type == PIPE)
-		if (dup2(pipe[READ], STDIN))
+		if (dup2(pipe[READ], STDIN) == -1)
 			error_exit(prog, 1);
 	if (command->next && command->next->type == PIPE)
-		if (dup2(pipe[WRITE], STDOUT))
+		if (dup2(pipe[WRITE], STDOUT) == -1)
 			error_exit(prog, 1);
 	redirection_apply(command->args);
 }
@@ -107,7 +109,7 @@ int		run_commands(t_msh *prog, t_cmd *commands, t_var *env)
 		std_exit(prog);
 	while (commands)
 	{
-		print_command(commands);
+//		print_command(commands);
 		in_out_redirection(prog, redir_pipe, commands);
 		(void)execute(prog, commands->args, env);
 		commands = commands->next;
