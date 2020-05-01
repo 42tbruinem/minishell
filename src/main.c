@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/01 12:10:28 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/05/01 13:08:38 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,18 @@
 
 char	**g_termbuff;
 
-void	redirection_apply(char **args)
+void	redirection_apply(char **args, int *inout)
 {
 	int			fds[100];
 	size_t		i;
 	size_t		fd_index;
-	int			inout[2];
 
 	i = 0;
 	fd_index = 0;
-	inout[0] = 0;
-	inout[1] = 1;
 	while (args[i])
 	{
-		if (ft_strncmp(args[i], ">>", 2) == 0)
+//		ft_printf("%ld | %s\n", i, args[i]);
+		if (ft_strncmp(args[i], ">>", 3) == 0)
 		{
 			if (args[i + 1])
 			{
@@ -49,7 +47,9 @@ void	redirection_apply(char **args)
 			{
 				fds[fd_index] = open(args[i + 1], O_CREAT | O_WRONLY | O_TRUNC);
 				inout[1] = fds[fd_index];
+				//free(args[i]);
 				args[i] = NULL;
+				//free(args[i + 1]);
 				args[i + 1] = NULL;
 				i++;
 				fd_index++;
@@ -71,17 +71,32 @@ void	redirection_apply(char **args)
 			else
 				break ;
 		}
-		else
-			i++;
+		i++;
 	}
-	if (inout[0])
-		dup2(inout[0], STDIN);
-	if (inout[1])
-		dup2(inout[1], STDOUT);
 }
 
 void	in_out_redirection(t_msh *prog, int *pipe, t_cmd *command)
 {
+	int			inout[2];
+
+	inout[READ] = 0;
+	inout[WRITE] = 0;
+	if (command->type == PIPE)
+		inout[READ] = pipe[READ];
+	if (command->next && command->next->type == PIPE)
+		inout[WRITE] = pipe[WRITE];
+	redirection_apply(command->args, inout);
+	if (inout[READ])
+		if (dup2(inout[0], STDIN) == -1)
+			error_exit(prog, 1);
+	if (inout[WRITE])
+		if (dup2(inout[1], STDOUT) == -1)
+			error_exit(prog, 1);
+}
+
+int		run_commands(t_msh *prog, t_cmd *commands, t_var *env)
+{
+	int	redir_pipe[2];
 	static	int stdfdsave[2];
 
 	if (!stdfdsave[STDIN])
@@ -90,21 +105,6 @@ void	in_out_redirection(t_msh *prog, int *pipe, t_cmd *command)
 	if (!stdfdsave[STDOUT])
 		if (dup(STDOUT) == -1)
 			error_exit(prog, 1);
-	dup2(stdfdsave[STDIN], STDIN);
-	dup2(stdfdsave[STDOUT], STDOUT);
-	if (command->type == PIPE)
-		if (dup2(pipe[READ], STDIN) == -1)
-			error_exit(prog, 1);
-	if (command->next && command->next->type == PIPE)
-		if (dup2(pipe[WRITE], STDOUT) == -1)
-			error_exit(prog, 1);
-	redirection_apply(command->args);
-}
-
-int		run_commands(t_msh *prog, t_cmd *commands, t_var *env)
-{
-	int	redir_pipe[2];
-
 	if (pipe(redir_pipe) == -1)
 		std_exit(prog);
 	while (commands)
@@ -112,6 +112,8 @@ int		run_commands(t_msh *prog, t_cmd *commands, t_var *env)
 //		print_command(commands);
 		in_out_redirection(prog, redir_pipe, commands);
 		(void)execute(prog, commands->args, env);
+		dup2(stdfdsave[STDIN], STDIN);
+		dup2(stdfdsave[STDOUT], STDOUT);
 		commands = commands->next;
 	}
 	return (1);
