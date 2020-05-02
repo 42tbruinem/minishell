@@ -6,13 +6,14 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 19:22:44 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/05/01 10:58:35 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/05/02 13:40:15 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdlib.h>
 #include "libft.h"
+#include <stdio.h>
 
 void	print_command(t_cmd *command)
 {
@@ -27,10 +28,10 @@ void	print_command(t_cmd *command)
 	};
 
 	i = 0;
-	ft_printf("type: %s\n", commandtypes[command->type]);
+	dprintf(2, "type: %s\n", commandtypes[command->type]);
 	while (command->args[i])
 	{
-		ft_printf("%s%c", command->args[i], command->args[i + 1] ? ' ' : '\n');
+		dprintf(2, "%s%c", command->args[i], command->args[i + 1] ? ' ' : '\n');
 		i++;
 	}
 	/* sleep(5); */
