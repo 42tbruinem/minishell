@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/02 13:46:55 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/05/04 14:28:02 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,9 +123,105 @@ int		run_commands(t_msh *prog, t_cmd *commands, t_var *env)
 	return (1);
 }
 
+int			checkstate(int state, int c)
+{
+	if (state == NORMAL)
+	{
+		if (c == '\"')
+			return (INDOUBLEQUOTE);
+		if (c == '\'')
+			return (INSINGLEQUOTE);
+		if (c == '`')
+			return (INBACKTICK);
+	}
+	if (state == INDOUBLEQUOTE && c == '\"')
+		return (NORMAL);
+	if (state == INSINGLEQUOTE && c == '\'')
+		return (NORMAL);
+	if (state == INBACKTICK && c == '`')
+		return (NORMAL);
+	return (state);
+}
+
+size_t			sum_tokens(char *line, int *state)
+{
+	size_t		i;
+	int			inwhitespace;
+	size_t		sum;
+
+	i = 0;
+	inwhitespace = 1;
+	sum = 0;
+	while (line[i])
+	{
+		*state = checkstate(*state, line[i]);
+		while (*state != NORMAL && line[i])
+		{
+			i++;
+			*state = checkstate(*state, line[i]);
+		}
+		if (!ft_is_whitespace(line[i]) && inwhitespace == 1)
+		{
+			sum++;
+			inwhitespace = 0;
+		}
+		if (ft_is_whitespace(line[i]) && inwhitespace == 0)
+			inwhitespace = 1;
+		i++;
+	}
+	return (sum);
+}
+
+void		gen_tokens(char *line, t_ryantok **tokens)
+{
+	size_t		i;
+	int			inwhitespace;
+	size_t		tokeni;
+
+	i = 0;
+	inwhitespace = 1;
+	tokeni = 0;
+	while (line[i])
+	{
+		*state = checkstate(*state, line[i]);
+		while (*state != NORMAL && line[i])
+		{
+			i++;
+			*state = checkstate(*state, line[i]);
+		}
+		if (!ft_is_whitespace(line[i]) && inwhitespace == 1)
+		{
+			(*tokens)[tokeni].index = line + i;
+			inwhitespace = 0;
+		}
+		if (ft_is_whitespace(line[i]) && inwhitespace == 0)
+		{
+			line[i] = '\0';
+			inwhitespace = 1;
+		}
+		i++;
+	}
+	return (sum);
+}
+
+void		tokenizer(char *line)
+{
+	int				state;
+	/* size_t		i; */
+	t_ryantok		*tokens;
+	size_t			totaltokens;
+
+	/* i = 0; */
+	state = NORMAL;
+	/* ft_printf("sum = %d\n", sum_tokens(line, &state)); */
+	totaltokens = sum_tokens(line, &state);
+	tokens = (t_ryantok *)malloc(totaltokens + 1);
+	gen_tokens(line, &tokens);
+}
+
 int	msh_main(t_msh *prog)
 {
-	t_cmd	*commands;
+	/* t_cmd	*commands; */
 	int		status;
 	char	buf[8];
 
@@ -135,8 +231,9 @@ int	msh_main(t_msh *prog)
 	{
 		if (read_input(prog) == -1)
 			error_exit(prog, MEM_FAIL);
-		commands = get_commands(tokenize(prog->line.cmd));
-		status = run_commands(prog, commands, prog->env);
+		tokenizer(prog->line.cmd);
+		/* commands = get_commands(tokenize(prog->line.cmd)); */
+		/* status = run_commands(prog, commands, prog->env); */
 	/* This helps calibrate cursor following command output for some reason */
 		ft_printf_fd(STDOUT, "\033[6n");
 		read(STDIN, buf, 8);

@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/04 12:13:53 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/04 13:37:20 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,14 @@
 # include <unistd.h>
 # include <termios.h>
 
+enum			e_fsm
+{
+	NORMAL = 0,
+	INDOUBLEQUOTE = 1,
+	INSINGLEQUOTE = 2,
+	INBACKTICK = 3
+};
+
 extern char	**g_termbuff;
 
 typedef struct s_var	t_var;
@@ -63,6 +71,12 @@ struct			s_cmd
 	size_t	type;
 	t_cmd	*next;
 };
+
+struct			s_ryantok
+{
+	int			type;
+	size_t		index;
+}				t_ryantok;
 
 typedef struct	s_lexer
 {
