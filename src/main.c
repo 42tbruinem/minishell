@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/04 15:21:50 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/05/04 21:25:28 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,9 @@ void	redirection_apply(char **args, int *inout)
 				fds[fd_index] = open(args[i + 1], O_CREAT | O_WRONLY | O_APPEND);
 				inout[WRITE] = fds[fd_index];
 				dprintf(2, ">> detected, setting OUT.\n");
+				free(args[i]);
 				args[i] = NULL;
+				free(args[i + 1]);
 				args[i + 1] = NULL;
 				i++;
 				fd_index++;
@@ -50,9 +52,9 @@ void	redirection_apply(char **args, int *inout)
 				fds[fd_index] = open(args[i + 1], O_CREAT | O_WRONLY | O_TRUNC);
 				inout[WRITE] = fds[fd_index];
 				dprintf(2, "> detected, setting OUT.\n");
-				//free(args[i]);
+				free(args[i]);
 				args[i] = NULL;
-				//free(args[i + 1]);
+				free(args[i + 1]);
 				args[i + 1] = NULL;
 				i++;
 				fd_index++;
@@ -67,7 +69,9 @@ void	redirection_apply(char **args, int *inout)
 				fds[fd_index] = open(args[i + 1], O_RDONLY);
 				inout[READ] = fds[fd_index];
 				dprintf(2, "< detected, setting IN.\n");
+				free(args[i]);
 				args[i] = NULL;
+				free(args[i + 1]);
 				args[i + 1] = NULL;
 				i++;
 				fd_index++;
@@ -85,9 +89,9 @@ void	in_out_redirection(t_msh *prog, int *pipe, t_cmd *command)
 
 	inout[READ] = 0;
 	inout[WRITE] = 0;
-	if (command->type == PIPE)
+	if (command->cmdtype == PIPE)
 		inout[READ] = pipe[READ]; //need one pipe per chain (A | B) = 1 (A | B | C) would need 2 pipes.
-	if (command->next && command->next->type == PIPE)
+	if (command->next && command->next->cmdtype == PIPE)
 		inout[WRITE] = pipe[WRITE];
 	redirection_apply(command->args, inout);
 	if (inout[READ])
@@ -125,8 +129,6 @@ int		run_commands(t_msh *prog, t_cmd *commands, t_var *env)
 
 int	msh_main(t_msh *prog)
 {
-	t_cmd	*commands;
-
 	int		status;
 	char	buf[8];
 
@@ -136,8 +138,12 @@ int	msh_main(t_msh *prog)
 	{
 		if (read_input(prog) == -1)
 			error_exit(prog, MEM_FAIL);
-		commands = get_commands(tokenize(prog->line.cmd));
-		status = run_commands(prog, commands, prog->env);
+		if (!tokenize(&prog->args, &prog->argtypes, prog->line.cmd))
+			error_exit(NULL, MEM_FAIL);
+		prog->commands = get_commands(&prog->args, &prog->argtypes);
+		if (!prog->commands)
+			error_exit(NULL, MEM_FAIL);
+		status = run_commands(prog, prog->commands, prog->env);
 	/* Requests a Report Cursor Position response from the device */
 		ft_printf_fd(STDOUT, "\033[6n");
 		read(STDIN, buf, 8);

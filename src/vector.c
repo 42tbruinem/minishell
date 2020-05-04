@@ -6,28 +6,15 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/03 20:49:54 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/05/04 14:23:35 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/05/04 20:59:47 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libext.h"
-
-typedef struct s_vec	t_vec;
-typedef void	(*t_destructor)(void *);
-
-struct	s_vec
-{
-	char			*store;
-	size_t			type_size;
-	size_t			capacity;
-	size_t			index;
-};
+#include "libft.h"
+#include "minishell.h"
 
 int		vec_new(t_vec *vector, size_t type_size)
 {
-	size_t	i;
-
-	i = 0;
 	vector->capacity = 4;
 	vector->index = 0;
 	vector->type_size = type_size;

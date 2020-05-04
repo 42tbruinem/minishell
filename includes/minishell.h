@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/04 15:21:27 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/05/04 21:20:38 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 */
 
 # define CTRL_D 4
+# define CTRL_L 12
 # define CTRL_U 21
 # define DEL 127
 # define NEWLINE 10
@@ -69,9 +70,11 @@ typedef struct s_cmd	t_cmd;
 struct			s_cmd
 {
 	char	**args;
-	size_t	type;
-	t_cmd	*next;
+	int		*argtypes;
+	int		cmdtype;
 	int		iostream[2];
+	int		cmdpipe[2];
+	t_cmd	*next;
 };
 
 typedef struct	s_lexer
@@ -117,8 +120,9 @@ typedef	struct	s_msh
 {
 	t_vec		process_arr;
 	t_vec		file_arr;
-	t_vec		argtype;
+	t_vec		argtypes;
 	t_vec		args;
+	t_cmd		*commands;
 	char		**envp;
 	t_var		*env;
 	t_line		line;
@@ -212,15 +216,18 @@ typedef void	(*t_escapef)(t_lexer *lex, char *last);
 int				execute(t_msh *prog, char **args, t_var *env);
 char			**ft_str2clear(char **str);
 t_cmd			*clear_commands(t_cmd *commands);
-t_cmd			*get_commands(t_token *tokens);
+t_cmd			*get_commands(t_vec *vec_args, t_vec *vec_types);
 void			print_command(t_cmd *command);
 
 void			error_exit(t_msh *prog, int err);
 void			std_exit(t_msh *prog);
 
+int				vec_add(t_vec *vector, void *buffer);
+int				vec_new(t_vec *vector, size_t type_size);
+
 void			tokclear(t_token *list, void (*del)(void *));
 void			tokprint(t_token *list);
-t_token			*tokenize(char *raw);
+int				tokenize(t_vec *args, t_vec *argtypes, char *raw);
 
 void			ft_cd(int argc, char **argv, t_var **env);
 void			ft_pwd(int argc, char **argv, t_var **env);
@@ -246,6 +253,7 @@ void			env_print(t_var *env);
 int				handle_input(t_line *line, char buf[6]);
 int				read_input(t_msh *prog);
 int				send_EOF(t_line *line, char buf[6]);
+int				clear_screen(t_line *line, char buf[6]);
 int				clear_input(t_line *line, char buf[6]);
 int				cursor_move(t_line *line, int c);
 int				special_command(t_line *line, char buf[6]);

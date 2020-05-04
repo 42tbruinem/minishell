@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 22:22:24 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/04/30 14:40:41 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/05/04 21:14:27 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,6 @@ int		run_program(char *abspath, char **args, t_var *env)
 			return (1); //error
 	(void)ft_str2clear(envp);
 	free(abspath);
-	(void)ft_str2clear(args);
 	return (0);
 }
 
