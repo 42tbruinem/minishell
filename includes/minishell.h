@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/01 12:01:48 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/05/04 15:21:27 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,16 @@
 
 extern char	**g_termbuff;
 
+typedef struct s_vec	t_vec;
+
+struct	s_vec
+{
+	char			*store;
+	size_t			type_size;
+	size_t			capacity;
+	size_t			index;
+};
+
 typedef struct s_var	t_var;
 
 struct	s_var
@@ -61,6 +71,7 @@ struct			s_cmd
 	char	**args;
 	size_t	type;
 	t_cmd	*next;
+	int		iostream[2];
 };
 
 typedef struct	s_lexer
@@ -104,6 +115,11 @@ typedef struct	s_line
 
 typedef	struct	s_msh
 {
+	t_vec		process_arr;
+	t_vec		file_arr;
+	t_vec		argtype;
+	t_vec		args;
+	char		**envp;
 	t_var		*env;
 	t_line		line;
 }				t_msh;

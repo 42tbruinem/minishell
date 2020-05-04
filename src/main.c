@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/02 13:46:55 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/05/04 15:21:50 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void	in_out_redirection(t_msh *prog, int *pipe, t_cmd *command)
 	inout[READ] = 0;
 	inout[WRITE] = 0;
 	if (command->type == PIPE)
-		inout[READ] = pipe[READ];
+		inout[READ] = pipe[READ]; //need one pipe per chain (A | B) = 1 (A | B | C) would need 2 pipes.
 	if (command->next && command->next->type == PIPE)
 		inout[WRITE] = pipe[WRITE];
 	redirection_apply(command->args, inout);
@@ -126,6 +126,7 @@ int		run_commands(t_msh *prog, t_cmd *commands, t_var *env)
 int	msh_main(t_msh *prog)
 {
 	t_cmd	*commands;
+
 	int		status;
 	char	buf[8];
 
@@ -137,7 +138,7 @@ int	msh_main(t_msh *prog)
 			error_exit(prog, MEM_FAIL);
 		commands = get_commands(tokenize(prog->line.cmd));
 		status = run_commands(prog, commands, prog->env);
-	/* This helps calibrate cursor following command output for some reason */
+	/* Requests a Report Cursor Position response from the device */
 		ft_printf_fd(STDOUT, "\033[6n");
 		read(STDIN, buf, 8);
 	}
