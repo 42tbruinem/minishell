@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:59:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/30 18:37:34 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/04 12:26:58 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,33 @@ int		send_EOF(t_line *line, char buf[6])
 	return (0);
 }
 
+int		clear_screen(t_line *line, char buf[6])
+{
+	(void)buf;
+	termcmd(CLEAR_SCREEN, 0, 0, 1);
+	termcmd(MOVE_COLROW, 0, 0, 1);
+	ft_printf("%s%s", line->prompt, line->cmd);
+	line->cursor.row = line->inputrow;
+	return (0);
+}
+
 int		clear_input(t_line *line, char buf[6])
 {
 	(void)buf;
 	ft_bzero(line->cmd, line->alloced_cmd);
 	line->cmd_len = 0;
 	line->cursor.row -= line->inputrow;
-	termcmd(MOVE_COLROW, 0, line->cursor.row, 1);
-	termcmd(DELETE_LINES, line->total_rows + 1, 0, line->total_rows + 1);
+	while (line->total_rows > 0)
+	{
+		termcmd(MOVE_COLROW, 0, line->cursor.row + line->total_rows, 1);
+		termcmd(DELETE_LINE, 0, 0, 1);
+		line->total_rows--;
+	}
+	termcmd(MOVE_COLROW, 0, line->cursor.row + line->total_rows, 1);
+	termcmd(DELETE_LINE, 0, 0, 1);
 	ft_printf("%s", line->prompt);
 	line->cursor.col = line->promptlen;
+	line->inputrow = 0;
 	return (0);
 }
 
