@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/05 18:58:46 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/05 23:32:43 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,15 @@ struct			s_ryantok
 	int			type;
 	char		*value;
 };
+
+typedef struct	s_ryanlexer
+{
+	size_t		i;
+	size_t		j;
+	int			prevstate;
+	int			state;
+	int			escape;
+}				t_ryanlexer;
 
 typedef struct	s_lexer
 {
@@ -238,6 +247,13 @@ void			env_init(t_msh *prog);
 char			*env_val_get(const char *name, t_var *env);
 void			env_clear(t_var *env, void (*del)(void *));
 void			env_print(t_var *env);
+
+/*
+** New token functions - creates tokens using the same
+** allocated string from input.
+*/
+
+void			tokenizer(char *line);
 
 /*
 ** Functions to read input and handle line-editing. In read_input.c,

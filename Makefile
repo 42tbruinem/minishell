@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/04/12 11:11:07 by rlucas        #+#    #+#                  #
-#    Updated: 2020/04/30 16:48:30 by rlucas        ########   odam.nl          #
+#    Updated: 2020/05/05 23:25:20 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,7 @@ SRC =	main.c \
 		env.c \
 		prompt.c \
 		terminal.c \
+		ryantokens.c \
 		utils.c
 
 OBJ := $(addprefix $(OBJDIR), $(SRC:%.c=%.o))
