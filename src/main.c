@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/04 14:28:02 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/05 14:18:56 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,10 +155,20 @@ size_t			sum_tokens(char *line, int *state)
 	while (line[i])
 	{
 		*state = checkstate(*state, line[i]);
-		while (*state != NORMAL && line[i])
+		if (*state != NORMAL)
 		{
 			i++;
+			if (!line[i])
+				return (sum);
+			sum++;
 			*state = checkstate(*state, line[i]);
+			while (*state != NORMAL && line[i])
+			{
+				i++;
+				*state = checkstate(*state, line[i]);
+				if (*state == NORMAL && line[i + 1])
+					*state = checkstate(*state, line[i + 1]);
+			}
 		}
 		if (!ft_is_whitespace(line[i]) && inwhitespace == 1)
 		{
@@ -172,7 +182,7 @@ size_t			sum_tokens(char *line, int *state)
 	return (sum);
 }
 
-void		gen_tokens(char *line, t_ryantok **tokens)
+void		gen_tokens(int *state, char *line, t_ryantok **tokens)
 {
 	size_t		i;
 	int			inwhitespace;
@@ -184,39 +194,123 @@ void		gen_tokens(char *line, t_ryantok **tokens)
 	while (line[i])
 	{
 		*state = checkstate(*state, line[i]);
-		while (*state != NORMAL && line[i])
+		if (*state != NORMAL)
 		{
+			line[i] = '\0';
 			i++;
+			if (!line[i])
+				return ;
+			(*tokens)[tokeni].value = line + i;
+			tokeni++;
 			*state = checkstate(*state, line[i]);
+			while (*state != NORMAL && line[i])
+			{
+				i++;
+				*state = checkstate(*state, line[i]);
+			}
+			line[i] = '\0';
 		}
-		if (!ft_is_whitespace(line[i]) && inwhitespace == 1)
+		else if (!ft_is_whitespace(line[i]) && inwhitespace == 1)
 		{
-			(*tokens)[tokeni].index = line + i;
+			(*tokens)[tokeni].value = line + i;
+			tokeni++;
 			inwhitespace = 0;
 		}
-		if (ft_is_whitespace(line[i]) && inwhitespace == 0)
+		else if (ft_is_whitespace(line[i]) && inwhitespace == 0)
 		{
 			line[i] = '\0';
 			inwhitespace = 1;
 		}
 		i++;
 	}
-	return (sum);
+	(*tokens)[tokeni].value = NULL;
+}
+
+void		concatenate_quotes(char *line)
+{
+	size_t		i;
+	int			state;
+	int			prevstate;
+	size_t		j;
+
+	i = 0;
+	state = NORMAL;
+	while (line[i])
+	{
+		prevstate = state;
+		state = checkstate(state, line[i]);
+		if (prevstate == NORMAL && state != NORMAL)
+			j = i;
+		if ((line[i] == '\"' || line[i] == '\'') && state == NORMAL)
+			if (line[i + 1] == '\"' || line[i + 1] == '\'')
+			{
+				(*ft_strchr(line + i + 2, line[i + 1])) = line[i];
+				ft_memmove(line + i, line + i + 2, ft_strlen(line + i + 2));
+				j = ft_strlen(line);
+				line[j - 1] = '\0';
+				line[j - 2] = '\0';
+				i = 0;
+				continue ;
+			}
+		i++;
+	}
+}
+
+void		concatenate_non_spaces(char *line)
+{
+	size_t		i;
+	int			state;
+	int			prevstate;
+	size_t		j;
+
+	i = 0;
+	state = NORMAL;
+	while (line[i])
+	{
+		prevstate = state;
+		state = checkstate(state, line[i]);
+		if (prevstate == NORMAL && state != NORMAL)
+			j = i;
+		if (state == NORMAL && (prevstate == INDOUBLEQUOTE || prevstate ==
+					INSINGLEQUOTE))
+			if (line[i + 1] && !ft_is_whitespace(line[i + 1]))
+			{
+				ft_memmove(line + i, line + i + 1, ft_strlen(line + i + 1));
+				ft_memmove(line + j, line + j + 1, ft_strlen(line + j + 1));
+				j = ft_strlen(line);
+				line[j - 1] = '\0';
+				line[j - 2] = '\0';
+				continue ;
+			}
+		i++;
+	}
 }
 
 void		tokenizer(char *line)
 {
 	int				state;
 	/* size_t		i; */
-	t_ryantok		*tokens;
+	/* t_ryantok		*tokens; */
 	size_t			totaltokens;
 
 	/* i = 0; */
+	concatenate_quotes(line);
+	ft_printf("after quote concat = %s\n", line);
+	concatenate_non_spaces(line);
+	ft_printf("after non-space concat = %s\n", line);
 	state = NORMAL;
-	/* ft_printf("sum = %d\n", sum_tokens(line, &state)); */
 	totaltokens = sum_tokens(line, &state);
-	tokens = (t_ryantok *)malloc(totaltokens + 1);
-	gen_tokens(line, &tokens);
+	ft_printf("sum = %u\n", totaltokens);
+	/* tokens = (t_ryantok *)malloc(sizeof(t_ryantok) * (totaltokens + 1)); */
+	/* state = NORMAL; */
+	/* gen_tokens(&state, line, &tokens); */
+    /*  */
+	/* size_t		i = 0; */
+	/* while (i < totaltokens) */
+	/* { */
+	/* 	ft_printf("%s\n", tokens[i].value); */
+	/* 	i++; */
+	/* } */
 }
 
 int	msh_main(t_msh *prog)

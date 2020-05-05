@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/04 13:37:20 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/04 14:49:46 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,13 @@ struct			s_cmd
 	t_cmd	*next;
 };
 
+typedef struct	s_ryantok	t_ryantok;
+
 struct			s_ryantok
 {
 	int			type;
-	size_t		index;
-}				t_ryantok;
+	char		*value;
+};
 
 typedef struct	s_lexer
 {
