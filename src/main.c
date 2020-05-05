@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/05 14:18:56 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/05 17:39:11 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,34 +148,24 @@ size_t			sum_tokens(char *line, int *state)
 	size_t		i;
 	int			inwhitespace;
 	size_t		sum;
+	int			prevstate;
 
 	i = 0;
 	inwhitespace = 1;
 	sum = 0;
 	while (line[i])
 	{
+		prevstate = *state;
 		*state = checkstate(*state, line[i]);
-		if (*state != NORMAL)
-		{
-			i++;
-			if (!line[i])
-				return (sum);
+		if (*state != NORMAL && prevstate == NORMAL)
 			sum++;
-			*state = checkstate(*state, line[i]);
-			while (*state != NORMAL && line[i])
-			{
-				i++;
-				*state = checkstate(*state, line[i]);
-				if (*state == NORMAL && line[i + 1])
-					*state = checkstate(*state, line[i + 1]);
-			}
-		}
-		if (!ft_is_whitespace(line[i]) && inwhitespace == 1)
+		if (!ft_is_whitespace(line[i]) && inwhitespace == 1 && *state == NORMAL
+				&& prevstate == NORMAL)
 		{
 			sum++;
 			inwhitespace = 0;
 		}
-		if (ft_is_whitespace(line[i]) && inwhitespace == 0)
+		if (ft_is_whitespace(line[i]) && inwhitespace == 0 && *state == NORMAL)
 			inwhitespace = 1;
 		i++;
 	}
@@ -271,6 +261,19 @@ void		concatenate_non_spaces(char *line)
 		state = checkstate(state, line[i]);
 		if (prevstate == NORMAL && state != NORMAL)
 			j = i;
+		if (prevstate == NORMAL && (state == INDOUBLEQUOTE || state ==
+					INSINGLEQUOTE) && i != 0)
+		{
+			if (!ft_is_whitespace(line[i - 1]))
+			{
+				j = ft_strchr(line + i + 1, line[i]) - line - 1;
+				ft_memmove(line + i, line + i + 1, ft_strlen(line + i + 1));
+				ft_memmove(line + j, line + j + 1, ft_strlen(line + j + 1));
+				j = ft_strlen(line);
+				line[j - 1] = '\0';
+				line[j - 2] = '\0';
+			}
+		}
 		if (state == NORMAL && (prevstate == INDOUBLEQUOTE || prevstate ==
 					INSINGLEQUOTE))
 			if (line[i + 1] && !ft_is_whitespace(line[i + 1]))
