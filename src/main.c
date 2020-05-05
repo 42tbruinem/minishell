@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/05 17:39:11 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/05 19:06:54 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,10 @@ int		run_commands(t_msh *prog, t_cmd *commands, t_var *env)
 	return (1);
 }
 
-int			checkstate(int state, int c)
+int			checkstate(int state, int c, int escape)
 {
+	if (escape == 1)
+		return (state);
 	if (state == NORMAL)
 	{
 		if (c == '\"')
@@ -148,25 +150,35 @@ size_t			sum_tokens(char *line, int *state)
 	size_t		i;
 	int			inwhitespace;
 	size_t		sum;
+	int			escape;
 	int			prevstate;
 
 	i = 0;
 	inwhitespace = 1;
 	sum = 0;
+	escape = 0;
 	while (line[i])
 	{
 		prevstate = *state;
-		*state = checkstate(*state, line[i]);
+		*state = checkstate(*state, line[i], escape);
+		if (line[i] == '\\' && escape == 0)
+		{
+			escape = 1;
+			i++;
+			continue ;
+		}
 		if (*state != NORMAL && prevstate == NORMAL)
 			sum++;
-		if (!ft_is_whitespace(line[i]) && inwhitespace == 1 && *state == NORMAL
-				&& prevstate == NORMAL)
+		if (!escape && !ft_is_whitespace(line[i]) && inwhitespace == 1 &&
+				*state == NORMAL && prevstate == NORMAL)
 		{
 			sum++;
 			inwhitespace = 0;
 		}
-		if (ft_is_whitespace(line[i]) && inwhitespace == 0 && *state == NORMAL)
+		if (!escape && ft_is_whitespace(line[i]) && inwhitespace == 0 && *state
+				== NORMAL)
 			inwhitespace = 1;
+		escape = 0;
 		i++;
 	}
 	return (sum);
@@ -176,14 +188,22 @@ void		gen_tokens(int *state, char *line, t_ryantok **tokens)
 {
 	size_t		i;
 	int			inwhitespace;
+	int			escape;
 	size_t		tokeni;
 
 	i = 0;
 	inwhitespace = 1;
 	tokeni = 0;
+	escape = 0;
 	while (line[i])
 	{
-		*state = checkstate(*state, line[i]);
+		*state = checkstate(*state, line[i], escape);
+		if (line[i] == '\\' && escape == 0)
+		{
+			escape = 1;
+			i++;
+			continue ;
+		}
 		if (*state != NORMAL)
 		{
 			line[i] = '\0';
@@ -192,11 +212,20 @@ void		gen_tokens(int *state, char *line, t_ryantok **tokens)
 				return ;
 			(*tokens)[tokeni].value = line + i;
 			tokeni++;
-			*state = checkstate(*state, line[i]);
-			while (*state != NORMAL && line[i])
+			*state = checkstate(*state, line[i], escape);
+			while (line[i])
 			{
+				if (line[i] == '\\' && escape == 0)
+				{
+					escape = 1;
+					i++;
+					continue ;
+				}
+				*state = checkstate(*state, line[i], escape);
+				if (*state == NORMAL)
+					break ;
 				i++;
-				*state = checkstate(*state, line[i]);
+				escape = 0;
 			}
 			line[i] = '\0';
 		}
@@ -211,6 +240,7 @@ void		gen_tokens(int *state, char *line, t_ryantok **tokens)
 			line[i] = '\0';
 			inwhitespace = 1;
 		}
+		escape = 0;
 		i++;
 	}
 	(*tokens)[tokeni].value = NULL;
@@ -221,17 +251,25 @@ void		concatenate_quotes(char *line)
 	size_t		i;
 	int			state;
 	int			prevstate;
+	int			escape;
 	size_t		j;
 
 	i = 0;
 	state = NORMAL;
+	escape = 0;
 	while (line[i])
 	{
 		prevstate = state;
-		state = checkstate(state, line[i]);
+		state = checkstate(state, line[i], escape);
+		if (line[i] == '\\' && escape == 0)
+		{
+			escape = 1;
+			i++;
+			continue ;
+		}
 		if (prevstate == NORMAL && state != NORMAL)
 			j = i;
-		if ((line[i] == '\"' || line[i] == '\'') && state == NORMAL)
+		if (!escape && (line[i] == '\"' || line[i] == '\'') && state == NORMAL)
 			if (line[i + 1] == '\"' || line[i + 1] == '\'')
 			{
 				(*ft_strchr(line + i + 2, line[i + 1])) = line[i];
@@ -242,6 +280,7 @@ void		concatenate_quotes(char *line)
 				i = 0;
 				continue ;
 			}
+		escape = 0;
 		i++;
 	}
 }
@@ -251,40 +290,67 @@ void		concatenate_non_spaces(char *line)
 	size_t		i;
 	int			state;
 	int			prevstate;
+	int			escape;
 	size_t		j;
+	unsigned char		c;
 
 	i = 0;
 	state = NORMAL;
+	escape = 0;
 	while (line[i])
 	{
 		prevstate = state;
-		state = checkstate(state, line[i]);
+		state = checkstate(state, line[i], escape);
+		if (line[i] == '\\' && escape == 0)
+		{
+			escape = 1;
+			i++;
+			continue ;
+		}
 		if (prevstate == NORMAL && state != NORMAL)
 			j = i;
-		if (prevstate == NORMAL && (state == INDOUBLEQUOTE || state ==
-					INSINGLEQUOTE) && i != 0)
-		{
-			if (!ft_is_whitespace(line[i - 1]))
-			{
-				j = ft_strchr(line + i + 1, line[i]) - line - 1;
-				ft_memmove(line + i, line + i + 1, ft_strlen(line + i + 1));
-				ft_memmove(line + j, line + j + 1, ft_strlen(line + j + 1));
-				j = ft_strlen(line);
-				line[j - 1] = '\0';
-				line[j - 2] = '\0';
-			}
-		}
-		if (state == NORMAL && (prevstate == INDOUBLEQUOTE || prevstate ==
-					INSINGLEQUOTE))
+		if (!escape && state == NORMAL && (prevstate == INDOUBLEQUOTE ||
+					prevstate == INSINGLEQUOTE))
 			if (line[i + 1] && !ft_is_whitespace(line[i + 1]))
 			{
-				ft_memmove(line + i, line + i + 1, ft_strlen(line + i + 1));
-				ft_memmove(line + j, line + j + 1, ft_strlen(line + j + 1));
-				j = ft_strlen(line);
-				line[j - 1] = '\0';
-				line[j - 2] = '\0';
-				continue ;
+				c = line[i];
+				if (!ft_strchr(line + i + 1, ' '))
+				{
+					j = ft_strchr(line + i + 1, line[i]) - line - 1;
+					ft_memmove(line + i, line + i + 1, ft_strlen(line + i + 1));
+					ft_memmove(line + j, line + j + 1, ft_strlen(line + j + 1));
+					j = ft_strlen(line);
+					line[j - 1] = '\0';
+					line[j - 2] = '\0';
+					continue ;
+				}
+				j = ft_strchr(line + i + 1, ' ') - line - 1;
+				ft_memmove(line + i, line + i + 1, j - i);
+				line[j] = c;
+				state = (prevstate == INDOUBLEQUOTE) ? INDOUBLEQUOTE :
+					INSINGLEQUOTE;
 			}
+		concatenate_quotes(line);
+		escape = 0;
+		i++;
+	}
+}
+/* "e"c"h"'o 'hello "th"er"e" */
+
+void		remove_escapes(char *line)
+{
+	size_t		i;
+	size_t		len;
+
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] == '\\')
+		{
+			len = ft_strlen(line);
+			ft_memmove(line + i, line + i + 1, ft_strlen(line + i + 1));
+			line[len - 1] = '\0';
+		}
 		i++;
 	}
 }
@@ -293,27 +359,29 @@ void		tokenizer(char *line)
 {
 	int				state;
 	/* size_t		i; */
-	/* t_ryantok		*tokens; */
+	t_ryantok		*tokens;
 	size_t			totaltokens;
 
 	/* i = 0; */
-	concatenate_quotes(line);
-	ft_printf("after quote concat = %s\n", line);
+	/* concatenate_quotes(line); */
+	/* ft_printf("after quote concat = %s\n", line); */
 	concatenate_non_spaces(line);
 	ft_printf("after non-space concat = %s\n", line);
 	state = NORMAL;
 	totaltokens = sum_tokens(line, &state);
 	ft_printf("sum = %u\n", totaltokens);
-	/* tokens = (t_ryantok *)malloc(sizeof(t_ryantok) * (totaltokens + 1)); */
-	/* state = NORMAL; */
-	/* gen_tokens(&state, line, &tokens); */
-    /*  */
-	/* size_t		i = 0; */
-	/* while (i < totaltokens) */
-	/* { */
-	/* 	ft_printf("%s\n", tokens[i].value); */
-	/* 	i++; */
-	/* } */
+	tokens = (t_ryantok *)malloc(sizeof(t_ryantok) * (totaltokens + 1));
+	state = NORMAL;
+	gen_tokens(&state, line, &tokens);
+	ft_printf("after token generation = %s\n", line);
+
+	size_t		i = 0;
+	while (i < totaltokens)
+	{
+		remove_escapes(tokens[i].value);
+		ft_printf("%s\n", tokens[i].value);
+		i++;
+	}
 }
 
 int	msh_main(t_msh *prog)
