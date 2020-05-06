@@ -6,13 +6,14 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/17 23:13:43 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/04/29 23:34:25 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/05/05 13:06:58 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdlib.h>
 #include "libft.h"
+#include <stdio.h>
 
 void	env_del(t_var *delete)
 {
@@ -194,6 +195,12 @@ char	**env_convert(t_var *env)
 	return (envp);
 }
 
+void	env_update(t_msh *prog)
+{
+	ft_str2clear(prog->envp);
+	prog->envp = env_convert(prog->env);
+}
+
 void	env_init(t_msh *prog)
 {
 	extern char	**environ;
@@ -213,4 +220,5 @@ void	env_init(t_msh *prog)
 		env = env->next;
 		i++;
 	}
+	prog->envp = env_convert(prog->env);
 }

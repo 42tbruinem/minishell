@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 22:22:24 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/05/04 21:14:27 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/05/05 20:05:19 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <stdio.h>
 
 size_t		ft_str2len(char **str)
 {
@@ -31,6 +32,8 @@ long long	ft_str2cmpstr(const char **str2, char *str)
 	long long	i;
 
 	i = 0;
+	if (!str)
+		return (-1);
 	while (str2[i])
 	{
 		if (ft_strcmp((char *)str2[i], str) == 0)
@@ -87,51 +90,82 @@ int		is_executable(char *program, char **abspath_to_exe, t_var *env)
 	return (0);
 }
 
-int		run_program(char *abspath, char **args, t_var *env)
+int		run_program(t_msh *prog, t_cmd *cmd, char *abspath)
 {
-	char **envp;
+	int pid;
 
-	envp = env_convert(env);
-	if (!envp)
+	if (!prog->envp)
 		return (1); //error
-	if (!fork())
-		if (execve(abspath, args, envp) == -1)
+	dprintf(2, "abspath: %s\n", abspath);
+	pid = fork();
+	if (!pid)
+	{
+		close_ifnot(&prog->file_arr, cmd->iostream);
+		if (cmd->iostream[READ] != -1 &&
+			dup2(cmd->iostream[READ], STDIN) == -1)
+			return (1);
+		if (cmd->iostream[WRITE] != -1 &&
+			dup2(cmd->iostream[WRITE], STDOUT) == -1)
+			return (1);
+		if (abspath && execve(abspath, cmd->args, prog->envp) == -1)
 			return (1); //error
-	(void)ft_str2clear(envp);
+		if (!abspath && execve(cmd->args[0], cmd->args, prog->envp) == -1)
+			return (1); //error
+		close_iostream(cmd->iostream);
+	}
+	close_iostream(cmd->iostream);
 	free(abspath);
 	return (0);
 }
 
-int		run_builtin(t_msh *prog, char **args, t_var *env, int id)
+int		run_builtin(t_msh *prog, t_cmd *cmd, int id)
 {
-	static const t_builtin builtins[] = {
+	int						pid;
+	static const t_builtin	builtins[] = {
 	[B_ENV] = &ft_env,
 	[B_PWD] = &ft_pwd,
 	[B_ECHO] = &ft_echo,
 	[B_EXPORT] = &ft_export,
 	[B_UNSET] = &ft_unset,
-	[B_CD] = &ft_cd};
+	[B_EXIT] = &ft_exit,
+	[B_CD] = &ft_cd
+	};
 
-//	printf("Executing builtin!\n");
-	if (id == B_EXIT)
+	dprintf(2, "IOSTREAM: [READ] = %d | [WRITE] = %d\n", cmd->iostream[0], cmd->iostream[1]);
+	if (cmd->iostream[READ] == -1 && cmd->iostream[WRITE] == -1)
 	{
-		ft_exit(prog, ft_str2len(args), args, &env);
+		builtins[id](prog, ft_str2len(cmd->args), cmd->args);
 		return (0);
 	}
-	builtins[id](ft_str2len(args), args, &env);
+	pid = fork();
+	if (!pid)
+	{
+		close_ifnot(&prog->file_arr, cmd->iostream);
+		if (cmd->iostream[READ] != -1 &&
+			dup2(cmd->iostream[READ], STDIN) == -1)
+			return (1);
+		if (cmd->iostream[WRITE] != -1 &&
+			dup2(cmd->iostream[WRITE], STDOUT) == -1)
+			return (1);
+		dprintf(2, "yeet\n");
+		builtins[id](prog, ft_str2len(cmd->args), cmd->args);
+		close_iostream(cmd->iostream);
+		exit(0);
+	}
+	close_iostream(cmd->iostream);
 	return (0);
 }
 
-int		execute(t_msh *prog, char **args, t_var *env)
+int		execute(t_msh *prog, t_cmd *cmd)
 {
 	char	*abspath;
 	int		builtin;
 
 	abspath = NULL;
-	if (is_executable(args[0], &abspath, env))
-		return (run_program(abspath, args, env));
-	builtin = is_builtin(args[0]);
-	if (builtin < 0)
-		return (1); //error (not an executable or a builtin)
-	return (run_builtin(prog, args, env, builtin));
+	builtin = is_builtin(cmd->args[0]);
+	dprintf(2, "BUILTIN: %d\n", builtin);
+	if (builtin >= 0)
+		return (run_builtin(prog, cmd, builtin));
+	is_executable(cmd->args[0], &abspath, prog->env);
+	return (run_program(prog, cmd, abspath));
 }

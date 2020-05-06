@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/04 21:20:38 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/05/06 11:05:00 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,7 @@ enum			e_tokentypes
 	DEFAULT,
 };
 
-typedef void	(*t_builtin)(int argc, char **argv, t_var **env);
+typedef void	(*t_builtin)(t_msh *prog, int argc, char **argv);
 typedef int		(*t_inputf)(t_line *line, char buf[6]);
 
 /*
@@ -213,30 +213,38 @@ char			*error_lookup(int err);
 
 typedef void	(*t_escapef)(t_lexer *lex, char *last);
 
-int				execute(t_msh *prog, char **args, t_var *env);
+int				execute(t_msh *prog, t_cmd *cmd);
 char			**ft_str2clear(char **str);
 t_cmd			*clear_commands(t_cmd *commands);
-t_cmd			*get_commands(t_vec *vec_args, t_vec *vec_types);
+t_cmd			*get_commands(char **args, int *types, t_vec *fd_arr);
 void			print_command(t_cmd *command);
+int				set_redirection(t_cmd *command, char **args,
+								int *types, t_vec *fd_arr);
 
 void			error_exit(t_msh *prog, int err);
 void			std_exit(t_msh *prog);
 
 int				vec_add(t_vec *vector, void *buffer);
 int				vec_new(t_vec *vector, size_t type_size);
+void			vec_destroy(t_vec *vector, void (*del)(void *));
 
 void			tokclear(t_token *list, void (*del)(void *));
 void			tokprint(t_token *list);
 int				tokenize(t_vec *args, t_vec *argtypes, char *raw);
 
-void			ft_cd(int argc, char **argv, t_var **env);
-void			ft_pwd(int argc, char **argv, t_var **env);
-void			ft_env(int argc, char **argv, t_var **env);
-void			ft_echo(int argc, char **argv, t_var **env);
-void			ft_unset(int argc, char **argv, t_var **env);
-void			ft_exit(t_msh *prog, int argc, char **argv, t_var **env);
-void			ft_export(int argc, char **argv, t_var **env);
+void			close_iostream(int *iostream);
+void			close_ifnot(t_vec *fd_arr, int *iostream);
+void			print_filearr(t_vec *fd_arr);
 
+void			ft_cd(t_msh *prog, int argc, char **argv);
+void			ft_pwd(t_msh *prog, int argc, char **argv);
+void			ft_env(t_msh *prog, int argc, char **argv);
+void			ft_echo(t_msh *prog, int argc, char **argv);
+void			ft_unset(t_msh *prog, int argc, char **argv);
+void			ft_exit(t_msh *prog, int argc, char **argv);
+void			ft_export(t_msh *prog, int argc, char **argv);
+
+void			env_update(t_msh *prog);
 void			env_unset(t_var **env, char *name);
 t_var			*env_val_set(const char *name, t_var *env, const char *val);
 char			**env_convert(t_var *env);

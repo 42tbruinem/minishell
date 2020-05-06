@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/04 21:25:28 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/05/06 11:05:16 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,47 +83,32 @@ void	redirection_apply(char **args, int *inout)
 	}
 }
 
-void	in_out_redirection(t_msh *prog, int *pipe, t_cmd *command)
+int		in_out_redirection(t_msh *prog, t_cmd *command)
 {
-	int			inout[2];
-
-	inout[READ] = 0;
-	inout[WRITE] = 0;
+	command->iostream[0] = -1;
+	command->iostream[1] = -1;
 	if (command->cmdtype == PIPE)
-		inout[READ] = pipe[READ]; //need one pipe per chain (A | B) = 1 (A | B | C) would need 2 pipes.
+		command->iostream[READ] = command->cmdpipe[READ];
 	if (command->next && command->next->cmdtype == PIPE)
-		inout[WRITE] = pipe[WRITE];
-	redirection_apply(command->args, inout);
-	if (inout[READ])
-		if (dup2(inout[READ], STDIN) == -1)
-			error_exit(prog, 1);
-	if (inout[WRITE])
-		if (dup2(inout[WRITE], STDOUT) == -1)
-			error_exit(prog, 1);
+		command->iostream[WRITE] = command->next->cmdpipe[WRITE];
+	if (!set_redirection(command, command->args,
+		command->argtypes, &prog->file_arr))
+		return (0);
+	return (1);
 }
 
-int		run_commands(t_msh *prog, t_cmd *commands, t_var *env)
+int		run_commands(t_msh *prog, t_cmd *commands)
 {
-	int	redir_pipe[2];
-	static	int stdfdsave[2];
-
-	if (!stdfdsave[STDIN])
-		if (dup(STDIN) == -1)
-			error_exit(prog, 1);
-	if (!stdfdsave[STDOUT])
-		if (dup(STDOUT) == -1)
-			error_exit(prog, 1);
-	if (pipe(redir_pipe) == -1)
-		std_exit(prog);
+	print_filearr(&prog->file_arr);
 	while (commands)
 	{
-		in_out_redirection(prog, redir_pipe, commands);
+		if (!in_out_redirection(prog, commands))
+			return (0);
 		print_command(commands);
-		(void)execute(prog, commands->args, env);
-		dup2(stdfdsave[STDIN], STDIN);
-		dup2(stdfdsave[STDOUT], STDOUT);
+		(void)execute(prog, commands);
 		commands = commands->next;
 	}
+	vec_destroy(&prog->file_arr, NULL);
 	return (1);
 }
 
@@ -140,10 +125,11 @@ int	msh_main(t_msh *prog)
 			error_exit(prog, MEM_FAIL);
 		if (!tokenize(&prog->args, &prog->argtypes, prog->line.cmd))
 			error_exit(NULL, MEM_FAIL);
-		prog->commands = get_commands(&prog->args, &prog->argtypes);
+		prog->commands = get_commands((char **)prog->args.store,
+						(int *)prog->argtypes.store, &prog->file_arr);
 		if (!prog->commands)
 			error_exit(NULL, MEM_FAIL);
-		status = run_commands(prog, prog->commands, prog->env);
+		status = run_commands(prog, prog->commands);
 	/* Requests a Report Cursor Position response from the device */
 		ft_printf_fd(STDOUT, "\033[6n");
 		read(STDIN, buf, 8);
