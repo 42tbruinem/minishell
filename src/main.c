@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/06 11:05:16 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/05/06 12:34:53 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	redirection_apply(char **args, int *inout)
 			{
 				fds[fd_index] = open(args[i + 1], O_CREAT | O_WRONLY | O_APPEND);
 				inout[WRITE] = fds[fd_index];
-				dprintf(2, ">> detected, setting OUT.\n");
+//				dprintf(2, ">> detected, setting OUT.\n");
 				free(args[i]);
 				args[i] = NULL;
 				free(args[i + 1]);
@@ -51,7 +51,7 @@ void	redirection_apply(char **args, int *inout)
 			{
 				fds[fd_index] = open(args[i + 1], O_CREAT | O_WRONLY | O_TRUNC);
 				inout[WRITE] = fds[fd_index];
-				dprintf(2, "> detected, setting OUT.\n");
+//				dprintf(2, "> detected, setting OUT.\n");
 				free(args[i]);
 				args[i] = NULL;
 				free(args[i + 1]);
@@ -68,7 +68,7 @@ void	redirection_apply(char **args, int *inout)
 			{
 				fds[fd_index] = open(args[i + 1], O_RDONLY);
 				inout[READ] = fds[fd_index];
-				dprintf(2, "< detected, setting IN.\n");
+//				dprintf(2, "< detected, setting IN.\n");
 				free(args[i]);
 				args[i] = NULL;
 				free(args[i + 1]);
@@ -99,15 +99,16 @@ int		in_out_redirection(t_msh *prog, t_cmd *command)
 
 int		run_commands(t_msh *prog, t_cmd *commands)
 {
-	print_filearr(&prog->file_arr);
 	while (commands)
 	{
 		if (!in_out_redirection(prog, commands))
-			return (0);
-		print_command(commands);
+			return (1);
+//		print_filearr(&prog->file_arr);
+//		print_command(commands);
 		(void)execute(prog, commands);
 		commands = commands->next;
 	}
+	close_all(&prog->file_arr);
 	vec_destroy(&prog->file_arr, NULL);
 	return (1);
 }

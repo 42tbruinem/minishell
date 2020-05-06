@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/04 19:35:57 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/05/05 20:19:27 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/05/06 12:34:25 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,23 @@
 #include <sys/stat.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <errno.h>
+
+extern int errno;
+
+void	close_all(t_vec *fd_arr)
+{
+	int		*fds;
+	size_t	i;
+
+	i = 0;
+	fds = (int *)fd_arr->store;
+	while (i < fd_arr->index)
+	{
+		close(fds[i]);
+		i++;
+	}
+}
 
 void	close_ifnot(t_vec *fd_arr, int *iostream)
 {
@@ -62,14 +79,23 @@ void	print_filearr(t_vec *fd_arr)
 	}
 }
 
-int		new_file(t_cmd *command, char **args, int flag, t_vec *fd_arr)
+int		new_file(t_cmd *command, char **args, int type, t_vec *fd_arr)
 {
 	int	fd;
 
-	if (open(args[1], flag) == -1 || !vec_add(fd_arr, &fd))
+	if (type == TRUNC)
+		fd = open(args[1], O_CREAT | O_WRONLY | O_TRUNC);
+	else if (type == APPEND)
+		fd = open(args[1], O_CREAT | O_WRONLY | O_APPEND);
+	else if (type == IN_REDIR)
+		fd = open(args[1], O_RDONLY);
+	if (fd == -1 || !vec_add(fd_arr, &fd))
+	{
+//		dprintf(2, "ERRNO: %d | file(%d) failed to open: %s\n", errno, fd, args[1]);
 		return (0);
-	dprintf(2, "File's FD: %d\n", fd);
-	if (flag == O_RDONLY)
+	}
+//	dprintf(2, "File's FD: %d\n", fd);
+	if (type == IN_REDIR)
 		command->iostream[READ] = fd;
 	else
 		command->iostream[WRITE] = fd;
@@ -83,14 +109,8 @@ int		new_file(t_cmd *command, char **args, int flag, t_vec *fd_arr)
 int		new_stream(t_cmd *cmd, char **args, int type, t_vec *fd_arr)
 {
 	if (!args[1])
-		return (0);
-	if (type == APPEND)
-		return (new_file(cmd, args, O_CREAT | O_WRONLY | O_APPEND, fd_arr));
-	if (type == TRUNC)
-		return (new_file(cmd, args, O_CREAT | O_WRONLY | O_APPEND, fd_arr));
-	if (type == IN_REDIR)
-		return (new_file(cmd, args, O_RDONLY, fd_arr));
-	return (1);
+		return (0); //error
+	return (new_file(cmd, args, type, fd_arr));
 }
 
 int		set_redirection(t_cmd *command, char **args, int *types, t_vec *fd_arr)
@@ -98,8 +118,6 @@ int		set_redirection(t_cmd *command, char **args, int *types, t_vec *fd_arr)
 	size_t	i;
 
 	i = 0;
-	if (!vec_new(fd_arr, sizeof(int)))
-		return (0);
 	while (args[i])
 	{
 		if (is_redir(types[i]))

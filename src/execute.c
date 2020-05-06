@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 22:22:24 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/05/05 20:05:19 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/05/06 12:34:08 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int		run_program(t_msh *prog, t_cmd *cmd, char *abspath)
 
 	if (!prog->envp)
 		return (1); //error
-	dprintf(2, "abspath: %s\n", abspath);
+//	dprintf(2, "abspath: %s\n", abspath);
 	pid = fork();
 	if (!pid)
 	{
@@ -131,7 +131,7 @@ int		run_builtin(t_msh *prog, t_cmd *cmd, int id)
 	[B_CD] = &ft_cd
 	};
 
-	dprintf(2, "IOSTREAM: [READ] = %d | [WRITE] = %d\n", cmd->iostream[0], cmd->iostream[1]);
+//	dprintf(2, "IOSTREAM: [READ] = %d | [WRITE] = %d\n", cmd->iostream[0], cmd->iostream[1]);
 	if (cmd->iostream[READ] == -1 && cmd->iostream[WRITE] == -1)
 	{
 		builtins[id](prog, ft_str2len(cmd->args), cmd->args);
@@ -147,7 +147,7 @@ int		run_builtin(t_msh *prog, t_cmd *cmd, int id)
 		if (cmd->iostream[WRITE] != -1 &&
 			dup2(cmd->iostream[WRITE], STDOUT) == -1)
 			return (1);
-		dprintf(2, "yeet\n");
+//		dprintf(2, "yeet\n");
 		builtins[id](prog, ft_str2len(cmd->args), cmd->args);
 		close_iostream(cmd->iostream);
 		exit(0);
@@ -163,7 +163,7 @@ int		execute(t_msh *prog, t_cmd *cmd)
 
 	abspath = NULL;
 	builtin = is_builtin(cmd->args[0]);
-	dprintf(2, "BUILTIN: %d\n", builtin);
+//	dprintf(2, "BUILTIN: %d\n", builtin);
 	if (builtin >= 0)
 		return (run_builtin(prog, cmd, builtin));
 	is_executable(cmd->args[0], &abspath, prog->env);

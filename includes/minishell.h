@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/06 11:05:00 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/05/06 12:19:36 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,6 +232,7 @@ void			tokclear(t_token *list, void (*del)(void *));
 void			tokprint(t_token *list);
 int				tokenize(t_vec *args, t_vec *argtypes, char *raw);
 
+void			close_all(t_vec *fd_arr);
 void			close_iostream(int *iostream);
 void			close_ifnot(t_vec *fd_arr, int *iostream);
 void			print_filearr(t_vec *fd_arr);

@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/02 15:10:27 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/05/02 15:28:12 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/05/06 12:34:05 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int		main(void)
 	pid = fork();
 	if (!pid)
 	{
-		dprintf(pipefd[1], "hoi\n");
+//		dprintf(pipefd[1], "hoi\n");
 //		close(pipefd[0]); //important
 	}
 	close(pipefd[1]); //important
