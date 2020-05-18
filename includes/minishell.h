@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/05 23:32:43 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/07 19:08:30 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,34 @@
 # include <unistd.h>
 # include <termios.h>
 
+enum			e_toktype
+{
+	COMMAND = 0,
+	STANDARD,
+	WRITEFILE,
+	APPENDFILE,
+	PIPEDCOMMAND,
+	ENV_VALUE,
+	DOUBLEQUOTE,
+	SINGLEQUOTE,
+	INPUT_SENDER,
+	CMD_DOUBLEQUOTE,
+	CMD_SINGLEQUOTE
+};
+
 enum			e_fsm
 {
 	NORMAL = 0,
-	INDOUBLEQUOTE = 1,
-	INSINGLEQUOTE = 2,
-	INBACKTICK = 3
+	WHITESPACE,
+	INDOUBLEQUOTE,
+	INSINGLEQUOTE,
+	INBACKTICK,
+	SEMICOLON,
+	OREDIRECT,
+	IREDIRECT,
+	OAPPEND,
+	PIPE_PIPE,
+	ENV
 };
 
 extern char	**g_termbuff;
@@ -87,6 +109,9 @@ typedef struct	s_ryanlexer
 	int			prevstate;
 	int			state;
 	int			escape;
+	int			inwhitespace;
+	size_t		tokeni;
+	int			nexttype;
 }				t_ryanlexer;
 
 typedef struct	s_lexer
@@ -132,6 +157,8 @@ typedef	struct	s_msh
 {
 	t_var		*env;
 	t_line		line;
+	size_t		argc;
+	t_ryantok	**argv;
 }				t_msh;
 
 enum			e_error
@@ -270,5 +297,21 @@ int				special_command(t_line *line, char buf[6]);
 int				send_input(t_line *line, char buf[6]);
 int				char_input(t_line *line, char buf[6]);
 int				backspace(t_line *line, char buf[6]);
+
+/*
+** Finite state machine function.
+*/
+
+int				checkstate(int c, t_ryanlexer lex);
+
+/*
+** Lexing utilities.
+*/
+
+int				check_esc_char(char *line, t_ryanlexer *lex);
+void			init_lexer(t_ryanlexer *lex);
+void			update_lexer(char *line, t_ryanlexer *lex);
+void			create_token(char *value, t_ryantok *token, t_ryanlexer *lex);
+void			concatenate_input(char *line);
 
 #endif

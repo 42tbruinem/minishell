@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/04/12 11:11:07 by rlucas        #+#    #+#                  #
-#    Updated: 2020/05/05 23:25:20 by rlucas        ########   odam.nl          #
+#    Updated: 2020/05/06 21:18:49 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,9 @@ SRC =	main.c \
 		prompt.c \
 		terminal.c \
 		ryantokens.c \
+		finitestatemachine.c \
+		inputconcat.c \
+		lexutils.c \
 		utils.c
 
 OBJ := $(addprefix $(OBJDIR), $(SRC:%.c=%.o))
