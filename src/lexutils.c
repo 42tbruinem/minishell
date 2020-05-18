@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/06 21:18:20 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/07 14:29:24 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/18 14:03:02 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void		init_lexer(t_ryanlexer *lex)
 	lex->inwhitespace = 1;
 	lex->tokeni = 0;
 	lex->nexttype = COMMAND;
+	lex->command_present = 0;
 }
 
 void		update_lexer(char *line, t_ryanlexer *lex)
@@ -45,8 +46,14 @@ int			check_esc_char(char *line, t_ryanlexer *lex)
 
 static void	assign_tok_type(t_ryantok *token, t_ryanlexer *lex)
 {
+	if (lex->nexttype == COMMAND || lex->nexttype == CMD_DOUBLEQUOTE ||
+			lex->nexttype == CMD_SINGLEQUOTE)
+		lex->command_present = 1;
 	token->type = lex->nexttype;
-	lex->nexttype = STANDARD;
+	if (lex->command_present == 0)
+		lex->nexttype = COMMAND;
+	else
+		lex->nexttype = STANDARD;
 }
 
 void	create_token(char *value, t_ryantok *token, t_ryanlexer *lex)

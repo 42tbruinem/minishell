@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/06 21:15:27 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/07 15:42:21 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/18 14:10:06 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,8 @@ void		concatenate_input(char *line)
 		if (!lex.escape && lex.state == NORMAL &&
 				(lex.prevstate == INDOUBLEQUOTE || lex.prevstate ==
 				 INSINGLEQUOTE))
-			if (line[lex.i + 1] && !ft_is_whitespace(line[lex.i + 1]))
+			if (line[lex.i + 1] && !ft_is_whitespace(line[lex.i + 1]) &&
+					line[lex.i + 1] != ';')
 				if (concat_no_spaces(line, &lex))
 					continue ;
 		concatenate_quotes(line);

@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/07 19:08:30 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/18 14:00:29 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ enum			e_toktype
 	SINGLEQUOTE,
 	INPUT_SENDER,
 	CMD_DOUBLEQUOTE,
-	CMD_SINGLEQUOTE
+	CMD_SINGLEQUOTE,
+	CMD_ENV
 };
 
 enum			e_fsm
@@ -112,6 +113,7 @@ typedef struct	s_ryanlexer
 	int			inwhitespace;
 	size_t		tokeni;
 	int			nexttype;
+	int			command_present;
 }				t_ryanlexer;
 
 typedef struct	s_lexer

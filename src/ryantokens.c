@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/05 23:24:42 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/08 01:37:13 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/18 13:33:03 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,10 @@ void		add_env_tok(char *line, t_ryanlexer *lex, t_ryantok **tokens)
 		create_token(line + lex->i, (*tokens) + lex->tokeni, lex);
 	else
 	{
-		lex->nexttype = ENV_VALUE;
+		if (lex->nexttype == COMMAND)
+			lex->nexttype = CMD_ENV;
+		else
+			lex->nexttype = ENV_VALUE;
 		create_token(line + lex->i + 1, (*tokens) + lex->tokeni, lex);
 		while (line[lex->i] && !ft_is_whitespace(line[lex->i]) &&
 				!ft_strchr("><|&", line[lex->i]))
@@ -105,28 +108,19 @@ void		add_env_tok(char *line, t_ryanlexer *lex, t_ryantok **tokens)
 void		state_action(char *line, t_ryanlexer *lex, t_ryantok **tokens)
 {
 	if (lex->state == SEMICOLON)
-	{
 		lex->nexttype = COMMAND;
-		lex->state = WHITESPACE;
-	}
-	/* if (lex->state == IREDIRECT) */
+	if (lex->state == IREDIRECT)
+		lex->nexttype = INPUT_SENDER;
 	if (lex->state == OREDIRECT)
-	{
 		lex->nexttype = WRITEFILE;
-		lex->state = WHITESPACE;
-	}
 	if (lex->state == OAPPEND)
-	{
 		lex->nexttype = APPENDFILE;
+	if (lex->state == PIPE_PIPE)
+		lex->nexttype = PIPEDCOMMAND;
+	if (lex->state >= SEMICOLON && lex->state <= PIPE_PIPE)
 		lex->state = WHITESPACE;
-	}
 	if (lex->state == ENV)
 		add_env_tok(line, lex, tokens);
-	if (lex->state == PIPE_PIPE)
-	{
-		lex->nexttype = PIPEDCOMMAND;
-		lex->state = WHITESPACE;
-	}
 }
 
 void		gen_tokens(char *line, t_ryantok **tokens)
@@ -182,12 +176,14 @@ void		print_tokens(t_ryantok *tokens)
 		[STANDARD] = "STANDARD",
 		[WRITEFILE] = "WRITEFILE",
 		[APPENDFILE] = "APPENDFILE",
+		[INPUT_SENDER] = "INPUT_SENDER",
 		[PIPEDCOMMAND] = "PIPEDCOMMAND",
 		[ENV_VALUE] = "ENV_VALUE",
 		[DOUBLEQUOTE] = "DOUBLEQUOTE",
 		[SINGLEQUOTE] = "SINGLEQUOTE",
 		[CMD_DOUBLEQUOTE] = "CMD_DOUBLEQUOTE",
-		[CMD_SINGLEQUOTE] = "CMD_SINGLEQUOTE"
+		[CMD_SINGLEQUOTE] = "CMD_SINGLEQUOTE",
+		[CMD_ENV] = "CMD_ENV"
 	};
 
 	i = 0;
