@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/05 23:25:07 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/24 14:55:07 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,11 @@ void	redirection_apply(char **args, int *inout)
 			{
 				fds[fd_index] = open(args[i + 1], O_CREAT | O_WRONLY | O_APPEND);
 				inout[WRITE] = fds[fd_index];
-				dprintf(2, ">> detected, setting OUT.\n");
-				args[i] = NULL;
-				args[i + 1] = NULL;
+//				dprintf(2, ">> detected, setting OUT.\n");
+//				free(args[i]);
+//				args[i] = NULL;
+//				free(args[i + 1]);
+//				args[i + 1] = NULL;
 				i++;
 				fd_index++;
 			}
@@ -49,11 +51,11 @@ void	redirection_apply(char **args, int *inout)
 			{
 				fds[fd_index] = open(args[i + 1], O_CREAT | O_WRONLY | O_TRUNC);
 				inout[WRITE] = fds[fd_index];
-				dprintf(2, "> detected, setting OUT.\n");
-				//free(args[i]);
-				args[i] = NULL;
-				//free(args[i + 1]);
-				args[i + 1] = NULL;
+//				dprintf(2, "> detected, setting OUT.\n");
+//				free(args[i]);
+//				args[i] = NULL;
+//				free(args[i + 1]);
+//				args[i + 1] = NULL;
 				i++;
 				fd_index++;
 			}
@@ -66,9 +68,11 @@ void	redirection_apply(char **args, int *inout)
 			{
 				fds[fd_index] = open(args[i + 1], O_RDONLY);
 				inout[READ] = fds[fd_index];
-				dprintf(2, "< detected, setting IN.\n");
-				args[i] = NULL;
-				args[i + 1] = NULL;
+//				dprintf(2, "< detected, setting IN.\n");
+//				free(args[i]);
+//				args[i] = NULL;
+//				free(args[i + 1]);
+//				args[i + 1] = NULL;
 				i++;
 				fd_index++;
 			}
@@ -79,53 +83,63 @@ void	redirection_apply(char **args, int *inout)
 	}
 }
 
-void	in_out_redirection(t_msh *prog, int *pipe, t_cmd *command)
+int		in_out_redirection(t_msh *prog, t_cmd *command)
 {
-	int			inout[2];
-
-	inout[READ] = 0;
-	inout[WRITE] = 0;
-	if (command->type == PIPE)
-		inout[READ] = pipe[READ];
-	if (command->next && command->next->type == PIPE)
-		inout[WRITE] = pipe[WRITE];
-	redirection_apply(command->args, inout);
-	if (inout[READ])
-		if (dup2(inout[READ], STDIN) == -1)
-			error_exit(prog, 1);
-	if (inout[WRITE])
-		if (dup2(inout[WRITE], STDOUT) == -1)
-			error_exit(prog, 1);
+	command->iostream[0] = -1;
+	command->iostream[1] = -1;
+	if (command->cmdtype == PIPEDCOMMAND)
+		command->iostream[READ] = command->cmdpipe[READ];
+	if (command->next && command->next->cmdtype == PIPEDCOMMAND)
+		command->iostream[WRITE] = command->next->cmdpipe[WRITE];
+	(void)prog;
+	//this has to do with why we're printing stuff after the command is ran
+	if (!set_redirection(command, command->args,
+		command->argtypes, &prog->file_arr))
+		return (0);
+	return (1);
 }
 
-int		run_commands(t_msh *prog, t_cmd *commands, t_var *env)
+int		run_commands(t_msh *prog, t_cmd *commands)
 {
-	int	redir_pipe[2];
-	static	int stdfdsave[2];
-
-	if (!stdfdsave[STDIN])
-		if (dup(STDIN) == -1)
-			error_exit(prog, 1);
-	if (!stdfdsave[STDOUT])
-		if (dup(STDOUT) == -1)
-			error_exit(prog, 1);
-	if (pipe(redir_pipe) == -1)
-		std_exit(prog);
 	while (commands)
 	{
-		in_out_redirection(prog, redir_pipe, commands);
-		print_command(commands);
-		(void)execute(prog, commands->args, env);
-		dup2(stdfdsave[STDIN], STDIN);
-		dup2(stdfdsave[STDOUT], STDOUT);
+		if (!in_out_redirection(prog, commands))
+			return (1);
+//		print_filearr(&prog->file_arr);
+//		print_command(commands);
+		(void)execute(prog, commands);
 		commands = commands->next;
 	}
+	close_all(&prog->file_arr);
+	vec_destroy(&prog->file_arr, NULL);
 	return (1);
+}
+
+void	debug_commands(t_cmd *commands)
+{
+	size_t	i;
+	size_t	cmd;
+
+	cmd = 0;
+	ft_printf("start of command debug\n");
+	while (commands)
+	{
+		i = 0;
+		while (commands->args[i])
+		{
+			ft_printf("%ld | %s\n", cmd, commands->args[i]);
+			i++;
+		}
+		cmd++;
+		commands = commands->next;
+	}
 }
 
 int	msh_main(t_msh *prog)
 {
-	/* t_cmd	*commands; */
+	t_cmd	*commands;
+	t_vec	args;
+	t_vec	argtypes;
 	int		status;
 	char	buf[8];
 
@@ -135,9 +149,10 @@ int	msh_main(t_msh *prog)
 	{
 		if (read_input(prog) == -1)
 			error_exit(prog, MEM_FAIL);
-		tokenizer(prog->line.cmd);
-		/* commands = get_commands(tokenize(prog->line.cmd)); */
-		/* status = run_commands(prog, commands, prog->env); */
+		tokenizer(prog->line.cmd, &args, &argtypes);
+		commands = get_commands(&args, (int *)argtypes.store, &(prog->file_arr));
+		debug_commands(commands);
+		status = run_commands(prog, commands);
 	/* This helps calibrate cursor following command output for some reason */
 		ft_printf_fd(STDOUT, "\033[6n");
 		read(STDIN, buf, 8);

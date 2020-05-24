@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/18 14:00:29 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/24 14:38:03 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ enum			e_toktype
 	STANDARD,
 	WRITEFILE,
 	APPENDFILE,
+	SEPARATOR,
 	PIPEDCOMMAND,
 	ENV_VALUE,
 	DOUBLEQUOTE,
@@ -76,6 +77,16 @@ enum			e_fsm
 
 extern char	**g_termbuff;
 
+typedef struct s_vec	t_vec;
+
+struct	s_vec
+{
+	char			*store;
+	size_t			type_size;
+	size_t			capacity;
+	size_t			index;
+};
+
 typedef struct s_var	t_var;
 
 struct	s_var
@@ -91,7 +102,10 @@ typedef struct s_cmd	t_cmd;
 struct			s_cmd
 {
 	char	**args;
-	size_t	type;
+	int		*argtypes;
+	int		cmdtype;
+	int		iostream[2];
+	int		cmdpipe[2];
 	t_cmd	*next;
 };
 
@@ -157,6 +171,12 @@ typedef struct	s_line
 
 typedef	struct	s_msh
 {
+	t_vec		process_arr;
+	t_vec		file_arr;
+	t_vec		argtypes;
+	t_vec		args;
+	t_cmd		*commands;
+	char		**envp;
 	t_var		*env;
 	t_line		line;
 	size_t		argc;
@@ -197,7 +217,7 @@ enum			e_tokentypes
 	DEFAULT,
 };
 
-typedef void	(*t_builtin)(int argc, char **argv, t_var **env);
+typedef void	(*t_builtin)(t_msh *prog, int argc, char **argv);
 typedef int		(*t_inputf)(t_line *line, char buf[6]);
 
 /*
@@ -248,27 +268,39 @@ char			*error_lookup(int err);
 
 typedef void	(*t_escapef)(t_lexer *lex, char *last);
 
-int				execute(t_msh *prog, char **args, t_var *env);
+int				execute(t_msh *prog, t_cmd *cmd);
 char			**ft_str2clear(char **str);
 t_cmd			*clear_commands(t_cmd *commands);
-t_cmd			*get_commands(t_token *tokens);
+t_cmd			*get_commands(t_vec *args, int *types, t_vec *fd_arr);
 void			print_command(t_cmd *command);
+int				set_redirection(t_cmd *command, char **args,
+								int *types, t_vec *fd_arr);
 
 void			error_exit(t_msh *prog, int err);
 void			std_exit(t_msh *prog);
 
+int				vec_add(t_vec *vector, void *buffer);
+int				vec_new(t_vec *vector, size_t type_size);
+void			vec_destroy(t_vec *vector, void (*del)(void *));
+
 void			tokclear(t_token *list, void (*del)(void *));
 void			tokprint(t_token *list);
-t_token			*tokenize(char *raw);
+int				tokenize(t_vec *args, t_vec *argtypes, char *raw);
 
-void			ft_cd(int argc, char **argv, t_var **env);
-void			ft_pwd(int argc, char **argv, t_var **env);
-void			ft_env(int argc, char **argv, t_var **env);
-void			ft_echo(int argc, char **argv, t_var **env);
-void			ft_unset(int argc, char **argv, t_var **env);
-void			ft_exit(t_msh *prog, int argc, char **argv, t_var **env);
-void			ft_export(int argc, char **argv, t_var **env);
+void			close_all(t_vec *fd_arr);
+void			close_iostream(int *iostream);
+void			close_ifnot(t_vec *fd_arr, int *iostream);
+void			print_filearr(t_vec *fd_arr);
 
+void			ft_cd(t_msh *prog, int argc, char **argv);
+void			ft_pwd(t_msh *prog, int argc, char **argv);
+void			ft_env(t_msh *prog, int argc, char **argv);
+void			ft_echo(t_msh *prog, int argc, char **argv);
+void			ft_unset(t_msh *prog, int argc, char **argv);
+void			ft_exit(t_msh *prog, int argc, char **argv);
+void			ft_export(t_msh *prog, int argc, char **argv);
+
+void			env_update(t_msh *prog);
 void			env_unset(t_var **env, char *name);
 t_var			*env_val_set(const char *name, t_var *env, const char *val);
 char			**env_convert(t_var *env);
@@ -282,7 +314,7 @@ void			env_print(t_var *env);
 ** allocated string from input.
 */
 
-void			tokenizer(char *line);
+void		tokenizer(char *line, t_vec *args, t_vec *types);
 
 /*
 ** Functions to read input and handle line-editing. In read_input.c,

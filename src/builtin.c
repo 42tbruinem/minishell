@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 23:02:16 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/04/30 14:40:47 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/05/05 12:44:31 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	*get_cwd(void)
 	return (path);
 }
 
-void	ft_export(int argc, char **argv, t_var **env)
+void	ft_export(t_msh *prog, int argc, char **argv)
 {
 	size_t	i;
 	size_t	tmp;
@@ -55,20 +55,20 @@ void	ft_export(int argc, char **argv, t_var **env)
 		tmp = ft_strclen(argv[i], '=');
 		argv[i][tmp] = '\0';
 		if (tmp != ft_strlen(argv[i]))
-			(void)env_val_set(argv[i], *env, &argv[i][tmp + 1]);
+			(void)env_val_set(argv[i], prog->env, &argv[i][tmp + 1]);
 		i++;
 	}
+	env_update(prog);
 }
 
-void	ft_exit(t_msh *prog, int argc, char **argv, t_var **env)
+void	ft_exit(t_msh *prog, int argc, char **argv)
 {
 	(void)argc;
 	(void)argv;
-	(void)env;
 	std_exit(prog); //euhm, yea..
 }
 
-void	ft_unset(int argc, char **argv, t_var **env)
+void	ft_unset(t_msh *prog, int argc, char **argv)
 {
 	size_t	i;
 
@@ -77,17 +77,18 @@ void	ft_unset(int argc, char **argv, t_var **env)
 	i = 1;
 	while (argv[i])
 	{
-		env_unset(env, argv[i]);
+		env_unset(&prog->env, argv[i]);
 		i++;
 	}
+	env_update(prog);
 }
 
-void	ft_echo(int argc, char **argv, t_var **env)
+void	ft_echo(t_msh *prog, int argc, char **argv)
 {
 	int	i;
 
 	i = 1;
-	(void)env;
+	(void)prog;
 	while (argc >= 2 && argv[i])
 	{
 		if (i != 1 || ft_strncmp(argv[1], "-n", 2) != 0)
@@ -102,14 +103,14 @@ void	ft_echo(int argc, char **argv, t_var **env)
 		write(1, "\n", 1);
 }
 
-void	ft_env(int argc, char **argv, t_var **env)
+void	ft_env(t_msh *prog, int argc, char **argv)
 {
 	if (argc != 1 || !argv)
 		return ;
-	env_print(*env);
+	env_print(prog->env);
 }
 
-void	ft_pwd(int argc, char **argv, t_var **env)
+void	ft_pwd(t_msh *prog, int argc, char **argv)
 {
 	char	*path;
 	char	*res;
@@ -117,7 +118,7 @@ void	ft_pwd(int argc, char **argv, t_var **env)
 
 	(void)argc;
 	(void)argv;
-	(void)env;
+	(void)prog;
 	size = 20;
 	path = malloc(sizeof(char) * (size + 1));
 	res = getcwd(path, size + 1);
@@ -135,7 +136,7 @@ void	ft_pwd(int argc, char **argv, t_var **env)
 	free(path);
 }
 
-void	ft_cd(int argc, char **argv, t_var **env)
+void	ft_cd(t_msh *prog, int argc, char **argv)
 {
 	char	*path;
 
@@ -157,7 +158,8 @@ void	ft_cd(int argc, char **argv, t_var **env)
 		free(path);
 		return (perror(strerror(errno)));
 	}
-	env_val_set("OLDPWD", *env, env_val_get("PWD", *env));
-	env_val_set("PWD", *env, get_cwd());
+	env_val_set("OLDPWD", prog->env, env_val_get("PWD", prog->env));
+	env_val_set("PWD", prog->env, get_cwd());
+	env_update(prog);
 	free(path);
 }

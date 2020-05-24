@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/14 17:15:28 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/05/05 18:58:08 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/24 13:28:19 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,38 +65,13 @@ void	toksuffix(t_token **list, t_token *add)
 	tmp->next = add;
 }
 
-//obsolete
-/*
-int		get_token_type(char *tok)
+int		new_tok(t_vec *args, t_vec *argtypes, char *tok, int type)
 {
-	long long			type;
-	static const char	*specialtokens[] = {
-	[PIPE] = "|",
-	[TRUNC] = ">",
-	[APPEND] = ">>",
-	[REDIRECT] = "<",
-	[ENDOFARG] = ";",
-	[5] = NULL,
-	};
-
-//	type = ft_str2cmpstr(specialtokens, tok);
-	if (type == -1)
-		return (DEFAULT);
-	return (type);
-}
-*/
-
-t_token	*new_tok(char *tok, size_t type)
-{
-	t_token *new;
-
-	new = malloc(sizeof(t_token));
-	if (!new)
-		return (NULL);
-	new->content = tok;
-	new->type = type;
-	new->next = NULL;
-	return (new);
+	if (!vec_add(args, &tok))
+		return (2);
+	if (!vec_add(argtypes, &type))
+		return (2);
+	return (0);
 }
 
 void	add_to_tok(t_lexer *lex, char *last, char *exception)
@@ -161,7 +136,7 @@ void	literalquote(t_lexer *lex)
 	lex->raw++;
 }
 
-t_token	*special_tok(t_lexer *lex)
+int		special_tok(t_vec *args, t_vec *argtypes, t_lexer *lex)
 {
 	char	*raw;
 
@@ -170,22 +145,22 @@ t_token	*special_tok(t_lexer *lex)
 	if (raw[0] == '>' && raw[1] == '>')
 	{
 		lex->raw++;
-		return (new_tok(ft_strdup(">>"), APPEND));
+		return (new_tok(args, argtypes, ft_strdup(">>"), APPEND));
 	}
 	if (raw[0] == '&' && raw[1] == '&')
 	{
 		lex->raw++;
-		return (new_tok(ft_strdup("&&"), EOC));
+		return (new_tok(args, argtypes, ft_strdup("&&"), EOC));
 	}
 	if (raw[0] == '>')
-		return (new_tok(ft_strdup(">"), TRUNC));
+		return (new_tok(args, argtypes, ft_strdup(">"), TRUNC));
 	if (raw[0] == '|')
-		return (new_tok(ft_strdup("|"), PIPE));
+		return (new_tok(args, argtypes, ft_strdup("|"), PIPE));
 	if (raw[0] == '<')
-		return (new_tok(ft_strdup("<"), IN_REDIR));
+		return (new_tok(args, argtypes, ft_strdup("<"), IN_REDIR));
 	if (raw[0] == ';')
-		return (new_tok(ft_strdup(";"), EOC));
-	return (NULL);
+		return (new_tok(args, argtypes, ft_strdup(";"), EOC));
+	return (2); //error
 }
 
 void	token_creation(t_lexer *lex, char *last)
@@ -200,7 +175,7 @@ void	token_creation(t_lexer *lex, char *last)
 		add_to_tok(lex, last, "\\");
 }
 
-t_token	*gen_token(char *raw)
+int		gen_token(t_vec *args, t_vec *argtypes, char *raw)
 {
 	char			last;
 	static t_lexer	lex;
@@ -210,31 +185,34 @@ t_token	*gen_token(char *raw)
 		lex.raw = raw;
 	lex.index = 0;
 	if (ft_strchr(";|><&", *lex.raw))
-		return (special_tok(&lex));
+		return (special_tok(args, argtypes, &lex));
 	while (lex.index < MAX_TOKSIZE && *lex.raw &&
 	(!ft_strchr("; |><&", *lex.raw) || last == '\\'))
 		token_creation(&lex, &last);
 	lex.token[lex.index] = '\0';
 	if (lex.index == 0 && *lex.raw != ' ')
-		return (NULL);
+		return (1);
 	if (*lex.raw == ' ')
 		lex.raw++;
 	return ((lex.index) ?
-		new_tok(ft_strdup(lex.token), DEFAULT) :
-		gen_token(NULL));
+		new_tok(args, argtypes, ft_strdup(lex.token), DEFAULT) :
+		gen_token(args, argtypes, NULL));
 }
 
-t_token	*tokenize(char *raw)
+int		tokenize(t_vec *args, t_vec *argtypes, char *raw)
 {
-	t_token	*tokens;
-	t_token	*tmp;
+	int		done;
+	char	*temp;
 
-	tokens = NULL;
-	tmp = gen_token(raw);
-	while (tmp)
-	{
-		toksuffix(&tokens, tmp);
-		tmp = gen_token(NULL);
-	}
-	return (tokens);
+	temp = NULL;
+	if (!vec_new(args, sizeof(char *)))
+		*temp = 0;
+	if (!vec_new(argtypes, sizeof(int)))
+		*temp = 0;
+	done = gen_token(args, argtypes, raw);
+	while (!done)
+		done = gen_token(args, argtypes, NULL);
+	if (new_tok(args, argtypes, NULL, EOC) == 2)
+		*temp = 0;
+	return (1);
 }

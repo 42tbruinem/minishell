@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 19:22:44 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/05/02 13:40:15 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/05/24 14:37:41 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	print_command(t_cmd *command)
 	};
 
 	i = 0;
-	dprintf(2, "type: %s\n", commandtypes[command->type]);
+	dprintf(2, "type: %s\n", commandtypes[command->cmdtype]);
 	while (command->args[i])
 	{
 		dprintf(2, "%s%c", command->args[i], command->args[i + 1] ? ' ' : '\n');
@@ -51,62 +51,27 @@ char	**ft_str2clear(char **str)
 	return (NULL);
 }
 
-char	**populate_args(t_cmd *command, t_token **start, size_t len)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < len)
-	{
-		command->args[i] = ft_strdup((*start)->content);
-		if (!command->args[i])
-		{
-			(void)ft_str2clear(command->args);
-			return (NULL);
-		}
-		i++;
-		(*start) = (*start)->next;
-	}
-	command->args[i] = 0;
-	return (command->args);
-}
-
-size_t	command_len(t_token *tokens)
-{
-	size_t	i;
-
-	i = 0;
-	if (!tokens)
-		return (0);
-	while (tokens && (tokens->type != EOC && tokens->type != PIPE))
-	{
-		tokens = tokens->next;
-		i++;
-	}
-	return (i);
-}
-
-t_cmd	*new_command(t_token **start, size_t type)
+t_cmd	*new_command(size_t type, char **argstart, int *types, t_vec *fd_arr)
 {
 	t_cmd	*new;
-	size_t	len;
 
-	len = command_len(*start);
 	new = malloc(sizeof(t_cmd));
 	if (!new)
 		return (NULL);
-	new->type = type;
-	new->args = malloc(sizeof(char *) * (len + 1));
-	if (!new->args)
-		return (NULL);
-	new->next = NULL;
-	if (!new->args)
+	if (type == PIPEDCOMMAND)
 	{
-		free(new);
-		return (NULL);
+		if (pipe(new->cmdpipe) == -1)
+		{
+			free(new);
+			return (NULL); //error
+		}
+		vec_add(fd_arr, &new->cmdpipe[0]);
+		vec_add(fd_arr, &new->cmdpipe[1]);
 	}
-	if (!populate_args(new, start, len))
-		return (NULL);
+	new->argtypes = types;
+	new->cmdtype = type;
+	new->args = argstart;
+	new->next = NULL;
 	return (new);
 }
 
@@ -138,34 +103,30 @@ t_cmd	*clear_commands(t_cmd *commands)
 	{
 		del = iter;
 		iter = iter->next;
-		(void)ft_str2clear(del->args);
 		free(del);
 	}
 	return (NULL);
 }
 
-t_cmd	*get_commands(t_token *tokens)
+t_cmd	*get_commands(t_vec *args, int *types, t_vec *fd_arr)
 {
 	t_cmd	*commands;
-	t_token	*start;
-	size_t	type;
+	char	**argv;
+	size_t	i;
 
-	commands = NULL;
-	start = tokens;
-	if (!tokens)
-		return (NULL);
-	while (start)
+	i = 0;
+	argv = (char **)args->store;
+	commands = NULL;	
+	vec_new(fd_arr, sizeof(int));
+	while (i < args->index)
 	{
-		type = start->type;
-		start = (start == tokens) ? start : start->next;
-		if (!start)
-			break ;
-		if (!push_command(&commands, new_command(&start, type)))
+		if (types[i] == PIPEDCOMMAND || types[i] == COMMAND)
 		{
-			tokclear(tokens, &free);
-			return (clear_commands(commands));
+			if (!push_command(&commands,
+				new_command(types[i], &argv[i], &types[i], fd_arr)))
+				return (clear_commands(commands));
 		}
+		i++;
 	}
-	tokclear(tokens, &free);
 	return (commands);
 }
