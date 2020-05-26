@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/26 12:29:07 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/26 18:35:19 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,6 @@ enum			e_fsm
 	ENV
 };
 
-enum			e_quotes
-{
-	NONE = 0,
-	SINGLE = 1,
-	DOUBLE = 2
-};
-
 extern char	**g_termbuff;
 
 typedef struct s_var	t_var;
@@ -101,10 +94,9 @@ typedef struct	s_ryantok	t_ryantok;
 struct			s_ryantok
 {
 	int			type;
+	size_t		index;
 	char		*value;
-	int			quotes;
 	int			cmd_num;
-	int			env;
 };
 
 typedef struct	s_ryanlexer
@@ -114,14 +106,11 @@ typedef struct	s_ryanlexer
 	int			prevstate;
 	int			state;
 	int			escape;
-	int			inwhitespace;
 	size_t		tokeni;
 	int			nexttype;
-	int			quotes;
 	int			cmd_num;
-	int			command_present;
+	int			cmd_present;
 	int			pipe;
-	int			env;
 }				t_ryanlexer;
 
 typedef struct	s_ryancmd
@@ -298,7 +287,9 @@ void			env_print(t_var *env);
 ** allocated string from input.
 */
 
-t_ryantok	    *tokenizer(char **line, t_msh *prog);
+t_ryantok		*tokenizer(char **line, t_msh *prog);
+size_t			sum_tokens(char *line);
+void			gen_tokens(char **lineptr, t_ryantok **tokens, t_msh *prog);
 
 /*
 ** Functions to read input and handle line-editing. In read_input.c,
@@ -329,7 +320,7 @@ int				checkstate(int c, t_ryanlexer lex);
 int				check_esc_char(char *line, t_ryanlexer *lex);
 void			init_lexer(t_ryanlexer *lex);
 void			update_lexer(char *line, t_ryanlexer *lex);
-void			create_token(char *value, t_ryantok *token, t_ryanlexer *lex);
+void			create_token(t_ryantok *token, t_ryanlexer *lex);
 void			concatenate_input(char *line);
 
 #endif

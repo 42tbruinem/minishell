@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/06 21:15:27 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/26 12:28:11 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/26 12:42:19 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,15 +102,3 @@
 /* 	ft_printf("concat line result: %s\n", line); */
 /* } */
 
-void	concatenate_input(char *line)
-{
-	t_ryanlexer     lex;
-
-	init_lexer(&lex);
-	while (line[lex.i])
-	{
-		update_lexer(line, &lex);
-		take_action(line, &lex);
-		lex.i++;
-	}
-}

@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/26 12:29:26 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/26 13:14:54 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,8 @@ int	msh_main(t_msh *prog)
 		if (read_input(prog) == -1)
 			error_exit(prog, MEM_FAIL);
 		toks = tokenizer(&prog->line.cmd, prog);
-		print_tokens(toks);
+        (void)toks;
+		/* print_tokens(toks); */
 		/* format_toks(toks, prog); */
 		/* status = r_execute(toks); */
 		/* status = run_commands(prog->) */

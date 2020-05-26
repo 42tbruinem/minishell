@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/06 21:08:08 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/20 19:33:25 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/26 12:58:42 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,14 @@ static int		special_state(int c, t_ryanlexer lex)
 		return (-1); // Parsing error
 	if (lex.state == ENV && c == ' ')
 		return (NORMAL);
+	if (lex.state == ENV && c == '>')
+		return (OREDIRECT);
+	if (lex.state == ENV && c == '<')
+		return (IREDIRECT);
+	if (lex.state == ENV && c == ';')
+		return (SEMICOLON);
+	if (lex.state == ENV && c == '|')
+		return (PIPE_PIPE);
 	return (lex.state);
 }
 

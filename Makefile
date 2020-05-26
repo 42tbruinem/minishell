@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/04/12 11:11:07 by rlucas        #+#    #+#                  #
-#    Updated: 2020/05/26 12:29:42 by rlucas        ########   odam.nl          #
+#    Updated: 2020/05/26 13:13:34 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,6 +41,7 @@ SRC =	main.c \
 		inputconcat.c \
 		lexutils.c \
 		sum_tokens.c \
+		gen_tokens.c \
 		utils.c
 
 OBJ := $(addprefix $(OBJDIR), $(SRC:%.c=%.o))
