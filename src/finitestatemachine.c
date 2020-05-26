@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/06 21:08:08 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/07 15:53:01 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/20 19:33:25 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ static int		quote_state(int c, t_ryanlexer lex)
 
 static int		special_state(int c, t_ryanlexer lex)
 {
+	if (ft_is_whitespace(c))
+		return (WHITESPACE);
 	if (lex.state == SEMICOLON && c == ';')
 		 return (-1); // Parsing error
 	if (lex.state == OREDIRECT && c == '>')

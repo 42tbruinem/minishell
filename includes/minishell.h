@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/18 14:00:29 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/26 12:29:07 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,7 @@ enum			e_toktype
 	WRITEFILE,
 	APPENDFILE,
 	PIPEDCOMMAND,
-	ENV_VALUE,
-	DOUBLEQUOTE,
-	SINGLEQUOTE,
-	INPUT_SENDER,
-	CMD_DOUBLEQUOTE,
-	CMD_SINGLEQUOTE,
-	CMD_ENV
+	INPUT_SENDER
 };
 
 enum			e_fsm
@@ -72,6 +66,13 @@ enum			e_fsm
 	OAPPEND,
 	PIPE_PIPE,
 	ENV
+};
+
+enum			e_quotes
+{
+	NONE = 0,
+	SINGLE = 1,
+	DOUBLE = 2
 };
 
 extern char	**g_termbuff;
@@ -101,6 +102,9 @@ struct			s_ryantok
 {
 	int			type;
 	char		*value;
+	int			quotes;
+	int			cmd_num;
+	int			env;
 };
 
 typedef struct	s_ryanlexer
@@ -113,8 +117,20 @@ typedef struct	s_ryanlexer
 	int			inwhitespace;
 	size_t		tokeni;
 	int			nexttype;
+	int			quotes;
+	int			cmd_num;
 	int			command_present;
+	int			pipe;
+	int			env;
 }				t_ryanlexer;
+
+typedef struct	s_ryancmd
+{
+	char		**args;
+	char		*output;
+	char		*input;
+	char		*command;
+}				t_ryancmd;
 
 typedef struct	s_lexer
 {
@@ -160,7 +176,6 @@ typedef	struct	s_msh
 	t_var		*env;
 	t_line		line;
 	size_t		argc;
-	t_ryantok	**argv;
 }				t_msh;
 
 enum			e_error
@@ -206,6 +221,7 @@ typedef int		(*t_inputf)(t_line *line, char buf[6]);
 
 char			*ft_realloc(char *str, size_t newsize);
 char			*ft_str3join(const char *s1, const char *s2, const char *s3);
+void			print_tokens(t_ryantok *tokens);
 
 /*
 ** Add a prompt to the shell, in prompt.c 
@@ -282,7 +298,7 @@ void			env_print(t_var *env);
 ** allocated string from input.
 */
 
-void			tokenizer(char *line);
+t_ryantok	    *tokenizer(char **line, t_msh *prog);
 
 /*
 ** Functions to read input and handle line-editing. In read_input.c,

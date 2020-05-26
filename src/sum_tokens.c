@@ -1,40 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ryantokens.c                                       :+:    :+:            */
+/*   sum_tokens.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/05/05 23:24:42 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/26 12:29:22 by rlucas        ########   odam.nl         */
+/*   Created: 2020/05/26 12:30:45 by rlucas        #+#    #+#                 */
+/*   Updated: 2020/05/26 12:31:04 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
 #include <libft.h>
-
-void			move_through_quote(char *line, t_ryanlexer *lex)
-{
-	update_lexer(line, lex);
-	while (lex->state != NORMAL)
-	{
-		lex->i++;
-		if (check_esc_char(line, lex))
-			continue ;
-		update_lexer(line, lex);
-	}
-}
-
-int				determine_state(char **line, size_t i, int state)
-{
-	if (state != ENV)
-		return (WHITESPACE);
-	if ((*line)[i + 1] && ft_is_whitespace((*line)[i + 1]))
-		return (NORMAL);
-	if (!(*line)[i + 1])
-		return (NORMAL);
-	return (WHITESPACE);
-}
+#include <minishell.h>
 
 void	edit_string(char **line, size_t i, t_msh *prog, char *env_value)
 {
@@ -160,118 +137,4 @@ size_t			sum_tokens(char **line)
 		lex.i++;
 	}
 	return (sum);
-}
-
-void		add_quote_tok(char *line, t_ryantok **tokens, t_ryanlexer *lex)
-{
-	if (line[lex->i] == '\'')
-		lex->quotes = SINGLE;
-	else if (line[lex->i] == '\"')
-		lex->quotes = DOUBLE;
-	line[lex->i] = '\0';
-	lex->i++;
-	create_token(line + lex->i, (*tokens) + lex->tokeni, lex);
-	move_through_quote(line, lex);
-	lex->quotes = NORMAL;
-	line[lex->i] = '\0';
-	lex->i++;
-}
-
-void		add_env_tok(char *line, t_ryanlexer *lex, t_ryantok **tokens)
-{
-	if (!line[lex->i + 1] || ft_is_whitespace(line[lex->i + 1]))
-		create_token(line + lex->i, (*tokens) + lex->tokeni, lex);
-	else
-	{
-		lex->env = 1;
-		create_token(line + lex->i + 1, (*tokens) + lex->tokeni, lex);
-		while (line[lex->i] && !ft_is_whitespace(line[lex->i]) &&
-				!ft_strchr("><|&", line[lex->i]))
-			lex->i++;
-		lex->state = WHITESPACE;
-	}
-}
-
-void		state_action(char *line, t_ryanlexer *lex, t_ryantok **tokens)
-{
-	if (lex->state == SEMICOLON)
-	{
-		lex->nexttype = COMMAND;
-		lex->command_present = 0;
-		lex->cmd_num++;
-		lex->state = WHITESPACE;
-	}
-	if (lex->state == IREDIRECT)
-		lex->nexttype = INPUT_SENDER;
-	if (lex->state == OREDIRECT)
-		lex->nexttype = WRITEFILE;
-	if (lex->state == OAPPEND)
-		lex->nexttype = APPENDFILE;
-	if (lex->state == PIPE_PIPE)
-	{
-		lex->nexttype = PIPEDCOMMAND;
-		lex->command_present = 0;
-		lex->pipe = 1;
-		lex->cmd_num++;
-	}
-	if (lex->state == ENV)
-		add_env_tok(line, lex, tokens);
-}
-
-void		gen_tokens(char *line, t_ryantok **tokens)
-{
-	t_ryanlexer		lex;
-
-	init_lexer(&lex);
-	while (line[lex.i])
-	{
-		if (check_esc_char(line, &lex))
-			continue ;
-		update_lexer(line, &lex);
-		if (lex.state == INDOUBLEQUOTE || lex.state == INSINGLEQUOTE)
-		{
-			add_quote_tok(line, tokens, &lex);
-			continue ;
-		}
-		if (lex.state >= SEMICOLON && lex.state <= ENV)
-			state_action(line, &lex, tokens);
-		if (lex.state == NORMAL && lex.prevstate == WHITESPACE)
-			create_token(line + lex.i, (*tokens) + lex.tokeni, &lex);
-		if (lex.state == WHITESPACE)
-			line[lex.i] = '\0';
-		lex.escape = 0;
-		lex.i++;
-	}
-	(*tokens)[lex.tokeni].value = NULL;
-}
-
-void		remove_escapes(char *line)
-{
-	size_t		i;
-	size_t		len;
-
-	i = 0;
-	while (line[i])
-	{
-		if (line[i] == '\\')
-		{
-			len = ft_strlen(line);
-			ft_memmove(line + i, line + i + 1, ft_strlen(line + i + 1));
-			line[len - 1] = '\0';
-		}
-		i++;
-	}
-}
-
-t_ryantok	*tokenizer(char **line, t_msh *prog)
-{
-	t_ryantok		*tokens;
-	size_t			totaltokens;
-
-    (void)prog;
-	totaltokens = sum_tokens(line);
-	ft_printf("sum = %u\n", totaltokens);
-	tokens = (t_ryantok *)malloc(sizeof(t_ryantok) * (totaltokens + 1));
-	gen_tokens(*line, &tokens);
-	return (tokens);
 }

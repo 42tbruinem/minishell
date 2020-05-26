@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/05 23:25:07 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/26 12:29:26 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,8 +126,9 @@ int		run_commands(t_msh *prog, t_cmd *commands, t_var *env)
 int	msh_main(t_msh *prog)
 {
 	/* t_cmd	*commands; */
-	int		status;
-	char	buf[8];
+	int			status;
+	char		buf[8];
+	t_ryantok	*toks;
 
 	status = 1;
 	init_readline(prog);
@@ -135,7 +136,11 @@ int	msh_main(t_msh *prog)
 	{
 		if (read_input(prog) == -1)
 			error_exit(prog, MEM_FAIL);
-		tokenizer(prog->line.cmd);
+		toks = tokenizer(&prog->line.cmd, prog);
+		print_tokens(toks);
+		/* format_toks(toks, prog); */
+		/* status = r_execute(toks); */
+		/* status = run_commands(prog->) */
 		/* commands = get_commands(tokenize(prog->line.cmd)); */
 		/* status = run_commands(prog, commands, prog->env); */
 	/* This helps calibrate cursor following command output for some reason */

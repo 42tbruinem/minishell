@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/06 21:18:20 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/18 14:03:02 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/20 16:35:28 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,10 @@ void		init_lexer(t_ryanlexer *lex)
 	lex->tokeni = 0;
 	lex->nexttype = COMMAND;
 	lex->command_present = 0;
+	lex->quotes = NONE;
+	lex->cmd_num = 0;
+	lex->pipe = 0;
+	lex->env = 0;
 }
 
 void		update_lexer(char *line, t_ryanlexer *lex)
@@ -46,9 +50,13 @@ int			check_esc_char(char *line, t_ryanlexer *lex)
 
 static void	assign_tok_type(t_ryantok *token, t_ryanlexer *lex)
 {
-	if (lex->nexttype == COMMAND || lex->nexttype == CMD_DOUBLEQUOTE ||
-			lex->nexttype == CMD_SINGLEQUOTE)
+	if (lex->nexttype == COMMAND)
+	{
 		lex->command_present = 1;
+		if (lex->pipe == 1)
+			lex->nexttype = PIPEDCOMMAND;
+		lex->pipe = 0;
+	}
 	token->type = lex->nexttype;
 	if (lex->command_present == 0)
 		lex->nexttype = COMMAND;
@@ -59,7 +67,11 @@ static void	assign_tok_type(t_ryantok *token, t_ryanlexer *lex)
 void	create_token(char *value, t_ryantok *token, t_ryanlexer *lex)
 {
 	token->value = value;
+	token->quotes = lex->quotes;
+	token->cmd_num = lex->cmd_num;
+	token->env = lex->env;
 	assign_tok_type(token, lex);
 	lex->tokeni++;
 	lex->inwhitespace = 0;
+	lex->env = 0;
 }
