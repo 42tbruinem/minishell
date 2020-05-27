@@ -6,14 +6,14 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/05 23:24:42 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/27 23:35:58 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/27 23:41:08 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <libft.h>
 
-void		conv_tokens(t_ryantok *tokens, t_ryanlexer lexer, t_vec *args,
+void		conv_tokens(t_ryantok *tokens, size_t totaltokens, t_vec *args,
 		t_vec *types)
 {
 	size_t i;
@@ -25,7 +25,7 @@ void		conv_tokens(t_ryantok *tokens, t_ryanlexer lexer, t_vec *args,
 	i = 0;
 	vec_new(args, sizeof(char *));
 	vec_new(types, sizeof(int));
-	while (i < lexer.tokeni)
+	while (i < totaltokens)
 	{
 		if ( i && (tokens[i].type == COMMAND || tokens[i].type == PIPEDCOMMAND))
 		{
@@ -62,6 +62,6 @@ void		tokenizer(t_msh *prog, t_vec *args, t_vec *types)
 	gen_tokens(&tokens, prog);
 	assign_token_indexes(prog->line.cmd, tokens);
 	print_tokens(tokens);
-	conv_tokens(tokens, lex, args, types);
+	conv_tokens(tokens, totaltokens, args, types);
     free(tokens);
 }
