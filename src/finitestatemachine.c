@@ -6,14 +6,14 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/06 21:08:08 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/26 12:58:42 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/27 22:47:06 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <libft.h>
 
-static int		normal_state(int c, t_ryanlexer lex)
+static int		normal_state(int c)
 {
 	if (ft_is_whitespace(c))
 		return (WHITESPACE);
@@ -25,8 +25,6 @@ static int		normal_state(int c, t_ryanlexer lex)
 		return (INBACKTICK);
 	if (c == ';')
 		return (SEMICOLON);
-	if (c == '>' && lex.nexttype == WRITEFILE)
-		return (-1); // Parsing error
 	if (c == '>')
 		return (OREDIRECT);
 	if (c == '<')
@@ -80,10 +78,10 @@ static int		special_state(int c, t_ryanlexer lex)
 
 int				checkstate(int c, t_ryanlexer lex)
 {
-	if (lex.escape == 1)
-		return (lex.state);
+	/* if (lex.escape == 1) */
+	/* 	return (lex.state); */
 	if (lex.state == NORMAL || lex.state == WHITESPACE)
-		return (normal_state(c, lex));
+		return (normal_state(c));
 	if (lex.state >= INDOUBLEQUOTE && lex.state <= INBACKTICK)
 		return (quote_state(c, lex));
 	return (special_state(c, lex));

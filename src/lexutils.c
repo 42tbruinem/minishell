@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/06 21:18:20 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/26 19:16:01 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/27 22:57:59 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,13 @@ void		update_lexer(char *line, t_ryanlexer *lex)
 		lex->j = lex->i;
 }
 
-int			check_esc_char(char *line, t_ryanlexer *lex)
+int			check_esc_char(char *line, t_ryanlexer *lex, int gen_true)
 {
-    if (lex->escape == 1)
-    {
-        lex->escape = 0;
-        lex->i++;
-        return (1);
-    }
 	if (line[lex->i] == '\\' && lex->escape == 0 && lex->state != INSINGLEQUOTE)
 	{
+		if (gen_true)
+			mash_string(line, lex->i, lex->i + 1);
 		lex->escape = 1;
-		lex->i++;
 		return (1);
 	}
 	return (0);

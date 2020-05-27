@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/26 18:35:19 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/27 22:58:10 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,9 +287,10 @@ void			env_print(t_var *env);
 ** allocated string from input.
 */
 
-t_ryantok		*tokenizer(char **line, t_msh *prog);
+t_ryantok		*tokenizer(t_msh *prog);
 size_t			sum_tokens(char *line);
-void			gen_tokens(char **lineptr, t_ryantok **tokens, t_msh *prog);
+void			gen_tokens(t_ryantok **tokens, t_msh *prog);
+void			mash_string(char *line, size_t dest, size_t src);
 
 /*
 ** Functions to read input and handle line-editing. In read_input.c,
@@ -317,10 +318,13 @@ int				checkstate(int c, t_ryanlexer lex);
 ** Lexing utilities.
 */
 
-int				check_esc_char(char *line, t_ryanlexer *lex);
+int				check_esc_char(char *line, t_ryanlexer *lex, int gen_true);
 void			init_lexer(t_ryanlexer *lex);
 void			update_lexer(char *line, t_ryanlexer *lex);
 void			create_token(t_ryantok *token, t_ryanlexer *lex);
 void			concatenate_input(char *line);
+
+/* Troubleshooting */
+void			print_state(int c, t_ryanlexer lex);
 
 #endif

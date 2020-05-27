@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/26 12:30:45 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/26 15:48:54 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/27 22:58:41 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ void			print_state(int c, t_ryanlexer lex)
 		[ENV] = "ENV"
 	};
 
-	ft_printf("%c:\tstate: %s\n", c, state_table[lex.state]);
+	ft_printf("%c:\tnum = %d\tescape: %d\tstate: %s\n",
+			c, lex.state, lex.escape, state_table[lex.state]);
 }
 
 size_t			sum_tokens(char *line)
@@ -41,7 +42,7 @@ size_t			sum_tokens(char *line)
 	sum = 0;
 	while (line[lex.i])
 	{
-		if (check_esc_char(line, &lex))
+		if (check_esc_char(line, &lex, 0))
 			continue ;
 		update_lexer(line, &lex);
 		/* print_state((*line)[lex.i], lex); #<{(| Troubleshooting |)}># */
