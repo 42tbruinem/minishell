@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/04/12 11:11:07 by rlucas        #+#    #+#                  #
-#    Updated: 2020/05/26 13:13:34 by rlucas        ########   odam.nl          #
+#    Updated: 2020/05/27 23:10:18 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,8 @@ SRC =	main.c \
 		execute.c \
 		builtin.c \
 		tok.c \
+		pipeline.c \
+		vector.c \
 		tables.c \
 		commands.c \
 		env.c \
