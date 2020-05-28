@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 22:22:24 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/05/28 13:11:43 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/05/28 15:02:06 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,8 @@ int		run_program(t_msh *prog, t_cmd *cmd, char *abspath)
 		close_iostream(cmd->iostream);
 		exit(0);
 	}
+	else
+		vec_add(&prog->process_arr, &pid);
 	close_iostream(cmd->iostream);
 	free(abspath);
 	return (0);

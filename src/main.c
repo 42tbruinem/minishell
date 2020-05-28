@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/28 12:48:09 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/05/28 15:13:49 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #include <minishell.h>
 #include <fcntl.h>
 #include <stdio.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 char	**g_termbuff;
 
@@ -31,8 +33,28 @@ int		in_out_redirection(t_msh *prog, t_cmd *command)
 	return (1);
 }
 
+int		abortion_failed(t_msh *prog)
+{
+	size_t	i;
+	int		exit_status;
+
+	i = 0;
+	while (i < prog->process_arr.index)
+	{
+		waitpid(-1, &exit_status, 0);
+		i++;
+	}
+	vec_destroy(&prog->process_arr, NULL);
+	if (exit_status == 0)
+		return (exit_status);
+	else
+		return (0);
+}
+
 int		run_commands(t_msh *prog, t_cmd *commands)
 {
+	if (!vec_new(&prog->process_arr, sizeof(int)))
+		error_exit(prog, MEM_FAIL);
 	while (commands)
 	{
 		if (!in_out_redirection(prog, commands))
@@ -40,13 +62,13 @@ int		run_commands(t_msh *prog, t_cmd *commands)
 			dprintf(2, "bieba\n");
 			return (1);
 		}
-//		print_filearr(&prog->file_arr);
-//		print_command(commands);
 		(void)execute(prog, commands);
 		commands = commands->next;
 	}
 	close_all(&prog->file_arr);
 	vec_destroy(&prog->file_arr, NULL);
+	if (abortion_failed(prog))
+		error_exit(prog, MEM_FAIL);
 	return (1);
 }
 
