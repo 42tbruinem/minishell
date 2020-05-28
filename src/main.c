@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/28 10:22:07 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/28 10:55:29 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ int	msh_main(t_msh *prog)
 	t_vec	args;
 	t_vec	argtypes;
 	int		status;
-	/* char	buf[8]; */
+	char	buf[7];
 
 	status = 1;
 	init_readline(prog);
@@ -154,10 +154,10 @@ int	msh_main(t_msh *prog)
 		debug_commands(commands);
 		status = run_commands(prog, commands);
 	/* This helps calibrate cursor following command output for some reason */
-		/* ft_printf_fd(STDOUT, "\033[6n"); */
-		/* read(STDOUT, buf, 8); */
-		/* buf[8] = '\0'; */
-		/* ft_printf("\nbuf = %s\n", buf); */
+		ft_printf_fd(STDOUT, "\033[6n");
+		read(STDIN, buf, 7);
+		buf[6] = '\0';
+//		ft_printf("\nbuf = %s\n", buf);
 	}
 	std_exit(prog);
 	return (0);

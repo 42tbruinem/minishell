@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 22:22:24 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/05/06 12:34:08 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/05/28 10:59:46 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,15 +103,16 @@ int		run_program(t_msh *prog, t_cmd *cmd, char *abspath)
 		close_ifnot(&prog->file_arr, cmd->iostream);
 		if (cmd->iostream[READ] != -1 &&
 			dup2(cmd->iostream[READ], STDIN) == -1)
-			return (1);
+			exit(0);
 		if (cmd->iostream[WRITE] != -1 &&
 			dup2(cmd->iostream[WRITE], STDOUT) == -1)
-			return (1);
+			exit(0);
 		if (abspath && execve(abspath, cmd->args, prog->envp) == -1)
-			return (1); //error
+			exit(0);
 		if (!abspath && execve(cmd->args[0], cmd->args, prog->envp) == -1)
-			return (1); //error
+			exit(0);
 		close_iostream(cmd->iostream);
+		exit(0);
 	}
 	close_iostream(cmd->iostream);
 	free(abspath);
@@ -143,10 +144,10 @@ int		run_builtin(t_msh *prog, t_cmd *cmd, int id)
 		close_ifnot(&prog->file_arr, cmd->iostream);
 		if (cmd->iostream[READ] != -1 &&
 			dup2(cmd->iostream[READ], STDIN) == -1)
-			return (1);
+			exit(0);
 		if (cmd->iostream[WRITE] != -1 &&
 			dup2(cmd->iostream[WRITE], STDOUT) == -1)
-			return (1);
+			exit(0);
 //		dprintf(2, "yeet\n");
 		builtins[id](prog, ft_str2len(cmd->args), cmd->args);
 		close_iostream(cmd->iostream);
