@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/26 13:10:59 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/28 11:43:31 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/28 16:04:08 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,11 @@ char		*env_val_get_n(const char *name, t_var *env, size_t len)
 	tmp = env;
 	while (tmp)
 	{
-		if (ft_strncmp(tmp->name, name, len + 1) == 0)
-			return (tmp->val);
+		if (ft_strncmp(tmp->name, name, len) == 0)
+		{
+			if (ft_strlen(tmp->name) == len)
+				return (tmp->val);
+		}
 		tmp = tmp->next;
 	}
 	return (NULL);
