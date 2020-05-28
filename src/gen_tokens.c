@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/26 13:10:59 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/28 16:04:08 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/28 16:07:31 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ void		mash_string(char *line, size_t dest, size_t src)
 {
 	size_t		tail;
 
-	tail = ft_strlen(line + src) + src - (src - dest);
-	ft_memmove(line + dest, line + src, ft_strlen(line + src));
+	tail = ft_strlen(&line[src]) + dest;
+	ft_memmove(&line[dest], &line[src], ft_strlen(&line[dest]));
 	while (line[tail])
 	{
 		line[tail] = '\0';
@@ -72,21 +72,6 @@ char		*env_val_get_n(const char *name, t_var *env, size_t len)
 	return (NULL);
 }
 
-void		dangerous_print(char *start, size_t len)
-{
-	size_t		i;
-
-	i = 0;
-	while (i <= len)
-	{
-		if (start[i] == '\0')
-			ft_putchar('0');
-		else
-			ft_putchar(start[i]);
-		i++;
-	}
-}
-
 void		insert_into_string(t_ryanlexer *lex, t_msh *prog, char *env_value)
 {
 	size_t		end;
@@ -98,7 +83,6 @@ void		insert_into_string(t_ryanlexer *lex, t_msh *prog, char *env_value)
 	{
 		prog->line.cmd = ft_realloc(prog->line.cmd, end + env_value_len + 1);
 		prog->line.alloced_cmd = end + env_value_len;
-		/* ft_bzero(prog->line.cmd + end, prog->line.alloced_cmd - end + 1); */
 	}
 	ft_memmove(prog->line.cmd + lex->i + env_value_len, prog->line.cmd + lex->i,
 			ft_strlen(prog->line.cmd + lex->i));
