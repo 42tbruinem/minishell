@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/26 13:10:59 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/27 22:58:54 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/28 09:52:04 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,8 @@ void		evaluate_env(t_ryanlexer *lex, t_msh *prog)
 		(void)prog; /* Initiate subshell */
 	if (prog->line.cmd[lex->i + 1] == '$')
 		(void)prog; /* Get process id of shell */
-	if (ft_isalpha(prog->line.cmd[lex->i + 1]))
+	if (ft_isalpha(prog->line.cmd[lex->i + 1]) || prog->line.cmd[lex->i + 1] ==
+			'_')
 		expand_env_value(lex, prog);
 }
 

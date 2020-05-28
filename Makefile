@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/04/12 11:11:07 by rlucas        #+#    #+#                  #
-#    Updated: 2020/05/27 23:10:18 by rlucas        ########   odam.nl          #
+#    Updated: 2020/05/28 10:17:01 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,7 +58,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	@echo "Compiling shell..."
-	@gcc -g $(FLAGS) $(OBJ) -o $(NAME) $(INCLUDES) \
+	@gcc $(FLAGS) $(OBJ) -o $(NAME) $(INCLUDES) \
 		-L$(LIBDIR) -lft -ltermcap
 
 compile_library:

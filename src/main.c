@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/28 00:05:14 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/28 10:22:07 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,9 @@ int	msh_main(t_msh *prog)
 		status = run_commands(prog, commands);
 	/* This helps calibrate cursor following command output for some reason */
 		/* ft_printf_fd(STDOUT, "\033[6n"); */
-		/* read(STDIN, buf, 8); */
+		/* read(STDOUT, buf, 8); */
+		/* buf[8] = '\0'; */
+		/* ft_printf("\nbuf = %s\n", buf); */
 	}
 	std_exit(prog);
 	return (0);
