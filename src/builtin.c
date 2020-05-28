@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 23:02:16 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/05/05 12:44:31 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/05/28 11:42:07 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,11 @@ void	ft_export(t_msh *prog, int argc, char **argv)
 	while (argv[i])
 	{
 		tmp = ft_strclen(argv[i], '=');
-		argv[i][tmp] = '\0';
-		if (tmp != ft_strlen(argv[i]))
+		if (tmp < ft_strlen(argv[i]))
+		{
+			argv[i][tmp] = '\0';
 			(void)env_val_set(argv[i], prog->env, &argv[i][tmp + 1]);
+		}
 		i++;
 	}
 	env_update(prog);
@@ -132,7 +134,7 @@ void	ft_pwd(t_msh *prog, int argc, char **argv)
 		res = getcwd(path, size + 1);
 	}
 	if (res)
-		ft_printf("%s", path);
+		ft_printf("%s\n", path);
 	free(path);
 }
 

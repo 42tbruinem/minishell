@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 22:22:24 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/05/28 10:59:46 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/05/28 11:28:57 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ int		run_builtin(t_msh *prog, t_cmd *cmd, int id)
 	[B_CD] = &ft_cd
 	};
 
-//	dprintf(2, "IOSTREAM: [READ] = %d | [WRITE] = %d\n", cmd->iostream[0], cmd->iostream[1]);
+	dprintf(2, "id: %d | IOSTREAM: [READ] = %d | [WRITE] = %d\n", id, cmd->iostream[0], cmd->iostream[1]);
 	if (cmd->iostream[READ] == -1 && cmd->iostream[WRITE] == -1)
 	{
 		builtins[id](prog, ft_str2len(cmd->args), cmd->args);

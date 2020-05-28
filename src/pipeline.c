@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/04 19:35:57 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/05/24 14:25:38 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/05/28 12:59:00 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,33 +83,29 @@ int		new_file(t_cmd *command, char **args, int type, t_vec *fd_arr)
 {
 	int	fd;
 
-	if (type == TRUNC)
-		fd = open(args[1], O_CREAT | O_WRONLY | O_TRUNC);
-	else if (type == APPEND)
-		fd = open(args[1], O_CREAT | O_WRONLY | O_APPEND);
-	else if (type == IN_REDIR)
-		fd = open(args[1], O_RDONLY);
+	if (type == WRITEFILE)
+		fd = open(args[0], O_CREAT | O_WRONLY | O_TRUNC);
+	else if (type == APPENDFILE)
+		fd = open(args[0], O_CREAT | O_WRONLY | O_APPEND);
+	else if (type == INPUT_SENDER)
+		fd = open(args[0], O_RDONLY);
 	if (fd == -1 || !vec_add(fd_arr, &fd))
-	{
-//		dprintf(2, "ERRNO: %d | file(%d) failed to open: %s\n", errno, fd, args[1]);
 		return (0);
-	}
-//	dprintf(2, "File's FD: %d\n", fd);
 	if (type == IN_REDIR)
 		command->iostream[READ] = fd;
 	else
 		command->iostream[WRITE] = fd;
-//	free(args[0]);
-//	free(args[1]);
-//	args[0] = NULL;
-//	args[1] = NULL;
+	args[0] = NULL;
 	return (1);
 }
 
 int		new_stream(t_cmd *cmd, char **args, int type, t_vec *fd_arr)
 {
-	if (!args[1])
+	if (!args[0])
+	{
+		dprintf(2, "banaantjes\n");
 		return (0); //error
+	}
 	return (new_file(cmd, args, type, fd_arr));
 }
 
@@ -120,7 +116,7 @@ int		set_redirection(t_cmd *command, char **args, int *types, t_vec *fd_arr)
 	i = 0;
 	while (args[i])
 	{
-		if (is_redir(types[i]))
+		if (is_redir(types[i])) //check if it's a redirection
 			if (!new_stream(command, &args[i], types[i], fd_arr))
 				return (0);
 		i++;
