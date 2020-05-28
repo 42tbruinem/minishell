@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/26 13:10:59 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/28 11:43:31 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/28 14:15:38 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,9 @@ void		mash_string(char *line, size_t dest, size_t src)
 {
 	size_t		tail;
 
-	tail = ft_strlen(line + src) + src - (src - dest);
-	ft_memmove(line + dest, line + src, ft_strlen(line + src));
+	tail = ft_strlen(&line[src]) + dest;
+	//how do we know if there's enough source to copy for the amount of strlen(dest)
+	ft_memmove(&line[dest], &line[src], ft_strlen(&line[dest]));
 	while (line[tail])
 	{
 		line[tail] = '\0';

@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/04 19:35:57 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/05/28 12:59:00 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/05/28 13:17:39 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int		new_file(t_cmd *command, char **args, int type, t_vec *fd_arr)
 		fd = open(args[0], O_RDONLY);
 	if (fd == -1 || !vec_add(fd_arr, &fd))
 		return (0);
-	if (type == IN_REDIR)
+	if (type == INPUT_SENDER)
 		command->iostream[READ] = fd;
 	else
 		command->iostream[WRITE] = fd;

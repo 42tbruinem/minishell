@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 22:22:24 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/05/28 11:28:57 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/05/28 13:11:43 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,7 @@ int		run_builtin(t_msh *prog, t_cmd *cmd, int id)
 		builtins[id](prog, ft_str2len(cmd->args), cmd->args);
 		return (0);
 	}
+	dprintf(2, "I'm fucking stupid\n");
 	pid = fork();
 	if (!pid)
 	{
