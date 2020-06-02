@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/28 15:13:49 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/02 11:28:12 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-
-char	**g_termbuff;
 
 int		in_out_redirection(t_msh *prog, t_cmd *command)
 {
@@ -54,7 +52,7 @@ int		abortion_failed(t_msh *prog)
 int		run_commands(t_msh *prog, t_cmd *commands)
 {
 	if (!vec_new(&prog->process_arr, sizeof(int)))
-		error_exit(prog, MEM_FAIL);
+		error_exit(prog, MEM_FAIL, IN_INPUT); // Change this later
 	while (commands)
 	{
 		if (!in_out_redirection(prog, commands))
@@ -68,7 +66,7 @@ int		run_commands(t_msh *prog, t_cmd *commands)
 	close_all(&prog->file_arr);
 	vec_destroy(&prog->file_arr, NULL);
 	if (abortion_failed(prog))
-		error_exit(prog, MEM_FAIL);
+		error_exit(prog, MEM_FAIL, IN_INPUT); // Change this later
 	return (1);
 }
 
@@ -92,6 +90,12 @@ void	debug_commands(t_cmd *commands)
 	}
 }
 
+void	refresh_prog(t_msh *prog)
+{
+	if (vecstr_reset(&prog->line.cmd))
+		exit (-1); // Mem fail - deal with later
+}
+
 int	msh_main(t_msh *prog)
 {
 	t_cmd	*commands;
@@ -102,11 +106,18 @@ int	msh_main(t_msh *prog)
 	while (1)
 	{
 		if (read_input(prog) == -1)
-			error_exit(prog, MEM_FAIL);
-		tokenizer(prog, &args, &argtypes);
+			error_exit(prog, MEM_FAIL, IN_INPUT); // Move into read_input() later
+		prog->line.term.c_lflag |= ECHO;
+		prog->line.term.c_lflag |= ICANON;
+		tcsetattr(STDIN, TCSAFLUSH, &prog->line.term);
+		tokenizer(prog, &prog->line.cmd, &args, &argtypes);
 		commands = get_commands(&args, (int *)argtypes.store, &(prog->file_arr));
 		debug_commands(commands);
 		(void)run_commands(prog, commands); //change this to update the exit_status variable, for $?
+		refresh_prog(prog);
+		prog->line.term.c_lflag &= ~(ECHO | ICANON);
+		tcsetattr(STDIN, TCSAFLUSH, &prog->line.term);
+		tcflush(STDIN, TCIFLUSH);
 	}
 	std_exit(prog);
 	return (0);

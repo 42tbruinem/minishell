@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/30 13:41:02 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/01 23:39:31 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,24 +26,38 @@ static void	refresh_cursor(t_line *line)
 	termcmd(MOVE_COLROW, line->cursor.col, line->cursor.row, 1);
 }
 
+static int	get_col(int row)
+{
+	char		buf[10];
+	int			col;
+
+	ft_printf_fd(STDOUT, "\033[6n");
+	read(STDIN, buf, 10);
+	if (row < 10)
+		col = ft_atoi(buf + 4);
+	else if (row > 10 && row < 100)
+		col = ft_atoi(buf + 5);
+	else if (row > 100)
+		col = ft_atoi(buf + 6);
+	return (col);
+}
+
 static int	get_row(void)
 {
-	char		buf[8];
+	char		buf[10];
 	int			row;
 
 	ft_printf_fd(STDOUT, "\033[6n");
-	read(STDIN, buf, 8);
+	read(STDIN, buf, 10);
 	row = ft_atoi(buf + 2);
 	return (row);
 }
 
 static int	initialize_line_editor(t_line *line)
 {
-	line->cmd = (char *)ft_calloc(1, 100);
-	if (!line->cmd)
-		return (-1);
-	line->cursor.col = line->promptlen;
 	line->cursor.row = get_row() - 1;
+	line->cursor.col = get_col(line->cursor.row + 1) - 1;
+	line->promptlen = line->cursor.col;
 	line->total_rows = 0;
 	line->alloced_cmd = 100;
 	line->cmd_len = 0;
@@ -59,9 +73,9 @@ int		read_input(t_msh *prog)
 	int			send;
 
 	line = &prog->line;
+	ft_printf("%s", line->prompt);
 	if (initialize_line_editor(line) == -1)
 		return (-1);
-	ft_printf("%s", line->prompt);
 	send = 0;
 	refresh_cursor(line);
 	while (!send)
@@ -70,7 +84,7 @@ int		read_input(t_msh *prog)
 		read(STDIN, buf, 6);
 		send = handle_input(line, buf);
 		if (send < 0)
-			error_exit(prog, MEM_FAIL);
+			error_exit(prog, MEM_FAIL, IN_INPUT);
 		if (send == CTRL_D)
 			std_exit(prog);
 		refresh_cursor(line);

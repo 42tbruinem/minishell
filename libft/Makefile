@@ -6,17 +6,16 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/10/28 15:06:46 by rlucas        #+#    #+#                  #
-#    Updated: 2020/05/04 13:28:01 by rlucas        ########   odam.nl          #
+#    Updated: 2020/06/02 11:19:52 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
 
 PRINTFDIR = ft_printf/
-
 MINIPRINTFDIR = ft_miniprintf/
-
 GNLDIR = get_next_line/
+VECTORDIR = vectors/
 
 SRCS = ft_isalpha.c ft_memset.c ft_bzero.c \
 	   ft_memcpy.c ft_memccpy.c ft_memmove.c ft_memchr.c \
@@ -65,7 +64,14 @@ SRCS = ft_isalpha.c ft_memset.c ft_bzero.c \
 	   ft_strtok.c \
 	   ft_strcmp.c \
 	   ft_putchar.c \
-	   ft_is_whitespace.c
+	   ft_is_whitespace.c \
+	   ft_realloc.c \
+	   $(VECTORDIR)vecstr.c \
+	   $(VECTORDIR)vecstr_insert.c \
+	   $(VECTORDIR)vecstr_delete.c \
+	   $(VECTORDIR)vecstr_utils.c \
+	   $(VECTORDIR)vecstr_get_set.c
+
 
 OBJ = $(notdir $(SRCS:.c=.o))
 

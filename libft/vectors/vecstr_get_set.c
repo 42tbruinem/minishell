@@ -1,36 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   exit.c                                             :+:    :+:            */
+/*   vecstr_get_set.c                                   :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/04/16 11:54:12 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/02 11:30:24 by rlucas        ########   odam.nl         */
+/*   Created: 2020/06/01 22:06:58 by rlucas        #+#    #+#                 */
+/*   Updated: 2020/06/01 22:07:58 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
-#include <unistd.h>
 #include <libft.h>
 
-/*
-** Functions to free up everything before exiting the program.
-*/
-
-void		error_exit(t_msh *prog, int err, int stage)
+void	vecstr_set(t_vecstr *v, size_t index, int c)
 {
-	ft_printf_fd(2, "Error %d - ", err);
-	ft_printf_fd(2, error_lookup(err));
-	if (stage == PRE_ENV)
-		exit(err);
-	if (stage == IN_ENV || stage == IN_TERM)
-		env_clear(prog->env, &free);
-	exit(err);
+	if (index > v->len)
+		return ;
+	v->str[index] = c;
 }
 
-void		std_exit(t_msh *prog)
+char	*vecstr_get(t_vecstr *v)
 {
-	env_clear(prog->env, &free);
-	exit(0);
+	return (v->str);
 }

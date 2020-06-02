@@ -6,26 +6,26 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/11/24 17:21:27 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/27 13:01:51 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/05/30 12:51:18 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 
-static void	*ft_realloc(char *existing, int newsize)
-{
-	char		*new;
-
-	new = (char *)malloc(newsize);
-	if (!new)
-	{
-		free(existing);
-		return (NULL);
-	}
-	ft_strlcpy(new, existing, newsize);
-	free(existing);
-	return (new);
-}
+/* static void	*ft_realloc(char *existing, int newsize) */
+/* { */
+/* 	char		*new; */
+/*  */
+/* 	new = (char *)malloc(newsize); */
+/* 	if (!new) */
+/* 	{ */
+/* 		free(existing); */
+/* 		return (NULL); */
+/* 	} */
+/* 	ft_strlcpy(new, existing, newsize); */
+/* 	free(existing); */
+/* 	return (new); */
+/* } */
 
 static char	*line_from_buf(char **line, char *buf, char **store)
 {
@@ -46,13 +46,11 @@ static char	*line_from_buf(char **line, char *buf, char **store)
 		*line = (char *)malloc(linelen + 1);
 		if (*line)
 			ft_strlcpy(*line, buf, linelen + 1);
+		return (*line);
 	}
-	else
-	{
-		*line = ft_realloc(*line, ft_strclen(*line, 0) + linelen + 1);
-		if (*line)
-			ft_strlcat(*line, buf, ft_strclen(*line, 0) + linelen + 1);
-	}
+	*line = ft_realloc(*line, ft_strlen(*line), ft_strlen(*line) + linelen + 1);
+	if (*line)
+		ft_strlcat(*line, buf, ft_strclen(*line, 0) + linelen + 1);
 	return (*line);
 }
 
