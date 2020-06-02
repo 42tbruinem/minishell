@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 22:22:24 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/05/28 15:02:06 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/02 13:29:22 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,18 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <stdio.h>
+
+void		ft_str2print(char **str)
+{
+	size_t	i;
+
+	i = 0;
+	while (str && str[i])
+	{
+		ft_printf("%s%c", str[i], (str[i + 1]) ? ' ' : '\n');
+		i++;
+	}
+}
 
 size_t		ft_str2len(char **str)
 {
@@ -97,6 +109,8 @@ int		run_program(t_msh *prog, t_cmd *cmd, char *abspath)
 	if (!prog->envp)
 		return (1); //error
 //	dprintf(2, "abspath: %s\n", abspath);
+	dprintf(2, "program:    | PIPE: [READ] = %d | [WRITE] = %d\n", cmd->cmdpipe[0], cmd->cmdpipe[1]);
+	dprintf(2, "program: %s | IOSTREAM: [READ] = %d | [WRITE] = %d\n", abspath, cmd->iostream[0], cmd->iostream[1]);
 	pid = fork();
 	if (!pid)
 	{
@@ -115,7 +129,7 @@ int		run_program(t_msh *prog, t_cmd *cmd, char *abspath)
 		exit(0);
 	}
 	else
-		vec_add(&prog->process_arr, &pid);
+		vec_add(&g_pid, &pid);
 	close_iostream(cmd->iostream);
 	free(abspath);
 	return (0);
@@ -134,13 +148,12 @@ int		run_builtin(t_msh *prog, t_cmd *cmd, int id)
 	[B_CD] = &ft_cd
 	};
 
-	dprintf(2, "id: %d | IOSTREAM: [READ] = %d | [WRITE] = %d\n", id, cmd->iostream[0], cmd->iostream[1]);
+//	dprintf(2, "id: %d | IOSTREAM: [READ] = %d | [WRITE] = %d\n", id, cmd->iostream[0], cmd->iostream[1]);
 	if (cmd->iostream[READ] == -1 && cmd->iostream[WRITE] == -1)
 	{
 		builtins[id](prog, ft_str2len(cmd->args), cmd->args);
 		return (0);
 	}
-	dprintf(2, "I'm fucking stupid\n");
 	pid = fork();
 	if (!pid)
 	{
@@ -165,6 +178,8 @@ int		execute(t_msh *prog, t_cmd *cmd)
 	char	*abspath;
 	int		builtin;
 
+//	ft_printf("PRINTING ARGUMENTS:\n");
+//	ft_str2print(cmd->args);
 	abspath = NULL;
 	builtin = is_builtin(cmd->args[0]);
 //	dprintf(2, "BUILTIN: %d\n", builtin);

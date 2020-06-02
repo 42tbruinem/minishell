@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/02 11:28:12 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/02 13:25:04 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,33 +25,31 @@ int		in_out_redirection(t_msh *prog, t_cmd *command)
 		command->iostream[READ] = command->cmdpipe[READ];
 	if (command->next && command->next->cmdtype == PIPEDCOMMAND)
 		command->iostream[WRITE] = command->next->cmdpipe[WRITE];
-	if (!set_redirection(command, command->args,
-		command->argtypes, &prog->file_arr))
-		return (0);
-	return (1);
+	return (set_redirection(command, command->args,
+		command->argtypes, &prog->file_arr));
 }
 
-int		abortion_failed(t_msh *prog)
+void	collect_souls(t_msh *prog)
 {
 	size_t	i;
-	int		exit_status;
 
 	i = 0;
-	while (i < prog->process_arr.index)
+	while (i < g_pid.index)
 	{
-		waitpid(-1, &exit_status, 0);
+		waitpid(-1, &prog->exit_status, 0);
 		i++;
 	}
-	vec_destroy(&prog->process_arr, NULL);
-	if (exit_status == 0)
-		return (exit_status);
-	else
-		return (0);
+	vec_destroy(&g_pid, NULL);
 }
 
 int		run_commands(t_msh *prog, t_cmd *commands)
 {
-	if (!vec_new(&prog->process_arr, sizeof(int)))
+	int		saved_stdout;
+	int		saved_stdin;
+
+	saved_stdout = dup(STDOUT);
+	saved_stdin = dup(STDIN);
+	if (!vec_new(&g_pid, sizeof(int)))
 		error_exit(prog, MEM_FAIL, IN_INPUT); // Change this later
 	while (commands)
 	{
@@ -65,27 +63,27 @@ int		run_commands(t_msh *prog, t_cmd *commands)
 	}
 	close_all(&prog->file_arr);
 	vec_destroy(&prog->file_arr, NULL);
-	if (abortion_failed(prog))
-		error_exit(prog, MEM_FAIL, IN_INPUT); // Change this later
+	collect_souls(prog);
+	dup2(saved_stdout, STDOUT);
+	close(saved_stdout);
+	dup2(saved_stdin, STDIN);
+	close(saved_stdin);
 	return (1);
 }
 
 void	debug_commands(t_cmd *commands)
 {
 	size_t	i;
-	size_t	cmd;
 
-	cmd = 0;
 	ft_printf("start of command debug\n");
 	while (commands)
 	{
 		i = 0;
 		while (commands->args[i])
 		{
-			ft_printf("%ld | %s\n", cmd, commands->args[i]);
+			ft_printf("%s%c", commands->args[i], (commands->args[i + 1]) ? ' ' : '\n');
 			i++;
 		}
-		cmd++;
 		commands = commands->next;
 	}
 }
@@ -112,8 +110,8 @@ int	msh_main(t_msh *prog)
 		tcsetattr(STDIN, TCSAFLUSH, &prog->line.term);
 		tokenizer(prog, &prog->line.cmd, &args, &argtypes);
 		commands = get_commands(&args, (int *)argtypes.store, &(prog->file_arr));
-		debug_commands(commands);
-		(void)run_commands(prog, commands); //change this to update the exit_status variable, for $?
+//		debug_commands(commands);
+		run_commands(prog, commands); //change this to update the exit_status variable, for $?
 		refresh_prog(prog);
 		prog->line.term.c_lflag &= ~(ECHO | ICANON);
 		tcsetattr(STDIN, TCSAFLUSH, &prog->line.term);

@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/02 11:39:14 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/02 12:35:41 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,14 @@ struct	s_vec
 	size_t			type_size;
 	size_t			capacity;
 	size_t			index;
+};
+
+typedef struct s_arg	t_arg;
+
+struct	s_arg
+{
+	t_vec	val;
+	t_vec	type;
 };
 
 typedef struct s_var	t_var;
@@ -175,11 +183,11 @@ typedef struct	s_line
 
 typedef	struct	s_msh
 {
-	t_vec		process_arr;
 	t_vec		file_arr;
 	t_vec		argtypes;
 	t_vec		args;
 	t_cmd		*commands;
+	int			exit_status;
 	char		**envp;
 	t_var		*env;
 	t_line		line;
@@ -227,6 +235,8 @@ enum			e_tokentypes
 	EOC,
 	DEFAULT,
 };
+
+t_vec	g_pid;
 
 typedef void	(*t_builtin)(t_msh *prog, int argc, char **argv);
 typedef int		(*t_inputf)(t_line *line, char buf[6]);

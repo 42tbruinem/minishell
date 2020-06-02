@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/04 19:35:57 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/05/28 13:17:39 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/02 13:23:03 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,7 @@ int		is_redir(int type)
 {
 	return (type == APPENDFILE ||
 		type == WRITEFILE ||
-		type == INPUT_SENDER ||
-		type == PIPEDCOMMAND);
+		type == INPUT_SENDER);
 }
 
 void	print_filearr(t_vec *fd_arr)
@@ -106,6 +105,7 @@ int		new_stream(t_cmd *cmd, char **args, int type, t_vec *fd_arr)
 		dprintf(2, "banaantjes\n");
 		return (0); //error
 	}
+//	return (1);
 	return (new_file(cmd, args, type, fd_arr));
 }
 
