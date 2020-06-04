@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/02 12:35:41 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/04 17:36:45 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -304,6 +304,7 @@ void			std_exit(t_msh *prog);
 int				vec_add(t_vec *vector, void *buffer);
 int				vec_new(t_vec *vector, size_t type_size);
 void			vec_destroy(t_vec *vector, void (*del)(void *));
+int				vec_get(t_vec *vector, void *buffer, size_t index);
 
 void			tokclear(t_token *list, void (*del)(void *));
 void			tokprint(t_token *list);
@@ -372,6 +373,12 @@ void			init_lexer(t_ryanlexer *lex);
 void			update_lexer(char *line, t_ryanlexer *lex);
 void			create_token(t_ryantok *token, t_ryanlexer *lex);
 void			concatenate_input(char *line);
+
+/*
+** Signal functions.
+*/
+
+void			sighandler(int signal);
 
 /* Troubleshooting */
 void			print_state(int c, t_ryanlexer lex);

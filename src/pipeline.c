@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/04 19:35:57 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/02 13:23:03 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/04 12:18:32 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	close_ifnot(t_vec *fd_arr, int *iostream)
 	size_t	i;
 	int		*fds;
 
+	i = 0;
 	fds = (int *)fd_arr->store;
 	while (i < fd_arr->index)
 	{
@@ -82,6 +83,7 @@ int		new_file(t_cmd *command, char **args, int type, t_vec *fd_arr)
 {
 	int	fd;
 
+	fd = -1;
 	if (type == WRITEFILE)
 		fd = open(args[0], O_CREAT | O_WRONLY | O_TRUNC);
 	else if (type == APPENDFILE)

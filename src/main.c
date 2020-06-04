@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/02 13:25:04 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/04 17:30:42 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <signal.h>
 
 int		in_out_redirection(t_msh *prog, t_cmd *command)
 {
@@ -125,6 +126,7 @@ int	main(void)
 {
 	t_msh	prog;
 
+	signal(SIGINT, sighandler);
 	env_init(&prog);
 	return (msh_main(&prog));
 }

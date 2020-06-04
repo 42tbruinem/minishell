@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/01 23:39:31 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/04 11:40:02 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static int	get_col(int row)
 	char		buf[10];
 	int			col;
 
+	col = 0;
 	ft_printf_fd(STDOUT, "\033[6n");
 	read(STDIN, buf, 10);
 	if (row < 10)

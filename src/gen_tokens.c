@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/26 13:10:59 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/02 11:40:08 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/04 12:21:29 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ void		add_env_value(t_ryanlexer *lex, t_vecstr *line, size_t env_name_len,
 {
 	char		*env_value;
 
-	env_value = env_val_get(vecstr_get(line) + lex->i + 1, prog->env);
+	env_value = env_val_get(vecstr_get(line) + lex->i + 1,
+			prog->env);
 	vecstr_slice(line, lex->i, lex->i + env_name_len + 1);
 	if (!env_value) {
 		if (lex->state != INDOUBLEQUOTE)
