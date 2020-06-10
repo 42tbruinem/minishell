@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/03 20:49:54 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/05/04 20:59:47 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/10 14:38:38 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int		vec_getref(t_vec *vector, void **buffer, size_t index)
 	return (1);
 }
 
-void	vec_destroy(t_vec *vector, void (*del)(void *))
+int		vec_destroy(t_vec *vector, void (*del)(void *))
 {
 	if (del)
 		del(vector);
@@ -71,4 +71,5 @@ void	vec_destroy(t_vec *vector, void (*del)(void *))
 	vector->index = 0;
 	vector->type_size = 0;
 	vector->store = NULL;
+	return (0);
 }

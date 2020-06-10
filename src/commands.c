@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 19:22:44 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/05/24 14:37:41 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/10 15:52:15 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,31 @@ char	**ft_str2clear(char **str)
 	return (NULL);
 }
 
-t_cmd	*new_command(size_t type, char **argstart, int *types, t_vec *fd_arr)
+int		is_pipe(int *types)
+{
+	int	i;
+
+	i = 0;
+	while (types[i] != SEPARATOR)
+	{
+		if (types[i] == PIPEDCOMMAND)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+t_cmd	*new_command(char **argstart, int *types, t_vec *fd_arr)
 {
 	t_cmd	*new;
 
 	new = malloc(sizeof(t_cmd));
 	if (!new)
 		return (NULL);
-	if (type == PIPEDCOMMAND)
+	new->cmdpipe[0] = -1;
+	new->cmdpipe[1] = -1;
+	new->cmdtype = (is_pipe(types) ? PIPEDCOMMAND : COMMAND);
+	if (new->cmdtype == PIPEDCOMMAND)
 	{
 		if (pipe(new->cmdpipe) == -1)
 		{
@@ -69,7 +86,6 @@ t_cmd	*new_command(size_t type, char **argstart, int *types, t_vec *fd_arr)
 		vec_add(fd_arr, &new->cmdpipe[1]);
 	}
 	new->argtypes = types;
-	new->cmdtype = type;
 	new->args = argstart;
 	new->next = NULL;
 	return (new);
@@ -93,7 +109,7 @@ t_cmd	*push_command(t_cmd **commands, t_cmd *new)
 	return (new);
 }
 
-t_cmd	*clear_commands(t_cmd *commands)
+int		clear_commands(t_cmd *commands)
 {
 	t_cmd	*iter;
 	t_cmd	*del;
@@ -105,28 +121,36 @@ t_cmd	*clear_commands(t_cmd *commands)
 		iter = iter->next;
 		free(del);
 	}
-	return (NULL);
+	return (0);
 }
 
-t_cmd	*get_commands(t_vec *args, int *types, t_vec *fd_arr)
+int			get_commands(t_msh *prog, t_ryantok *tokens, size_t totaltokens)
 {
-	t_cmd	*commands;
-	char	**argv;
 	size_t	i;
+	int		*types;
+	char	**args;
+	int		cmd;
 
 	i = 0;
-	argv = (char **)args->store;
-	commands = NULL;	
-	vec_new(fd_arr, sizeof(int));
-	while (i < args->index)
+	cmd = 0;
+	if (!conv_tokens(prog, tokens, totaltokens))
+		return (0);
+	args = (char **)prog->args.store;
+	types = (int *)prog->argtypes.store;
+	if (!vec_new(&prog->file_arr, sizeof(int)))
+		return (0);
+	prog->commands = NULL;
+	while (i < prog->args.index)
 	{
-		if (types[i] == PIPEDCOMMAND || types[i] == COMMAND)
+//		printf("token[%ld]: %s\n", i, args[i]);
+		if (cmd == tokens[i].cmd_num)
 		{
-			if (!push_command(&commands,
-				new_command(types[i], &argv[i], &types[i], fd_arr)))
-				return (clear_commands(commands));
+			if (!push_command(&prog->commands,
+				new_command(&args[i + cmd], &types[i + cmd], &prog->file_arr)))
+				return (clear_commands(prog->commands));
+			cmd++;
 		}
 		i++;
 	}
-	return (commands);
+	return (1);
 }

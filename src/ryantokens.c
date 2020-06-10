@@ -6,37 +6,50 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/05 23:24:42 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/02 11:35:20 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/10 15:37:11 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <libft.h>
 
-void		conv_tokens(t_ryantok *tokens, size_t totaltokens, t_vec *args,
-		t_vec *types)
-{
-	size_t i;
-	void	*nullptr;
-	int		separator;
+//ARG AND ARGTYPES IS INSIDE THE PROG STRUCT, NEED TO CHANGE TOKENIZER TO CREATE THE COMMAND LIST
 
-	nullptr = NULL;
-	separator = SEPARATOR;
+//first get an array of args and argtypes from the tokens, with a NULL inbetween the commands
+
+int			add_arg(t_msh *prog, char *arg, int argtype)
+{
+	if (!vec_add(&prog->args, &arg))
+		return (vec_destroy(&prog->args, NULL));
+	if (!vec_add(&prog->argtypes, &argtype))
+		return (vec_destroy(&prog->argtypes, NULL));
+	return (1);
+}
+
+int			conv_tokens(t_msh *prog, t_ryantok *tokens, size_t totaltokens)
+{
+	size_t	i;
+	int		cmd;
+
+	cmd = 0;
 	i = 0;
-	vec_new(args, sizeof(char *));
-	vec_new(types, sizeof(int));
+	if (!vec_new(&prog->args, sizeof(char *)))
+		return (0);
+	if (!vec_new(&prog->argtypes, sizeof(int)))
+		return (0);
 	while (i < totaltokens)
 	{
-		if ( i && (tokens[i].type == COMMAND || tokens[i].type == PIPEDCOMMAND))
+		if (cmd != tokens[i].cmd_num)
 		{
-			vec_add(args, &nullptr);
-			vec_add(types, &separator);
+			if (!add_arg(prog, NULL, SEPARATOR))
+				return (0);
+			cmd++;
 		}
-		vec_add(args, &tokens[i].value);
-		vec_add(types, &tokens[i].type);
+		if (!add_arg(prog, tokens[i].value, tokens[i].type))
+			return (0);
 		i++;
 	}
-	vec_add(args, &nullptr);
+	return (add_arg(prog, NULL, SEPARATOR));
 }
 
 void		assign_token_indexes(char *line, t_ryantok *tokens)
@@ -51,7 +64,7 @@ void		assign_token_indexes(char *line, t_ryantok *tokens)
 	}
 }
 
-void		tokenizer(t_msh *prog, t_vecstr *line, t_vec *args, t_vec *types)
+int			tokenizer(t_msh *prog, t_vecstr *line)
 {
 	t_ryantok		*tokens;
 	size_t			totaltokens;
@@ -59,9 +72,16 @@ void		tokenizer(t_msh *prog, t_vecstr *line, t_vec *args, t_vec *types)
 	totaltokens = sum_tokens(line);
 	ft_printf("sum = %u\n", totaltokens);
 	tokens = (t_ryantok *)malloc(sizeof(t_ryantok) * (totaltokens + 1));
+	if (!tokens)
+		return (0);
 	gen_tokens(&tokens, line, prog);
 	assign_token_indexes(vecstr_get(&prog->line.cmd), tokens);
 	print_tokens(tokens);
-	conv_tokens(tokens, totaltokens, args, types);
-    free(tokens);
+	if (!get_commands(prog, tokens, totaltokens))
+	{
+		free(tokens);
+		return (0);
+	}
+	free(tokens);
+	return (1);
 }

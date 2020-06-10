@@ -1,34 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   redirection.c                                      :+:    :+:            */
+/*   error.c                                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/05/02 15:10:27 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/10 15:52:24 by tbruinem      ########   odam.nl         */
+/*   Created: 2020/06/10 12:57:52 by tbruinem      #+#    #+#                 */
+/*   Updated: 2020/06/10 12:58:40 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <fcntl.h>
-#include <unistd.h>
+#include "minishell.h"
 
-int		main(void)
+//this function will print the details of the parsing error
+
+int		parse_error(char *str)
 {
-	int			pid;
-	int			pipefd[2];
-	static char	buff[5];
 
-	pipe(pipefd);
-	pid = fork();
-	if (!pid)
-	{
-//		dprintf(pipefd[1], "hoi\n");
-//		close(pipefd[0]); //important
-	}
-	close(pipefd[1]); //important
-	read(pipefd[0], buff, 4);
-//	printf("%s", buff);
-	return (0);
+
 }

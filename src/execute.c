@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 22:22:24 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/02 13:29:22 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/10 15:52:03 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,8 +128,7 @@ int		run_program(t_msh *prog, t_cmd *cmd, char *abspath)
 		close_iostream(cmd->iostream);
 		exit(0);
 	}
-	else
-		vec_add(&g_pid, &pid);
+	vec_add(&g_pid, &pid);
 	close_iostream(cmd->iostream);
 	free(abspath);
 	return (0);
@@ -169,15 +168,32 @@ int		run_builtin(t_msh *prog, t_cmd *cmd, int id)
 		close_iostream(cmd->iostream);
 		exit(0);
 	}
+	vec_add(&g_pid, &pid);
 	close_iostream(cmd->iostream);
 	return (0);
+}
+
+char	*get_program(char **args, int *types)
+{
+	int	i;
+
+	i = 0;
+	while (args[i])
+	{
+		if (types[i] == PIPEDCOMMAND || types[i] == COMMAND)
+			return (args[i]);
+		i++;
+	}
+	return (NULL);
 }
 
 int		execute(t_msh *prog, t_cmd *cmd)
 {
 	char	*abspath;
 	int		builtin;
+//	char	*program;
 
+//	program = get_program(cmd->args, cmd->argtypes);
 //	ft_printf("PRINTING ARGUMENTS:\n");
 //	ft_str2print(cmd->args);
 	abspath = NULL;

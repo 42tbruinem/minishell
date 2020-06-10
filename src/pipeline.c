@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/04 19:35:57 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/04 12:18:32 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/10 15:42:58 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,17 +97,15 @@ int		new_file(t_cmd *command, char **args, int type, t_vec *fd_arr)
 	else
 		command->iostream[WRITE] = fd;
 	args[0] = NULL;
+	if (command->args[0] == args[0])
+		command->args++;
 	return (1);
 }
 
 int		new_stream(t_cmd *cmd, char **args, int type, t_vec *fd_arr)
 {
 	if (!args[0])
-	{
-		dprintf(2, "banaantjes\n");
-		return (0); //error
-	}
-//	return (1);
+		return (0);
 	return (new_file(cmd, args, type, fd_arr));
 }
 

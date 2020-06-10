@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/04 17:36:45 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/10 14:49:02 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,10 +290,12 @@ char			*error_lookup(int err);
 
 typedef void	(*t_escapef)(t_lexer *lex, char *last);
 
+void			ft_str2print(char **str);
 int				execute(t_msh *prog, t_cmd *cmd);
 char			**ft_str2clear(char **str);
-t_cmd			*clear_commands(t_cmd *commands);
-t_cmd			*get_commands(t_vec *args, int *types, t_vec *fd_arr);
+int				clear_commands(t_cmd *commands);
+int				conv_tokens(t_msh *prog, t_ryantok *tokens, size_t totaltokens);
+int				get_commands(t_msh *prog, t_ryantok *tokens, size_t totaltokens);
 void			print_command(t_cmd *command);
 int				set_redirection(t_cmd *command, char **args,
 								int *types, t_vec *fd_arr);
@@ -303,7 +305,7 @@ void			std_exit(t_msh *prog);
 
 int				vec_add(t_vec *vector, void *buffer);
 int				vec_new(t_vec *vector, size_t type_size);
-void			vec_destroy(t_vec *vector, void (*del)(void *));
+int				vec_destroy(t_vec *vector, void (*del)(void *));
 int				vec_get(t_vec *vector, void *buffer, size_t index);
 
 void			tokclear(t_token *list, void (*del)(void *));
@@ -327,9 +329,9 @@ void			env_update(t_msh *prog);
 void			env_unset(t_var **env, char *name);
 t_var			*env_val_set(const char *name, t_var *env, const char *val);
 char			**env_convert(t_var *env);
-void			env_init(t_msh *prog);
+int				env_init(t_msh *prog);
 char			*env_val_get(const char *name, t_var *env);
-void			env_clear(t_var *env, void (*del)(void *));
+int				env_clear(t_var *env, void (*del)(void *));
 void			env_print(t_var *env);
 
 /*
@@ -337,8 +339,7 @@ void			env_print(t_var *env);
 ** allocated string from input.
 */
 
-void			tokenizer(t_msh *prog, t_vecstr *line, t_vec *args,
-		t_vec *types);
+int				tokenizer(t_msh *prog, t_vecstr *line);
 size_t			sum_tokens(t_vecstr *line);
 void			gen_tokens(t_ryantok **tokens, t_vecstr *line, t_msh *prog);
 

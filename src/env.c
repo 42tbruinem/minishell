@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/17 23:13:43 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/05/05 13:06:58 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/10 12:49:45 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ char	*env_val_get(const char *name, t_var *env)
 	return (NULL);
 }
 
-void	env_clear(t_var *env, void (*del)(void *))
+int	env_clear(t_var *env, void (*del)(void *))
 {
 	t_var	*delete;
 
@@ -106,6 +106,7 @@ void	env_clear(t_var *env, void (*del)(void *))
 		del(delete->name);
 		del(delete->val);
 	}
+	return (0);
 }
 
 void	env_print(t_var *env)
@@ -201,7 +202,7 @@ void	env_update(t_msh *prog)
 	prog->envp = env_convert(prog->env);
 }
 
-void	env_init(t_msh *prog)
+int	env_init(t_msh *prog)
 {
 	extern char	**environ;
 	t_var		*env;
@@ -210,15 +211,18 @@ void	env_init(t_msh *prog)
 	i = 0;
 	prog->env = var_init(environ[i]);
 	if (!prog->env)
-		return (env_clear(prog->env, &free));//error
+		return (env_clear(prog->env, &free));
 	env = prog->env;
 	while (environ[i])
 	{
 		env->next = var_init(environ[i]);
 		if (!env->next)
-			return (env_clear(prog->env, &free));//error
+			return (env_clear(prog->env, &free));
 		env = env->next;
 		i++;
 	}
 	prog->envp = env_convert(prog->env);
+	if (!prog->envp)
+		return (0);
+	return (1);
 }
