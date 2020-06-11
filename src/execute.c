@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 22:22:24 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/10 15:52:03 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/11 15:12:53 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,10 +107,7 @@ int		run_program(t_msh *prog, t_cmd *cmd, char *abspath)
 	int pid;
 
 	if (!prog->envp)
-		return (1); //error
-//	dprintf(2, "abspath: %s\n", abspath);
-	dprintf(2, "program:    | PIPE: [READ] = %d | [WRITE] = %d\n", cmd->cmdpipe[0], cmd->cmdpipe[1]);
-	dprintf(2, "program: %s | IOSTREAM: [READ] = %d | [WRITE] = %d\n", abspath, cmd->iostream[0], cmd->iostream[1]);
+		return (1);
 	pid = fork();
 	if (!pid)
 	{
@@ -147,7 +144,6 @@ int		run_builtin(t_msh *prog, t_cmd *cmd, int id)
 	[B_CD] = &ft_cd
 	};
 
-//	dprintf(2, "id: %d | IOSTREAM: [READ] = %d | [WRITE] = %d\n", id, cmd->iostream[0], cmd->iostream[1]);
 	if (cmd->iostream[READ] == -1 && cmd->iostream[WRITE] == -1)
 	{
 		builtins[id](prog, ft_str2len(cmd->args), cmd->args);
@@ -163,7 +159,6 @@ int		run_builtin(t_msh *prog, t_cmd *cmd, int id)
 		if (cmd->iostream[WRITE] != -1 &&
 			dup2(cmd->iostream[WRITE], STDOUT) == -1)
 			exit(0);
-//		dprintf(2, "yeet\n");
 		builtins[id](prog, ft_str2len(cmd->args), cmd->args);
 		close_iostream(cmd->iostream);
 		exit(0);
@@ -191,14 +186,9 @@ int		execute(t_msh *prog, t_cmd *cmd)
 {
 	char	*abspath;
 	int		builtin;
-//	char	*program;
 
-//	program = get_program(cmd->args, cmd->argtypes);
-//	ft_printf("PRINTING ARGUMENTS:\n");
-//	ft_str2print(cmd->args);
 	abspath = NULL;
 	builtin = is_builtin(cmd->args[0]);
-//	dprintf(2, "BUILTIN: %d\n", builtin);
 	if (builtin >= 0)
 		return (run_builtin(prog, cmd, builtin));
 	is_executable(cmd->args[0], &abspath, prog->env);

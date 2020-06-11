@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/04 19:35:57 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/10 15:42:58 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/11 15:14:08 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,20 +63,6 @@ int		is_redir(int type)
 	return (type == APPENDFILE ||
 		type == WRITEFILE ||
 		type == INPUT_SENDER);
-}
-
-void	print_filearr(t_vec *fd_arr)
-{
-	int		*fds;
-	size_t	i;
-
-	i = 0;
-	fds = (int *)fd_arr->store;
-	while (i < fd_arr->index)
-	{
-		dprintf(2, "[%d]%c", fds[i], (i + 1 < fd_arr->index) ? ' ' : '\n');
-		i++;
-	}
 }
 
 int		new_file(t_cmd *command, char **args, int type, t_vec *fd_arr)

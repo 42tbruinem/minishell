@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/05 23:24:42 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/10 15:37:11 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/10 21:18:28 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void		assign_token_indexes(char *line, t_ryantok *tokens)
 	i = 0;
 	while (tokens[i].value)
 	{
-		tokens[i].value = line + tokens[i].index;
+		tokens[i].value = &line[tokens[i].index];
 		i++;
 	}
 }
@@ -69,12 +69,12 @@ int			tokenizer(t_msh *prog, t_vecstr *line)
 	t_ryantok		*tokens;
 	size_t			totaltokens;
 
-	totaltokens = sum_tokens(line);
+	totaltokens = sum_tokens(line); //token amount
 	ft_printf("sum = %u\n", totaltokens);
-	tokens = (t_ryantok *)malloc(sizeof(t_ryantok) * (totaltokens + 1));
+	tokens = (t_ryantok *)malloc(sizeof(t_ryantok) * (totaltokens + 1)); //malloc tokens
 	if (!tokens)
 		return (0);
-	gen_tokens(&tokens, line, prog);
+	gen_tokens(&tokens, line, prog); //assign tokens
 	assign_token_indexes(vecstr_get(&prog->line.cmd), tokens);
 	print_tokens(tokens);
 	if (!get_commands(prog, tokens, totaltokens))

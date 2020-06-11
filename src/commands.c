@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 19:22:44 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/10 15:52:15 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/11 14:49:22 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,26 +127,22 @@ int		clear_commands(t_cmd *commands)
 int			get_commands(t_msh *prog, t_ryantok *tokens, size_t totaltokens)
 {
 	size_t	i;
-	int		*types;
-	char	**args;
 	int		cmd;
 
 	i = 0;
 	cmd = 0;
 	if (!conv_tokens(prog, tokens, totaltokens))
 		return (0);
-	args = (char **)prog->args.store;
-	types = (int *)prog->argtypes.store;
 	if (!vec_new(&prog->file_arr, sizeof(int)))
 		return (0);
 	prog->commands = NULL;
-	while (i < prog->args.index)
+	while (i < totaltokens)
 	{
-//		printf("token[%ld]: %s\n", i, args[i]);
 		if (cmd == tokens[i].cmd_num)
 		{
 			if (!push_command(&prog->commands,
-				new_command(&args[i + cmd], &types[i + cmd], &prog->file_arr)))
+				new_command((char **)prog->args.store + i + cmd,
+				(int *)prog->argtypes.store + i + cmd, &prog->file_arr)))
 				return (clear_commands(prog->commands));
 			cmd++;
 		}

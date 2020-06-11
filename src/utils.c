@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 16:46:14 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/29 18:17:24 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/10 15:59:39 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,23 +20,23 @@
 
 char		*ft_str3join(const char *s1, const char *s2, const char *s3)
 {
-	char		*newstring;
+	char		*newstr;
 
 	if (!s1 || !s2 || !s3)
 		return (NULL);
-	newstring = (char *)ft_calloc(ft_strlen(s1) + ft_strlen(s2) +
+	newstr = (char *)ft_calloc(ft_strlen(s1) + ft_strlen(s2) +
 			ft_strlen(s3) + 1, sizeof(char));
-	if (!newstring)
+	if (!newstr)
 		return (NULL);
-	ft_strlcpy(newstring, s1, ft_strlen(s1) + 1);
-	ft_strlcpy(newstring + ft_strlen(s1), s2, ft_strlen(s2) + 1);
-	ft_strlcpy(newstring + ft_strlen(s1) + ft_strlen(s2), s3, ft_strlen(s3) + 1);
-	return (newstring);
+	ft_strlcpy(newstr, s1, ft_strlen(s1) + 1);
+	ft_strlcpy(newstr + ft_strlen(s1), s2, ft_strlen(s2) + 1);
+	ft_strlcpy(newstr + ft_strlen(s1) + ft_strlen(s2), s3, ft_strlen(s3) + 1);
+	return (newstr);
 }
 
 void		print_tokens(t_ryantok *tokens)
 {
-	size_t		i;
+	size_t				i;
 	static const char	*toktypes[] = {
 		[COMMAND] = "COMMAND",
 		[STANDARD] = "STANDARD",

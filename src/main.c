@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/10 15:52:38 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/11 14:47:14 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ void	collect_souls(t_msh *prog)
 
 int		run_commands(t_msh *prog, t_cmd *commands)
 {
+	t_cmd	*del;
+
 	if (!vec_new(&g_pid, sizeof(int)))
 		return (0);
 	while (commands)
@@ -52,8 +54,12 @@ int		run_commands(t_msh *prog, t_cmd *commands)
 		if (!in_out_redirection(prog, commands))
 			return (0);
 		(void)execute(prog, commands);
+		del = commands;
 		commands = commands->next;
+		free(del);
 	}
+	vec_destroy(&prog->args, NULL);
+	vec_destroy(&prog->argtypes, NULL);
 	close_all(&prog->file_arr);
 	vec_destroy(&prog->file_arr, NULL);
 	collect_souls(prog);
@@ -84,19 +90,21 @@ void	refresh_prog(t_msh *prog)
 		exit (-1); // Mem fail - deal with later
 }
 
+//init readline, enter the loop
+//loop:
+//read input, tokenize and convert to commands, run commands
 void	msh_main(t_msh *prog)
 {
 	init_readline(prog);
 	while (1)
 	{
 		if (read_input(prog) == -1)
-			error_exit(prog, MEM_FAIL, IN_INPUT); // Move into read_input() later
+			error_exit(prog, MEM_FAIL, IN_INPUT);
 		prog->line.term.c_lflag |= ECHO;
 		prog->line.term.c_lflag |= ICANON;
 		tcsetattr(STDIN, TCSAFLUSH, &prog->line.term);
 		if (!tokenizer(prog, &prog->line.cmd))
 			error_exit(prog, MEM_FAIL, IN_INPUT);
-//		debug_commands(prog->commands);
 		if (!run_commands(prog, prog->commands))
 			error_exit(prog, MEM_FAIL, IN_INPUT);
 		refresh_prog(prog);
@@ -106,6 +114,7 @@ void	msh_main(t_msh *prog)
 	}
 }
 
+//init signals and env
 int	main(void)
 {
 	t_msh	prog;

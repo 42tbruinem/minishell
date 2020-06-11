@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 23:02:16 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/05/28 11:42:07 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/11 15:10:33 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,17 +141,10 @@ void	ft_pwd(t_msh *prog, int argc, char **argv)
 void	ft_cd(t_msh *prog, int argc, char **argv)
 {
 	char	*path;
+	char	*newpwd;
 
 	if (argc <= 1 || argc > 3)
 		return ;
-//	if (argc == 2 && ft_strcmp(argv[1], "-") == 0)
-//		path = ft_strdup(env_val_get(&env, "OLDPWD"));
-//	else if (argc == 3)
-//	{
-//		path = ft_strdup(get_envvar_value(&env, "PWD"));
-//		path = ft_strreplace(path, argv[1], argv[2]);
-//	}
-//	else
 	path = ft_strdup(argv[1]);
 	if (!path)
 		return ;
@@ -161,7 +154,9 @@ void	ft_cd(t_msh *prog, int argc, char **argv)
 		return (perror(strerror(errno)));
 	}
 	env_val_set("OLDPWD", prog->env, env_val_get("PWD", prog->env));
-	env_val_set("PWD", prog->env, get_cwd());
+	newpwd = get_cwd();
+	env_val_set("PWD", prog->env, newpwd);
 	env_update(prog);
+	free(newpwd);
 	free(path);
 }
