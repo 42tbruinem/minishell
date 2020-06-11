@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   builtin.c                                          :+:    :+:            */
+/*   ft_export.c                                        :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 23:02:16 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/11 20:55:56 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/11 20:56:05 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,25 +19,23 @@
 #include <stdio.h>
 #include <string.h>
 
-extern int errno;
-
-char	*get_cwd(void)
+void	ft_export(t_msh *prog, int argc, char **argv)
 {
-	char	*path;
-	char	*res;
-	size_t	size;
+	size_t	i;
+	size_t	tmp;
 
-	size = 20;
-	path = malloc(sizeof(char) * (size + 1));
-	res = getcwd(path, size + 1);
-	while (!res && errno == ERANGE)
+	if (argc == 1)
+		return ;
+	i = 1;
+	while (argv[i])
 	{
-		size += 20;
-		free(path);
-		path = malloc(sizeof(char) * (size + 1));
-		if (!path)
-			return (NULL);
-		res = getcwd(path, size + 1);
+		tmp = ft_strclen(argv[i], '=');
+		if (tmp < ft_strlen(argv[i]))
+		{
+			argv[i][tmp] = '\0';
+			(void)env_val_set(argv[i], prog->env, &argv[i][tmp + 1]);
+		}
+		i++;
 	}
-	return (path);
+	env_update(prog);
 }

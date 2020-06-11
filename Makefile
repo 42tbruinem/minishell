@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/04/12 11:11:07 by rlucas        #+#    #+#                  #
-#    Updated: 2020/06/11 16:39:32 by tbruinem      ########   odam.nl          #
+#    Updated: 2020/06/11 20:57:16 by tbruinem      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,20 +28,31 @@ SRC =	main.c \
 		move_cursor.c \
 		move_cursor2.c \
 		execute.c \
-		builtin.c \
-		tok.c \
+		builtin/ft_cd.c \
+		builtin/ft_export.c \
+		builtin/ft_unset.c \
+		builtin/ft_pwd.c \
+		builtin/ft_echo.c \
+		builtin/ft_exit.c \
+		builtin/ft_env.c \
 		pipeline.c \
 		vector.c \
 		tables.c \
 		commands.c \
-		env.c \
+		env/env_init.c \
+		env/env_clear.c \
+		env/env_del.c \
+		env/env_new.c \
+		env/env_print.c \
+		env/env_val_set.c \
+		env/env_val_get.c \
+		env/env_update.c \
+		env/env_convert.c \
+		env/env_unset.c \
 		prompt.c \
 		terminal.c \
-		ryantokens.c \
+		token.c \
 		finitestatemachine.c \
-		r_execute.c \
-		format_toks.c \
-		inputconcat.c \
 		lexutils.c \
 		sum_tokens.c \
 		gen_tokens.c \

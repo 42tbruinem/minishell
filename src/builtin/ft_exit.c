@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   builtin.c                                          :+:    :+:            */
+/*   ft_exit.c                                          :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 23:02:16 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/11 20:55:56 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/11 20:55:51 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,25 +19,9 @@
 #include <stdio.h>
 #include <string.h>
 
-extern int errno;
-
-char	*get_cwd(void)
+void	ft_exit(t_msh *prog, int argc, char **argv)
 {
-	char	*path;
-	char	*res;
-	size_t	size;
-
-	size = 20;
-	path = malloc(sizeof(char) * (size + 1));
-	res = getcwd(path, size + 1);
-	while (!res && errno == ERANGE)
-	{
-		size += 20;
-		free(path);
-		path = malloc(sizeof(char) * (size + 1));
-		if (!path)
-			return (NULL);
-		res = getcwd(path, size + 1);
-	}
-	return (path);
+	(void)argc;
+	(void)argv;
+	std_exit(prog);
 }

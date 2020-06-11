@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:17:50 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/01 23:39:40 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/11 20:05:15 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,27 +30,17 @@ int			init_term(struct termios *term)
 {
 	if (!isatty(STDIN) || tcgetattr(STDIN, term) < 0)
 		return (1);
-	/* term->c_iflag &= ~(INLCR) */
-	term->c_iflag &= ~(IMAXBEL); //change certain attributes in termios 1/4
-	/* INLCR - When \n is input, program recieves it as \r. */
-	/* IMAXBEL - If input buffer is filled, send a BEL to the terminal. */
-	term->c_lflag &= ~(ECHO | ICANON); //change certain attributes in termios 2/4
-	/* ECHO - display input characters. */
-	/* ICANON - NON-CANONICAL Input. This is required to allow our program to */
-	/* 	control input editing facilities. */
-	term->c_cc[VMIN] = 1; //change certain attributes in termios 3/4
-	term->c_cc[VTIME] = 0; //change certain attributes in termios  4/4
-
-	/* The change occurs after all output written to the file descriptor has been */
-	/* 	transmitted, and all input so far received but not read is discarded */
-	/* 	before the change is made */
+	term->c_iflag &= ~(IMAXBEL);
+	term->c_lflag &= ~(ECHO | ICANON);
+	term->c_cc[VMIN] = 1;
+	term->c_cc[VTIME] = 0;
 	if (cfsetispeed(term, B9600) < 0 || cfsetospeed(term, B9600) < 0 ||
 		tcsetattr(STDIN, TCSAFLUSH, term) < 0)
 		return (1);
 	return (0);
 }
 
-void	init_readline(t_msh *prog)
+void		init_readline(t_msh *prog)
 {
 	prog->line = (t_line){0};
 	if (init_term(&prog->line.term) || init_caps(&prog->line) == -1)
@@ -64,7 +54,7 @@ void	init_readline(t_msh *prog)
 	prog->line.max.row = tgetnum("li");
 }
 
-void	termcmd(char *command, int p1, int p2, int lines_affected)
+void		termcmd(char *command, int p1, int p2, int lines_affected)
 {
 	tputs(tgoto(tgetstr(command, NULL), p1, p2),
 		lines_affected, &ft_putchar);

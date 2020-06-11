@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/04 19:35:57 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/11 15:14:08 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/11 20:40:37 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int		set_redirection(t_cmd *command, char **args, int *types, t_vec *fd_arr)
 	i = 0;
 	while (args[i])
 	{
-		if (is_redir(types[i])) //check if it's a redirection
+		if (is_redir(types[i]))
 			if (!new_stream(command, &args[i], types[i], fd_arr))
 				return (0);
 		i++;

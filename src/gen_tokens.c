@@ -6,14 +6,14 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/26 13:10:59 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/04 18:09:11 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/11 20:31:06 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <libft.h>
 
-static int	state_action(char *line, t_ryanlexer *lex)
+static int	state_action(char *line, t_lexer *lex)
 {
 	if (lex->state == SEMICOLON || lex->state == PIPE_PIPE)
 	{
@@ -42,7 +42,7 @@ static int	state_action(char *line, t_ryanlexer *lex)
 	return (0);
 }
 
-void		add_env_value(t_ryanlexer *lex, t_vecstr *line, size_t env_name_len,
+void		add_env_value(t_lexer *lex, t_vecstr *line, size_t env_name_len,
 		t_msh *prog)
 {
 	char		*env_value;
@@ -87,7 +87,7 @@ size_t		env_strclen(char *line, const char *chars)
 	return (i);
 }
 
-void		expand_env_value(t_ryanlexer *lex, t_vecstr *line, t_msh *prog)
+void		expand_env_value(t_lexer *lex, t_vecstr *line, t_msh *prog)
 {
 	size_t		env_name_len;
 	char		*env_name;
@@ -100,7 +100,7 @@ void		expand_env_value(t_ryanlexer *lex, t_vecstr *line, t_msh *prog)
 	add_env_value(lex, line, env_name_len, prog);
 }
 
-void		evaluate_env(t_ryanlexer *lex, t_vecstr *line, t_msh *prog)
+void		evaluate_env(t_lexer *lex, t_vecstr *line, t_msh *prog)
 {
 	int		c;
 
@@ -115,7 +115,7 @@ void		evaluate_env(t_ryanlexer *lex, t_vecstr *line, t_msh *prog)
 		expand_env_value(lex, line, prog);
 }
 
-void		quote_toks(t_ryantok **tokens, t_ryanlexer *lex, t_vecstr *line,
+void		quote_toks(t_tok **tokens, t_lexer *lex, t_vecstr *line,
 		t_msh *prog)
 {
 	vecstr_slice(line, lex->i, lex->i + 1);
@@ -143,9 +143,9 @@ void		quote_toks(t_ryantok **tokens, t_ryanlexer *lex, t_vecstr *line,
 	lex->i--;
 }
 
-void		gen_tokens(t_ryantok **tokens, t_vecstr *line, t_msh *prog)
+void		gen_tokens(t_tok **tokens, t_vecstr *line, t_msh *prog)
 {
-	t_ryanlexer		lex;
+	t_lexer		lex;
 
 	init_lexer(&lex);
 	ft_printf("line = %s\n", vecstr_get(line));

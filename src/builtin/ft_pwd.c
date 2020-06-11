@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   builtin.c                                          :+:    :+:            */
+/*   ft_pwd.c                                           :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 23:02:16 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/11 20:55:56 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/11 20:54:32 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,15 @@
 #include <stdio.h>
 #include <string.h>
 
-extern int errno;
-
-char	*get_cwd(void)
+void	ft_pwd(t_msh *prog, int argc, char **argv)
 {
 	char	*path;
 	char	*res;
 	size_t	size;
 
+	(void)argc;
+	(void)argv;
+	(void)prog;
 	size = 20;
 	path = malloc(sizeof(char) * (size + 1));
 	res = getcwd(path, size + 1);
@@ -36,8 +37,10 @@ char	*get_cwd(void)
 		free(path);
 		path = malloc(sizeof(char) * (size + 1));
 		if (!path)
-			return (NULL);
+			return ;
 		res = getcwd(path, size + 1);
 	}
-	return (path);
+	if (res)
+		ft_printf("%s\n", path);
+	free(path);
 }

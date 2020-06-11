@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 22:22:24 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/11 15:12:53 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/11 20:37:42 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,10 @@ int		is_executable(char *program, char **abspath_to_exe, t_var *env)
 	i = 0;
 	path = env_val_get("PATH", env);
 	if (!path)
-		return (0); //error
+		return (0);
 	entries = ft_split(path, ':');
 	if (!entries)
-		return (0); //error
+		return (0);
 	while (entries[i])
 	{
 		tmp = ft_str3join(entries[i], "/", program);

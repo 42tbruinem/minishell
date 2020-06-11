@@ -6,14 +6,14 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/06 21:18:20 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/04 18:09:52 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/11 20:31:06 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <libft.h>
 
-void		init_lexer(t_ryanlexer *lex)
+void		init_lexer(t_lexer *lex)
 {
 	lex->i = 0;
 	lex->j = 0;
@@ -26,7 +26,7 @@ void		init_lexer(t_ryanlexer *lex)
 	lex->pipe = 0;
 }
 
-void		update_lexer(char *line, t_ryanlexer *lex)
+void		update_lexer(char *line, t_lexer *lex)
 {
 	lex->prevstate = lex->state;
 	lex->state = checkstate(line[lex->i], *lex);
@@ -34,7 +34,7 @@ void		update_lexer(char *line, t_ryanlexer *lex)
 		lex->j = lex->i;
 }
 
-int			esc_double_quotes(t_vecstr *line, t_ryanlexer *lex)
+int			esc_double_quotes(t_vecstr *line, t_lexer *lex)
 {
 	int		c;
 
@@ -48,7 +48,7 @@ int			esc_double_quotes(t_vecstr *line, t_ryanlexer *lex)
 	return (1);
 }
 
-int			check_esc_char(t_vecstr *line, t_ryanlexer *lex, int gen_true)
+int			check_esc_char(t_vecstr *line, t_lexer *lex, int gen_true)
 {
 	if (vecstr_val(line, lex->i) == '\\' &&
 			lex->escape == 0 && lex->state != INSINGLEQUOTE)
@@ -63,7 +63,7 @@ int			check_esc_char(t_vecstr *line, t_ryanlexer *lex, int gen_true)
 	return (0);
 }
 
-static void	assign_tok_type(t_ryantok *token, t_ryanlexer *lex)
+static void	assign_tok_type(t_tok *token, t_lexer *lex)
 {
 	if (lex->nexttype == COMMAND)
 	{
@@ -79,7 +79,7 @@ static void	assign_tok_type(t_ryantok *token, t_ryanlexer *lex)
 		lex->nexttype = STANDARD;
 }
 
-void	create_token(t_ryantok *token, t_ryanlexer *lex)
+void	create_token(t_tok *token, t_lexer *lex)
 {
 	token->index = lex->i;
 	token->value = (char *)1;

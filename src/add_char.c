@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:34:51 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/02 10:47:23 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/11 20:47:17 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,21 @@
 ** add_char() will reallocate a new length for the command string, then
 ** add the newly input character to it.
 */
+
+static void	increase_row(t_line *line)
+{
+	line->cursor.col = 0;
+	line->cursor.row++;
+	line->inputrow++;
+}
+
+static void	reprint_row(size_t *row, size_t index, t_line *line)
+{
+	termcmd(INSERT_START, 0, 0, 1);
+	ft_printf("%c", vecstr_val(&line->cmd, index));
+	termcmd(INSERT_END, 0, 0, 1);
+	(*row)++;
+}
 
 int			add_char(t_line *line, char c)
 {
@@ -42,21 +57,10 @@ int			add_char(t_line *line, char c)
 		index = row * line->max.col + line->max.col - line->promptlen;
 		if (index > vecstr_len(&line->cmd))
 			break ;
-		/* if (vecstr_get(&line->cmd)[index] >= 32 && vecstr_get(&line->cmd)[index] */
-		/* 		<= 126) */
-		/* { */
-			termcmd(INSERT_START, 0, 0, 1);
-			ft_printf("%c", vecstr_val(&line->cmd, index));
-			termcmd(INSERT_END, 0, 0, 1);
-		/* } */
-		row++;
+		reprint_row(&row, index, line);
 	}
 	line->cursor.col++;
 	if (line->cursor.col >= line->max.col)
-	{
-		line->cursor.col = 0;
-		line->cursor.row++;
-		line->inputrow++;
-	}
+		increase_row(line);
 	return (0);
 }

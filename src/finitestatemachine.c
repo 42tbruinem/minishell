@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/06 21:08:08 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/27 22:47:06 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/11 20:37:52 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static int		normal_state(int c)
 	return (NORMAL);
 }
 
-static int		quote_state(int c, t_ryanlexer lex)
+static int		quote_state(int c, t_lexer lex)
 {
 	if (lex.state == INDOUBLEQUOTE && c == '\"')
 		return (NORMAL);
@@ -47,22 +47,22 @@ static int		quote_state(int c, t_ryanlexer lex)
 	return (lex.state);
 }
 
-static int		special_state(int c, t_ryanlexer lex)
+static int		special_state(int c, t_lexer lex)
 {
 	if (ft_is_whitespace(c))
 		return (WHITESPACE);
 	if (lex.state == SEMICOLON && c == ';')
-		 return (-1); // Parsing error
+		 return (-1);
 	if (lex.state == OREDIRECT && c == '>')
 		return (OAPPEND);
 	if (lex.state == OREDIRECT && (c == '<' || c == '|'))
-		return (-1); // Parsing error
+		return (-1);
 	if (lex.state == OREDIRECT && c != '>')
 		return (NORMAL);
 	if (lex.state == IREDIRECT)
 		return (NORMAL);
 	if (lex.state == OAPPEND && c == '>')
-		return (-1); // Parsing error
+		return (-1);
 	if (lex.state == ENV && c == ' ')
 		return (NORMAL);
 	if (lex.state == ENV && c == '>')
@@ -76,7 +76,7 @@ static int		special_state(int c, t_ryanlexer lex)
 	return (lex.state);
 }
 
-int				checkstate(int c, t_ryanlexer lex)
+int				checkstate(int c, t_lexer lex)
 {
 	/* if (lex.escape == 1) */
 	/* 	return (lex.state); */

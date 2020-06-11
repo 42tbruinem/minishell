@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 16:46:14 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/10 15:59:39 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/11 20:31:06 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char		*ft_str3join(const char *s1, const char *s2, const char *s3)
 	return (newstr);
 }
 
-void		print_tokens(t_ryantok *tokens)
+void		print_tokens(t_tok *tokens)
 {
 	size_t				i;
 	static const char	*toktypes[] = {

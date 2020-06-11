@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   builtin.c                                          :+:    :+:            */
+/*   ft_echo.c                                          :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 23:02:16 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/11 20:55:56 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/11 20:55:15 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,25 +19,22 @@
 #include <stdio.h>
 #include <string.h>
 
-extern int errno;
-
-char	*get_cwd(void)
+void	ft_echo(t_msh *prog, int argc, char **argv)
 {
-	char	*path;
-	char	*res;
-	size_t	size;
+	int	i;
 
-	size = 20;
-	path = malloc(sizeof(char) * (size + 1));
-	res = getcwd(path, size + 1);
-	while (!res && errno == ERANGE)
+	i = 1;
+	(void)prog;
+	while (argc >= 2 && argv[i])
 	{
-		size += 20;
-		free(path);
-		path = malloc(sizeof(char) * (size + 1));
-		if (!path)
-			return (NULL);
-		res = getcwd(path, size + 1);
+		if (i != 1 || ft_strncmp(argv[1], "-n", 2) != 0)
+		{
+			write(1, argv[i], ft_strlen(argv[i]));
+			if (i + 1 < argc)
+				write(1, " ", 1);
+		}
+		i++;
 	}
-	return (path);
+	if (argc == 1 || ft_strncmp(argv[1], "-n", 2) != 0)
+		write(1, "\n", 1);
 }

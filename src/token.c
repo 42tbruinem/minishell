@@ -1,21 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ryantokens.c                                       :+:    :+:            */
+/*   token.c                                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/05 23:24:42 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/10 21:18:28 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/11 20:31:06 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <libft.h>
-
-//ARG AND ARGTYPES IS INSIDE THE PROG STRUCT, NEED TO CHANGE TOKENIZER TO CREATE THE COMMAND LIST
-
-//first get an array of args and argtypes from the tokens, with a NULL inbetween the commands
 
 int			add_arg(t_msh *prog, char *arg, int argtype)
 {
@@ -26,7 +22,7 @@ int			add_arg(t_msh *prog, char *arg, int argtype)
 	return (1);
 }
 
-int			conv_tokens(t_msh *prog, t_ryantok *tokens, size_t totaltokens)
+int			conv_tokens(t_msh *prog, t_tok *tokens, size_t totaltokens)
 {
 	size_t	i;
 	int		cmd;
@@ -52,7 +48,7 @@ int			conv_tokens(t_msh *prog, t_ryantok *tokens, size_t totaltokens)
 	return (add_arg(prog, NULL, SEPARATOR));
 }
 
-void		assign_token_indexes(char *line, t_ryantok *tokens)
+void		assign_token_indexes(char *line, t_tok *tokens)
 {
 	size_t		i;
 
@@ -66,21 +62,21 @@ void		assign_token_indexes(char *line, t_ryantok *tokens)
 
 int			tokenizer(t_msh *prog, t_vecstr *line)
 {
-	t_ryantok		*tokens;
+	t_tok		*tokens;
 	size_t			totaltokens;
 
-	totaltokens = sum_tokens(line); //token amount
+	totaltokens = sum_tokens(line);
 	ft_printf("sum = %u\n", totaltokens);
-	tokens = (t_ryantok *)malloc(sizeof(t_ryantok) * (totaltokens + 1)); //malloc tokens
+	tokens = (t_tok *)malloc(sizeof(t_tok) * (totaltokens + 1));
 	if (!tokens)
 		return (0);
-	gen_tokens(&tokens, line, prog); //assign tokens
+	gen_tokens(&tokens, line, prog);
 	assign_token_indexes(vecstr_get(&prog->line.cmd), tokens);
 	print_tokens(tokens);
 	if (!get_commands(prog, tokens, totaltokens))
 	{
 		free(tokens);
-		return (0);
+		exit(0);
 	}
 	free(tokens);
 	return (1);

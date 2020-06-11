@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   builtin.c                                          :+:    :+:            */
+/*   ft_cd.c                                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 23:02:16 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/11 20:55:56 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/11 20:58:14 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,7 @@
 #include <stdio.h>
 #include <string.h>
 
-extern int errno;
-
-char	*get_cwd(void)
+static	char	*get_cwd(void)
 {
 	char	*path;
 	char	*res;
@@ -40,4 +38,28 @@ char	*get_cwd(void)
 		res = getcwd(path, size + 1);
 	}
 	return (path);
+}
+
+
+void			ft_cd(t_msh *prog, int argc, char **argv)
+{
+	char	*path;
+	char	*newpwd;
+
+	if (argc <= 1 || argc > 3)
+		return ;
+	path = ft_strdup(argv[1]);
+	if (!path)
+		return ;
+	if (chdir(path) == -1)
+	{
+		free(path);
+		return (perror(strerror(errno)));
+	}
+	env_val_set("OLDPWD", prog->env, env_val_get("PWD", prog->env));
+	newpwd = get_cwd();
+	env_val_set("PWD", prog->env, newpwd);
+	env_update(prog);
+	free(newpwd);
+	free(path);
 }

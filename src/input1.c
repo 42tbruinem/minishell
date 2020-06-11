@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:59:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/01 21:36:16 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/11 20:39:43 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int		clear_input(t_line *line, char buf[6])
 {
 	(void)buf;
 	if (vecstr_truncate(&line->cmd, 0))
-		return (-1); // Mem error - make sure is dealt with.
+		return (-1);
 	line->cursor.row -= line->inputrow;
 	while (line->total_rows > 0)
 	{

@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 19:22:44 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/11 14:49:22 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/11 20:35:48 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ t_cmd	*new_command(char **argstart, int *types, t_vec *fd_arr)
 		if (pipe(new->cmdpipe) == -1)
 		{
 			free(new);
-			return (NULL); //error
+			return (NULL);
 		}
 		vec_add(fd_arr, &new->cmdpipe[0]);
 		vec_add(fd_arr, &new->cmdpipe[1]);
@@ -124,7 +124,7 @@ int		clear_commands(t_cmd *commands)
 	return (0);
 }
 
-int			get_commands(t_msh *prog, t_ryantok *tokens, size_t totaltokens)
+int			get_commands(t_msh *prog, t_tok *tokens, size_t totaltokens)
 {
 	size_t	i;
 	int		cmd;

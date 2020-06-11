@@ -6,14 +6,14 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/26 12:30:45 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/02 10:49:09 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/11 20:29:57 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <minishell.h>
 
-void			print_state(int c, t_ryanlexer lex)
+void			print_state(int c, t_lexer lex)
 {
 	static const char	*state_table[] = {
 		[NORMAL] = "NORMAL",
@@ -35,7 +35,7 @@ void			print_state(int c, t_ryanlexer lex)
 
 size_t			sum_tokens(t_vecstr *line)
 {
-	t_ryanlexer		lex;
+	t_lexer		lex;
 	size_t			sum;
 
 	init_lexer(&lex);
@@ -45,7 +45,6 @@ size_t			sum_tokens(t_vecstr *line)
 		if (check_esc_char(line, &lex, 0))
 			continue ;
 		update_lexer(vecstr_get(line), &lex);
-		/* print_state((*line)[lex.i], lex); #<{(| Troubleshooting |)}># */
 		if (lex.state >= SEMICOLON && lex.state <= PIPE_PIPE)
 			lex.state = WHITESPACE;
 		if (lex.state != WHITESPACE && lex.prevstate == WHITESPACE)

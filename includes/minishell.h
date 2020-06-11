@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/10 14:49:02 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/11 20:34:39 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,6 @@
 # define HOME 72
 # define END 70
 
-# define MAX_TOKSIZE 300
-
 # include <unistd.h>
 # include <termios.h>
 # include <libft_types.h>
@@ -70,6 +68,16 @@ enum			e_fsm
 	ENV
 };
 
+typedef struct s_var	t_var;
+
+struct	s_var
+{
+	char		*name;
+	char		*val;
+	size_t		len;
+	t_var		*next;
+};
+
 typedef struct s_vec	t_vec;
 
 struct	s_vec
@@ -88,16 +96,6 @@ struct	s_arg
 	t_vec	type;
 };
 
-typedef struct s_var	t_var;
-
-struct	s_var
-{
-	char		*name;
-	char		*val;
-	size_t		len;
-	t_var		*next;
-};
-
 typedef struct s_cmd	t_cmd;
 
 struct			s_cmd
@@ -110,9 +108,9 @@ struct			s_cmd
 	t_cmd	*next;
 };
 
-typedef struct	s_ryantok	t_ryantok;
+typedef struct	s_tok	t_tok;
 
-struct			s_ryantok
+struct			s_tok
 {
 	int			type;
 	size_t		index;
@@ -120,7 +118,7 @@ struct			s_ryantok
 	int			cmd_num;
 };
 
-typedef struct	s_ryanlexer
+typedef struct	s_lexer
 {
 	size_t		i;
 	size_t		j;
@@ -132,31 +130,7 @@ typedef struct	s_ryanlexer
 	int			cmd_num;
 	int			cmd_present;
 	int			pipe;
-}				t_ryanlexer;
-
-typedef struct	s_ryancmd
-{
-	char		**args;
-	char		*output;
-	char		*input;
-	char		*command;
-}				t_ryancmd;
-
-typedef struct	s_lexer
-{
-	char		token[MAX_TOKSIZE];
-	char		*raw;
-	size_t		index;
 }				t_lexer;
-
-typedef struct s_token	t_token;
-
-struct			s_token
-{
-	char		*content;
-	int			type;
-	t_token		*next;
-};
 
 typedef struct	s_coord
 {
@@ -246,7 +220,7 @@ typedef int		(*t_inputf)(t_line *line, char buf[6]);
 */
 
 char			*ft_str3join(const char *s1, const char *s2, const char *s3);
-void			print_tokens(t_ryantok *tokens);
+void			print_tokens(t_tok *tokens);
 
 /*
 ** Add a prompt to the shell, in prompt.c 
@@ -294,8 +268,8 @@ void			ft_str2print(char **str);
 int				execute(t_msh *prog, t_cmd *cmd);
 char			**ft_str2clear(char **str);
 int				clear_commands(t_cmd *commands);
-int				conv_tokens(t_msh *prog, t_ryantok *tokens, size_t totaltokens);
-int				get_commands(t_msh *prog, t_ryantok *tokens, size_t totaltokens);
+int				conv_tokens(t_msh *prog, t_tok *tokens, size_t totaltokens);
+int				get_commands(t_msh *prog, t_tok *tokens, size_t totaltokens);
 void			print_command(t_cmd *command);
 int				set_redirection(t_cmd *command, char **args,
 								int *types, t_vec *fd_arr);
@@ -308,14 +282,23 @@ int				vec_new(t_vec *vector, size_t type_size);
 int				vec_destroy(t_vec *vector, void (*del)(void *));
 int				vec_get(t_vec *vector, void *buffer, size_t index);
 
-void			tokclear(t_token *list, void (*del)(void *));
-void			tokprint(t_token *list);
 int				tokenize(t_vec *args, t_vec *argtypes, char *raw);
 
 void			close_all(t_vec *fd_arr);
 void			close_iostream(int *iostream);
 void			close_ifnot(t_vec *fd_arr, int *iostream);
 void			print_filearr(t_vec *fd_arr);
+
+void			env_del(t_var *delete);
+t_var			*env_new(const char *name, const char *val);
+void			env_print(t_var *env);
+void			env_update(t_msh *prog);
+void			env_unset(t_var **env, char *name);
+char			**env_convert(t_var *env);
+t_var			*env_val_set(const char *name, t_var *env, const char *val);
+int				env_init(t_msh *prog);
+char			*env_val_get(const char *name, t_var *env);
+int				env_clear(t_var *env, void (*del)(void *));
 
 void			ft_cd(t_msh *prog, int argc, char **argv);
 void			ft_pwd(t_msh *prog, int argc, char **argv);
@@ -325,14 +308,7 @@ void			ft_unset(t_msh *prog, int argc, char **argv);
 void			ft_exit(t_msh *prog, int argc, char **argv);
 void			ft_export(t_msh *prog, int argc, char **argv);
 
-void			env_update(t_msh *prog);
-void			env_unset(t_var **env, char *name);
-t_var			*env_val_set(const char *name, t_var *env, const char *val);
-char			**env_convert(t_var *env);
-int				env_init(t_msh *prog);
-char			*env_val_get(const char *name, t_var *env);
-int				env_clear(t_var *env, void (*del)(void *));
-void			env_print(t_var *env);
+
 
 /*
 ** New token functions - creates tokens using the same
@@ -341,7 +317,7 @@ void			env_print(t_var *env);
 
 int				tokenizer(t_msh *prog, t_vecstr *line);
 size_t			sum_tokens(t_vecstr *line);
-void			gen_tokens(t_ryantok **tokens, t_vecstr *line, t_msh *prog);
+void			gen_tokens(t_tok **tokens, t_vecstr *line, t_msh *prog);
 
 /*
 ** Functions to read input and handle line-editing. In read_input.c,
@@ -363,16 +339,16 @@ int				backspace(t_line *line, char buf[6]);
 ** Finite state machine function.
 */
 
-int				checkstate(int c, t_ryanlexer lex);
+int				checkstate(int c, t_lexer lex);
 
 /*
 ** Lexing utilities.
 */
 
-int				check_esc_char(t_vecstr *line, t_ryanlexer *lex, int gen_true);
-void			init_lexer(t_ryanlexer *lex);
-void			update_lexer(char *line, t_ryanlexer *lex);
-void			create_token(t_ryantok *token, t_ryanlexer *lex);
+int				check_esc_char(t_vecstr *line, t_lexer *lex, int gen_true);
+void			init_lexer(t_lexer *lex);
+void			update_lexer(char *line, t_lexer *lex);
+void			create_token(t_tok *token, t_lexer *lex);
 void			concatenate_input(char *line);
 
 /*
@@ -382,6 +358,6 @@ void			concatenate_input(char *line);
 void			sighandler(int signal);
 
 /* Troubleshooting */
-void			print_state(int c, t_ryanlexer lex);
+void			print_state(int c, t_lexer lex);
 
 #endif

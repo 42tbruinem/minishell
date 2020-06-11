@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:58:45 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/31 22:54:55 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/11 20:37:11 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,16 +62,6 @@ int			handle_input(t_line *line, char buf[6])
 	static t_inputf	func_table[128];
 	t_inputf		func;
 	int				c;
-
-	/*
-	** For testing of key input values
-	*/
-
-	/* (void)line; */
-	/* (void)buf; */
-	/* ft_printf("entered key = {%d,%d,%d,%d,%d,%d}\n\n", buf[0], buf[1], buf[2], */
-	/* 		buf[3], buf[4], buf[5]); */
-	/* return (0); */
 
 	c = buf[0];
 	if (line->escmode == 1 && c != DEL)

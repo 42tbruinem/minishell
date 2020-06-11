@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/11 15:27:07 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/11 20:29:58 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,12 +87,9 @@ void	debug_commands(t_cmd *commands)
 void	refresh_prog(t_msh *prog)
 {
 	if (vecstr_reset(&prog->line.cmd))
-		exit (-1); // Mem fail - deal with later
+		exit (-1);
 }
 
-//init readline, enter the loop
-//loop:
-//read input, tokenize and convert to commands, run commands
 void	msh_main(t_msh *prog)
 {
 	init_readline(prog);
@@ -114,7 +111,6 @@ void	msh_main(t_msh *prog)
 	}
 }
 
-//init signals and env
 int	main(void)
 {
 	t_msh	prog;
@@ -126,4 +122,3 @@ int	main(void)
 	msh_main(&prog);
 	return (0);
 }
-
