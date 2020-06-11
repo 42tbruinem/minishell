@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/04 11:40:02 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/11 21:38:00 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static int	initialize_line_editor(t_line *line)
 	return (0);
 }
 
-int		read_input(t_msh *prog)
+int			read_input(t_msh *prog)
 {
 	t_line		*line;
 	char		buf[6];

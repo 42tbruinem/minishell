@@ -1,22 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   tables.c                                           :+:    :+:            */
+/*   ft_str2clear.c                                     :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/04/16 13:09:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/11 21:37:02 by tbruinem      ########   odam.nl         */
+/*   Created: 2020/04/29 16:46:14 by rlucas        #+#    #+#                 */
+/*   Updated: 2020/06/11 21:47:15 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
+#include <libft.h>
 #include <minishell.h>
 
-char		*error_lookup(int err)
+char	**ft_str2clear(char **str)
 {
-	static char	*error_array[20] = {
-		[MEM_FAIL] = "Minishell was unable to allocate memory\n"
-	};
+	size_t	i;
 
-	return (error_array[err]);
+	i = 0;
+	while (str[i])
+	{
+		free(str[i]);
+		i++;
+	}
+	free(str);
+	return (NULL);
 }

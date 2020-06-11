@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:58:45 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/11 20:37:11 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/11 21:13:32 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,12 @@
 ** Create a jumptable for directing input.
 */
 
-static void	create_jumptable(t_inputf func_table[128]){
+static void	create_jumptable(t_inputf func_table[128])
+{
 	size_t			i;
 
-	func_table[0] = &send_EOF;
-	func_table[CTRL_D] = &send_EOF;
+	func_table[0] = &send_eof;
+	func_table[CTRL_D] = &send_eof;
 	func_table[CTRL_L] = &clear_screen;
 	func_table[CTRL_U] = &clear_input;
 	func_table[NEWLINE] = &send_input;

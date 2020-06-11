@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/30 16:37:19 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/02 09:59:30 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/11 21:49:45 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static size_t	find_index(t_line *line, size_t index, int dir)
 	return (index - index2 + 1);
 }
 
-static void	cursor_word_left(t_line *line)
+static void		cursor_word_left(t_line *line)
 {
 	size_t	index;
 	size_t	original_row;
@@ -56,7 +56,7 @@ static void	cursor_word_left(t_line *line)
 	line->cursor.row += line->inputrow - original_row;
 }
 
-static void	cursor_word_right(t_line *line)
+static void		cursor_word_right(t_line *line)
 {
 	size_t	index;
 	size_t	original_row;
@@ -72,7 +72,7 @@ static void	cursor_word_right(t_line *line)
 	line->cursor.row += line->inputrow - original_row;
 }
 
-void		cursor_move_word(t_line *line, int c)
+void			cursor_move_word(t_line *line, int c)
 {
 	if (c == LEFT_KEY)
 		cursor_word_left(line);

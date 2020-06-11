@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/26 12:30:45 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/11 20:29:57 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/11 21:37:35 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void			print_state(int c, t_lexer lex)
 size_t			sum_tokens(t_vecstr *line)
 {
 	t_lexer		lex;
-	size_t			sum;
+	size_t		sum;
 
 	init_lexer(&lex);
 	sum = 0;

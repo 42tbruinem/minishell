@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/26 13:10:59 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/11 20:31:06 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/11 21:59:48 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	state_action(char *line, t_lexer *lex)
 	if (lex->state == OREDIRECT)
 	{
 		if (lex->nexttype == WRITEFILE || lex->nexttype == APPENDFILE)
-			return (1); /* Parsing error */
+			return (1);
 		if (line[lex->i + 1] == '>')
 		{
 			lex->nexttype = APPENDFILE;
@@ -50,7 +50,8 @@ void		add_env_value(t_lexer *lex, t_vecstr *line, size_t env_name_len,
 	env_value = env_val_get(vecstr_get(line) + lex->i + 1,
 			prog->env);
 	vecstr_slice(line, lex->i, lex->i + env_name_len + 1);
-	if (!env_value) {
+	if (!env_value)
+	{
 		if (lex->state != INDOUBLEQUOTE)
 		{
 			vecstr_insert_str(line, lex->i, " ");
@@ -108,9 +109,9 @@ void		evaluate_env(t_lexer *lex, t_vecstr *line, t_msh *prog)
 	if (c == 0)
 		return ;
 	if (c == '(')
-		(void)line; /* Initiate subshell */
+		(void)line;
 	if (c == '$')
-		(void)line; /* Get process id of shell */
+		(void)line;
 	if (ft_isalpha(c) || c == '_')
 		expand_env_value(lex, line, prog);
 }
@@ -154,13 +155,12 @@ void		gen_tokens(t_tok **tokens, t_vecstr *line, t_msh *prog)
 		if (check_esc_char(line, &lex, 1))
 			continue ;
 		update_lexer(vecstr_get(line), &lex);
-		/* print_state(prog->line.cmd[lex.i], lex); #<{(| Troubleshooting |)}># */
 		if (!lex.escape && lex.state >= INDOUBLEQUOTE &&
 				lex.state <= INSINGLEQUOTE)
 			quote_toks(tokens, &lex, line, prog);
 		if (!lex.escape && lex.state >= SEMICOLON && lex.state <= PIPE_PIPE)
-			if(state_action(vecstr_get(line), &lex))
-				exit(1); /* Error in parsing */
+			if (state_action(vecstr_get(line), &lex))
+				exit(1);
 		if (lex.state != WHITESPACE && lex.prevstate == WHITESPACE)
 			create_token((*tokens) + lex.tokeni, &lex);
 		if (!lex.escape && vecstr_val(line, lex.i) == '$' &&

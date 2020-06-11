@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/06 21:08:08 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/11 20:37:52 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/11 22:00:15 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static int		special_state(int c, t_lexer lex)
 	if (ft_is_whitespace(c))
 		return (WHITESPACE);
 	if (lex.state == SEMICOLON && c == ';')
-		 return (-1);
+		return (-1);
 	if (lex.state == OREDIRECT && c == '>')
 		return (OAPPEND);
 	if (lex.state == OREDIRECT && (c == '<' || c == '|'))
@@ -78,8 +78,6 @@ static int		special_state(int c, t_lexer lex)
 
 int				checkstate(int c, t_lexer lex)
 {
-	/* if (lex.escape == 1) */
-	/* 	return (lex.state); */
 	if (lex.state == NORMAL || lex.state == WHITESPACE)
 		return (normal_state(c));
 	if (lex.state >= INDOUBLEQUOTE && lex.state <= INBACKTICK)

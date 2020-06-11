@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/11 20:34:39 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/11 21:55:27 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,11 +219,15 @@ typedef int		(*t_inputf)(t_line *line, char buf[6]);
 ** Utility functions in utils.c
 */
 
+size_t			ft_str2len(char **str);
+char			**ft_str2clear(char **str);
+void			ft_str2print(char **str);
+long long		ft_str2cmpstr(const char **str2, char *str);
 char			*ft_str3join(const char *s1, const char *s2, const char *s3);
 void			print_tokens(t_tok *tokens);
 
 /*
-** Add a prompt to the shell, in prompt.c 
+** Add a prompt to the shell, in prompt.c
 */
 
 size_t			ft_no_ansi_strlen(const char *str);
@@ -264,15 +268,27 @@ char			*error_lookup(int err);
 
 typedef void	(*t_escapef)(t_lexer *lex, char *last);
 
-void			ft_str2print(char **str);
-int				execute(t_msh *prog, t_cmd *cmd);
-char			**ft_str2clear(char **str);
-int				clear_commands(t_cmd *commands);
 int				conv_tokens(t_msh *prog, t_tok *tokens, size_t totaltokens);
-int				get_commands(t_msh *prog, t_tok *tokens, size_t totaltokens);
-void			print_command(t_cmd *command);
+
+int				execute(t_msh *prog, t_cmd *cmd);
+char			*get_program(char **args, int *types);
+int				run_builtin(t_msh *prog, t_cmd *cmd, int id);
+int				run_program(t_msh *prog, t_cmd *cmd, char *abspath);
+void			get_abspath(char *program, char **abspath_to_exe, t_var *env);
+
+int				in_out_redirection(t_msh *prog, t_cmd *command);
+void			close_all(t_vec *fd_arr);
+void			close_iostream(int *iostream);
+void			close_ifnot(t_vec *fd_arr, int *iostream);
 int				set_redirection(t_cmd *command, char **args,
 								int *types, t_vec *fd_arr);
+
+int				run_commands(t_msh *prog, t_cmd *commands);
+int				clear_commands(t_cmd *commands);
+t_cmd			*push_command(t_cmd **commands, t_cmd *new);
+t_cmd			*new_command(char **argstart, int *types, t_vec *fd_arr);
+int				get_commands(t_msh *prog, t_tok *tokens, size_t totaltokens);
+void			print_command(t_cmd *command);
 
 void			error_exit(t_msh *prog, int err, int stage);
 void			std_exit(t_msh *prog);
@@ -282,11 +298,6 @@ int				vec_new(t_vec *vector, size_t type_size);
 int				vec_destroy(t_vec *vector, void (*del)(void *));
 int				vec_get(t_vec *vector, void *buffer, size_t index);
 
-int				tokenize(t_vec *args, t_vec *argtypes, char *raw);
-
-void			close_all(t_vec *fd_arr);
-void			close_iostream(int *iostream);
-void			close_ifnot(t_vec *fd_arr, int *iostream);
 void			print_filearr(t_vec *fd_arr);
 
 void			env_del(t_var *delete);
@@ -308,8 +319,6 @@ void			ft_unset(t_msh *prog, int argc, char **argv);
 void			ft_exit(t_msh *prog, int argc, char **argv);
 void			ft_export(t_msh *prog, int argc, char **argv);
 
-
-
 /*
 ** New token functions - creates tokens using the same
 ** allocated string from input.
@@ -326,7 +335,7 @@ void			gen_tokens(t_tok **tokens, t_vecstr *line, t_msh *prog);
 
 int				handle_input(t_line *line, char buf[6]);
 int				read_input(t_msh *prog);
-int				send_EOF(t_line *line, char buf[6]);
+int				send_eof(t_line *line, char buf[6]);
 int				clear_screen(t_line *line, char buf[6]);
 int				clear_input(t_line *line, char buf[6]);
 int				cursor_move(t_line *line, int c);

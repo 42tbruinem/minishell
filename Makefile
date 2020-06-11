@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/04/12 11:11:07 by rlucas        #+#    #+#                  #
-#    Updated: 2020/06/11 20:57:16 by tbruinem      ########   odam.nl          #
+#    Updated: 2020/06/11 21:55:01 by tbruinem      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,11 @@ SRC =	main.c \
 		delete_char.c \
 		move_cursor.c \
 		move_cursor2.c \
-		execute.c \
+		execute/execute.c \
+		execute/get_program.c \
+		execute/get_abspath.c \
+		execute/run_builtin.c \
+		execute/run_program.c \
 		builtin/ft_cd.c \
 		builtin/ft_export.c \
 		builtin/ft_unset.c \
@@ -35,10 +39,26 @@ SRC =	main.c \
 		builtin/ft_echo.c \
 		builtin/ft_exit.c \
 		builtin/ft_env.c \
-		pipeline.c \
+		commands/get_commands.c \
+		commands/clear_commands.c \
+		commands/print_command.c \
+		commands/new_command.c \
+		commands/push_command.c \
+		commands/debug_commands.c \
+		commands/run_commands.c \
+		redirection/set_redirection.c \
+		redirection/close_ifnot.c \
+		redirection/close_all.c \
+		redirection/close_iostream.c \
+		redirection/in_out_redirection.c \
+		utils/ft_str2clear.c \
+		utils/ft_str2cmpstr.c \
+		utils/ft_str2print.c \
+		utils/ft_str2len.c \
+		utils/ft_str3join.c \
+		utils/print_tokens.c \
 		vector.c \
 		tables.c \
-		commands.c \
 		env/env_init.c \
 		env/env_clear.c \
 		env/env_del.c \
@@ -56,7 +76,6 @@ SRC =	main.c \
 		lexutils.c \
 		sum_tokens.c \
 		gen_tokens.c \
-		utils.c \
 		signals.c
 
 OBJ := $(addprefix $(OBJDIR)/, $(SRC:%.c=%.o))

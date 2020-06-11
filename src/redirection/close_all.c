@@ -1,43 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   builtin.c                                          :+:    :+:            */
+/*   close_all.c                                        :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/04/29 23:02:16 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/11 20:55:56 by tbruinem      ########   odam.nl         */
+/*   Created: 2020/05/04 19:35:57 by tbruinem      #+#    #+#                 */
+/*   Updated: 2020/06/11 21:43:15 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "minishell.h"
-#include <sys/stat.h>
-#include <sys/types.h>
 #include <fcntl.h>
-#include <errno.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
+#include <errno.h>
 
-extern int errno;
-
-char	*get_cwd(void)
+void	close_all(t_vec *fd_arr)
 {
-	char	*path;
-	char	*res;
-	size_t	size;
+	int		*fds;
+	size_t	i;
 
-	size = 20;
-	path = malloc(sizeof(char) * (size + 1));
-	res = getcwd(path, size + 1);
-	while (!res && errno == ERANGE)
+	i = 0;
+	fds = (int *)fd_arr->store;
+	while (i < fd_arr->index)
 	{
-		size += 20;
-		free(path);
-		path = malloc(sizeof(char) * (size + 1));
-		if (!path)
-			return (NULL);
-		res = getcwd(path, size + 1);
+		close(fds[i]);
+		i++;
 	}
-	return (path);
 }

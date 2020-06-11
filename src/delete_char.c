@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:37:30 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/11 20:35:57 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/11 21:04:41 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int			esc_delete(t_line *line)
 
 	if (line->inputrow == 0 && line->cursor.col == line->promptlen)
 		return (0);
-
 	index = line->inputrow * line->max.col + line->cursor.col - line->promptlen;
 	index2 = 1;
 	charfound = 0;

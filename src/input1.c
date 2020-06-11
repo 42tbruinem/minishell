@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:59:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/11 20:39:43 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/11 21:14:01 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 typedef int		(*t_inputf)(t_line *line, char buf[6]);
 
-int		send_EOF(t_line *line, char buf[6])
+int		send_eof(t_line *line, char buf[6])
 {
 	(void)buf;
 	if (vecstr_len(&line->cmd) == 0)

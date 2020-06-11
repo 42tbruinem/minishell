@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/05 23:24:42 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/11 20:31:06 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/11 21:15:28 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void		assign_token_indexes(char *line, t_tok *tokens)
 int			tokenizer(t_msh *prog, t_vecstr *line)
 {
 	t_tok		*tokens;
-	size_t			totaltokens;
+	size_t		totaltokens;
 
 	totaltokens = sum_tokens(line);
 	ft_printf("sum = %u\n", totaltokens);
