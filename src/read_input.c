@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/13 19:46:38 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/13 20:04:30 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ static int	initialize_line_editor(t_line *line)
 	line->alloced_cmd = 100;
 	line->inputrow = 0;
 	line->escmode = 0;
+	g_current_line = line->inputrow;
+	g_total_lines = line->total_rows;
 	return (0);
 }
 
@@ -98,6 +100,8 @@ int			read_input(t_msh *prog)
 			error_exit(prog, MEM_FAIL, IN_INPUT);
 		if (send == CTRL_D)
 			std_exit(prog);
+		g_current_line = line->inputrow;
+		g_total_lines = line->total_rows;
 		refresh_cursor(line);
 	}
 	line->cursor.row = line->cursor.row + line->total_rows + 1;

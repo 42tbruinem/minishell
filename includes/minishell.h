@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/13 19:26:55 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/13 19:53:43 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,6 +212,8 @@ enum			e_tokentypes
 t_vec	g_pid;
 char	*g_prompt;
 int		g_siggy;
+int		g_total_lines;
+int		g_current_line;
 
 typedef void	(*t_builtin)(t_msh *prog, int argc, char **argv);
 typedef int		(*t_inputf)(t_line *line, char buf[6]);

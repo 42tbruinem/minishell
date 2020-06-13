@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/13 16:45:58 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/13 19:55:57 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ int		main(void)
 	t_msh	prog;
 
 	g_siggy = 0;
+	g_total_lines = 0;
+	g_current_line = 0;
 	signal(SIGINT, sighandler);
 	signal(SIGQUIT, sighandler);
 	if (!env_init(&prog))
