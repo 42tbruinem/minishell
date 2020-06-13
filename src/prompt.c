@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 16:42:01 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/11 22:01:00 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/13 19:36:26 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,15 @@ char		*prompt(t_msh *prog, t_line *line)
 	{
 		line->promptlen = ft_strlen(user) + 4;
 		prompt = ft_str3join("\033[32m", user, "\033[39m:~$ ");
+		g_prompt = prompt;
 		if (!prompt)
 			return (NULL);
 		return (prompt);
 	}
 	else
-		return (ft_strdup(":~$ "));
+	{
+		prompt = ft_strdup(":~$ ");
+		g_prompt = prompt;
+		return (prompt);
+	}
 }

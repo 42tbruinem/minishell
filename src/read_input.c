@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/13 14:30:08 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/13 19:46:38 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <termcap.h>
 #include <termios.h>
 #include "msh_term.h"
+#include <errno.h>
 
 static void	refresh_cursor(t_line *line)
 {
@@ -82,6 +83,16 @@ int			read_input(t_msh *prog)
 	{
 		ft_bzero(buf, 6);
 		read(STDIN, buf, 6);
+		if (g_siggy == 1)
+		{
+			g_siggy = 0;
+			if (initialize_line_editor(line) == -1)
+				return (-1);
+			refresh_cursor(line);
+			if (vecstr_truncate(&line->cmd, 0))
+				return (-1);
+			line->promptlen = ft_no_ansi_strlen(line->prompt);
+		}
 		send = handle_input(line, buf);
 		if (send < 0)
 			error_exit(prog, MEM_FAIL, IN_INPUT);
