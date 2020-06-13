@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/17 23:13:43 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/11 20:48:16 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/13 15:53:25 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,30 @@ static	t_var	*var_init(char *str)
 	return (new);
 }
 
+int				modify_shlvl(t_var *env)
+{
+	t_var		*current;
+	char		*new;
+	int			lvl;
+
+	current = env;
+	while (current)
+	{
+		if (ft_strcmp(current->name, "SHLVL") == 0)
+		{
+			lvl = ft_atoi(current->val);
+			new = ft_itoa(lvl + 1);
+			if (!new)
+				return (1);
+			free(current->val);
+			current->val = new;
+			return (0);
+		}
+		current = current->next;
+	}
+	return (0);
+}
+
 int				env_init(t_msh *prog)
 {
 	extern char	**environ;
@@ -74,8 +98,10 @@ int				env_init(t_msh *prog)
 		env = env->next;
 		i++;
 	}
+	if (modify_shlvl(prog->env))
+			return (env_clear(prog->env, &free));
 	prog->envp = env_convert(prog->env);
 	if (!prog->envp)
-		return (0);
+		return (env_clear(prog->env, &free));
 	return (1);
 }

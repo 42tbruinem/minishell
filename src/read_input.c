@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/13 13:15:33 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/13 14:30:08 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ static int	initialize_line_editor(t_line *line)
 	line->promptlen = line->cursor.col;
 	line->total_rows = 0;
 	line->alloced_cmd = 100;
-	line->cmd_len = 0;
 	line->inputrow = 0;
 	line->escmode = 0;
 	return (0);

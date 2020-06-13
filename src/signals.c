@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/04 17:31:19 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/10 12:31:48 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/13 14:14:24 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,12 @@ void	sighandler(int signal)
 
 	i = 0;
 	c = '\n';
+	if (g_pid.index == 0)
+		write(STDOUT, &c, 1);
 	while (i < g_pid.index)
 	{
 		vec_get(&g_pid, &process, i);
 		kill(process, signal);
 		i++;
 	}
-	write(STDOUT, &c, 1);
 }
