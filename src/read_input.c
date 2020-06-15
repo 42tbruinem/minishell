@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/15 20:23:51 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/15 23:24:43 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include "msh_term.h"
 #include <errno.h>
 
-static void	refresh_cursor(t_line *line)
+void		refresh_cursor(t_line *line)
 {
 	if (line->cursor.row < 0)
 	{

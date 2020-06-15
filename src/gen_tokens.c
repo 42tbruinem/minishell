@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/26 13:10:59 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/15 14:22:45 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/15 23:08:30 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ void		add_tilde_value(t_lexer *lex, t_vecstr *line,
 		vecstr_insert_str(line, lex->i, " ");
 		lex->state = checkstate(vecstr_val(line, lex->i), *lex);
 		vecstr_set(line, lex->i, '\0');
-		sleep(5);
 		return ;
 	}
 	vecstr_slice(line, lex->i, lex->i + env_name_len + 1);

@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:59:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/15 14:18:24 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/15 23:24:40 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,9 @@ int		cursor_move(t_line *line, int c)
 
 int		special_command(t_line *line, char buf[6])
 {
+	if (buf[1] == 127)
+		if (esc_delete(line) == -1)
+			return (-1);
 	if (buf[1] == 0)
 		line->escmode = 1;
 	else if (buf[4] == 53)
@@ -102,10 +105,17 @@ int		char_input(t_line *line, char buf[6])
 	size_t		i;
 
 	i = 1;
-	if (add_char(line, buf[0]) == -1)
-		return (-1);
+	if (buf[0] >= 32 && buf[0] <= 126)
+		if (add_char(line, buf[0]) == -1)
+			return (-1);
 	while (buf[i])
 	{
+		refresh_cursor(line);
+		if (!(buf[i] >= 32 && buf[i] <= 126))
+		{
+			handle_input(line, buf);
+			break ;
+		}
 		if (add_char(line, buf[i]) == -1)
 			return (-1);
 		i++;

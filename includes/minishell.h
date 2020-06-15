@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/15 20:23:08 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/15 22:44:48 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -337,6 +337,7 @@ int				gen_tokens(t_tok **tokens, t_vecstr *line, t_msh *prog);
 */
 
 int				handle_input(t_line *line, char buf[6]);
+void			refresh_cursor(t_line *line);
 int				read_input(t_msh *prog);
 int				send_eof(t_line *line, char buf[6]);
 int				clear_screen(t_line *line, char buf[6]);
