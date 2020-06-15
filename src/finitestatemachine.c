@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/06 21:08:08 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/11 22:00:15 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/15 12:39:06 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,40 +47,9 @@ static int		quote_state(int c, t_lexer lex)
 	return (lex.state);
 }
 
-static int		special_state(int c, t_lexer lex)
-{
-	if (ft_is_whitespace(c))
-		return (WHITESPACE);
-	if (lex.state == SEMICOLON && c == ';')
-		return (-1);
-	if (lex.state == OREDIRECT && c == '>')
-		return (OAPPEND);
-	if (lex.state == OREDIRECT && (c == '<' || c == '|'))
-		return (-1);
-	if (lex.state == OREDIRECT && c != '>')
-		return (NORMAL);
-	if (lex.state == IREDIRECT)
-		return (NORMAL);
-	if (lex.state == OAPPEND && c == '>')
-		return (-1);
-	if (lex.state == ENV && c == ' ')
-		return (NORMAL);
-	if (lex.state == ENV && c == '>')
-		return (OREDIRECT);
-	if (lex.state == ENV && c == '<')
-		return (IREDIRECT);
-	if (lex.state == ENV && c == ';')
-		return (SEMICOLON);
-	if (lex.state == ENV && c == '|')
-		return (PIPE_PIPE);
-	return (lex.state);
-}
-
 int				checkstate(int c, t_lexer lex)
 {
 	if (lex.state == NORMAL || lex.state == WHITESPACE)
 		return (normal_state(c));
-	if (lex.state >= INDOUBLEQUOTE && lex.state <= INBACKTICK)
-		return (quote_state(c, lex));
-	return (special_state(c, lex));
+	return (quote_state(c, lex));
 }

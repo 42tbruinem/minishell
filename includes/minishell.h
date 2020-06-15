@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/13 19:53:43 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/15 12:44:39 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,7 +294,7 @@ int				get_commands(t_msh *prog, t_tok *tokens, size_t totaltokens);
 void			print_command(t_cmd *command);
 
 void			error_exit(t_msh *prog, int err, int stage);
-void			std_exit(t_msh *prog);
+void			std_exit(t_msh *prog, int n);
 
 int				vec_add(t_vec *vector, void *buffer);
 int				vec_new(t_vec *vector, size_t type_size);
@@ -329,7 +329,7 @@ void			ft_export(t_msh *prog, int argc, char **argv);
 
 int				tokenizer(t_msh *prog, t_vecstr *line);
 size_t			sum_tokens(t_vecstr *line);
-void			gen_tokens(t_tok **tokens, t_vecstr *line, t_msh *prog);
+int				gen_tokens(t_tok **tokens, t_vecstr *line, t_msh *prog);
 
 /*
 ** Functions to read input and handle line-editing. In read_input.c,

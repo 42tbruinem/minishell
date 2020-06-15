@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/04 19:35:57 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/11 21:41:51 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/15 12:52:57 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ static	int		new_file(t_cmd *command, char **args, int type, t_vec *fd_arr)
 	if (!args[0])
 		return (0);
 	if (type == WRITEFILE)
-		fd = open(args[0], O_CREAT | O_WRONLY | O_TRUNC);
+		fd = open(args[0], O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	else if (type == APPENDFILE)
-		fd = open(args[0], O_CREAT | O_WRONLY | O_APPEND);
+		fd = open(args[0], O_CREAT | O_WRONLY | O_APPEND, 0644);
 	else if (type == INPUT_SENDER)
 		fd = open(args[0], O_RDONLY);
 	if (fd == -1 || !vec_add(fd_arr, &fd))

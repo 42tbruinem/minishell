@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 11:54:12 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/02 11:30:24 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/15 12:44:16 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ void		error_exit(t_msh *prog, int err, int stage)
 	exit(err);
 }
 
-void		std_exit(t_msh *prog)
+void		std_exit(t_msh *prog, int n)
 {
 	env_clear(prog->env, &free);
-	exit(0);
+	exit(n);
 }

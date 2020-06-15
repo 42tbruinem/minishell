@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/13 20:04:30 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/15 12:45:18 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int			read_input(t_msh *prog)
 		if (send < 0)
 			error_exit(prog, MEM_FAIL, IN_INPUT);
 		if (send == CTRL_D)
-			std_exit(prog);
+			std_exit(prog, 0);
 		g_current_line = line->inputrow;
 		g_total_lines = line->total_rows;
 		refresh_cursor(line);
