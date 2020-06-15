@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/13 19:55:57 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/15 12:25:28 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,11 @@ void	msh_main(t_msh *prog)
 		prog->line.term.c_lflag |= ECHO;
 		prog->line.term.c_lflag |= ICANON;
 		tcsetattr(STDIN, TCSAFLUSH, &prog->line.term);
-		if (!tokenizer(prog, &prog->line.cmd))
-			error_exit(prog, MEM_FAIL, IN_INPUT);
-		if (!run_commands(prog, prog->commands))
-			error_exit(prog, MEM_FAIL, IN_INPUT);
+		if (tokenizer(prog, &prog->line.cmd))
+		{
+			if (!run_commands(prog, prog->commands))
+				error_exit(prog, MEM_FAIL, IN_INPUT);
+		}
 		refresh_prog(prog);
 		prog->line.term.c_lflag &= ~(ECHO | ICANON);
 		tcsetattr(STDIN, TCSAFLUSH, &prog->line.term);

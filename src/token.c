@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/05 23:24:42 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/11 21:15:28 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/15 12:25:06 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,11 @@ int			tokenizer(t_msh *prog, t_vecstr *line)
 	tokens = (t_tok *)malloc(sizeof(t_tok) * (totaltokens + 1));
 	if (!tokens)
 		return (0);
-	gen_tokens(&tokens, line, prog);
+	if (!gen_tokens(&tokens, line, prog))
+	{
+		free(tokens);
+		return (0);
+	}
 	assign_token_indexes(vecstr_get(&prog->line.cmd), tokens);
 	print_tokens(tokens);
 	if (!get_commands(prog, tokens, totaltokens))

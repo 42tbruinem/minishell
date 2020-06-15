@@ -6,12 +6,18 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/26 13:10:59 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/11 21:59:48 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/15 12:37:48 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <libft.h>
+
+int			parse_error(char c)
+{
+	ft_printf("msh: syntax error near unexpected token `%c'\n", c);
+	return (1);
+}
 
 static int	state_action(char *line, t_lexer *lex)
 {
@@ -23,10 +29,10 @@ static int	state_action(char *line, t_lexer *lex)
 		if (lex->state == PIPE_PIPE)
 			lex->pipe = 1;
 	}
-	if (lex->state == OREDIRECT)
+	if (line[lex->i] == '>')
 	{
 		if (lex->nexttype == WRITEFILE || lex->nexttype == APPENDFILE)
-			return (1);
+			return (parse_error(line[lex->i]));
 		if (line[lex->i + 1] == '>')
 		{
 			lex->nexttype = APPENDFILE;
@@ -144,7 +150,7 @@ void		quote_toks(t_tok **tokens, t_lexer *lex, t_vecstr *line,
 	lex->i--;
 }
 
-void		gen_tokens(t_tok **tokens, t_vecstr *line, t_msh *prog)
+int		gen_tokens(t_tok **tokens, t_vecstr *line, t_msh *prog)
 {
 	t_lexer		lex;
 
@@ -160,7 +166,7 @@ void		gen_tokens(t_tok **tokens, t_vecstr *line, t_msh *prog)
 			quote_toks(tokens, &lex, line, prog);
 		if (!lex.escape && lex.state >= SEMICOLON && lex.state <= PIPE_PIPE)
 			if (state_action(vecstr_get(line), &lex))
-				exit(1);
+				return (0);
 		if (lex.state != WHITESPACE && lex.prevstate == WHITESPACE)
 			create_token((*tokens) + lex.tokeni, &lex);
 		if (!lex.escape && vecstr_val(line, lex.i) == '$' &&
@@ -172,4 +178,5 @@ void		gen_tokens(t_tok **tokens, t_vecstr *line, t_msh *prog)
 		lex.i++;
 	}
 	(*tokens)[lex.tokeni].value = NULL;
+	return (1);
 }
