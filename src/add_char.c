@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:34:51 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/13 13:17:11 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/15 13:15:14 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ static void	scroll_lines(t_line *line)
 	int			tmp;
 	int			tmp2;
 
-	if (line->total_rows - line->inputrow + line->cursor.row >= line->max.row)
+	if ((int)line->total_rows - (int)line->inputrow + line->cursor.row >=
+			(int)line->max.row)
 	{
 		tmp = line->cursor.row - 1;
 		tmp2 = line->cursor.col;

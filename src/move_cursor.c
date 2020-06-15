@@ -6,12 +6,13 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:38:37 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/13 14:30:49 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/15 13:18:10 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <libft.h>
+#include <msh_term.h>
 
 void	cursor_move_row(t_line *line, int c)
 {
@@ -40,8 +41,8 @@ void	cursor_move_row(t_line *line, int c)
 
 void	cursor_home(t_line *line)
 {
-	line->cursor.col = line->promptlen;
 	line->cursor.row = line->cursor.row - line->inputrow;
+	line->cursor.col = line->promptlen;
 	line->inputrow = 0;
 }
 
@@ -59,7 +60,7 @@ void	cursor_end(t_line *line)
 
 void	cursor_left(t_line *line)
 {
-	if (line->inputrow == 0 && line->cursor.col == line->promptlen)
+	if (line->inputrow == 0 && line->cursor.col == (int)line->promptlen)
 		return ;
 	if (line->cursor.col == 0)
 	{

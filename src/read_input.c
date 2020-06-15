@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/15 16:21:45 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/15 20:23:51 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,16 @@
 
 static void	refresh_cursor(t_line *line)
 {
-	if (line->cursor.row >= line->max.row)
+	if (line->cursor.row < 0)
+	{
+		while (line->cursor.row < 0)
+		{
+			termcmd(MOVE_COLROW, 0, 0, 1);
+			termcmd(SCROLL_UP, 0, 0, 1);
+			line->cursor.row++;
+		}
+	}
+	if (line->cursor.row >= line->max.row && g_siggy == 0)
 	{
 		line->cursor.row -= 1;
 		termcmd(SCROLL_LINE, 0, 0, 1);
@@ -38,7 +47,7 @@ static int	get_col(int row)
 	read(STDIN, buf, 10);
 	if (row < 10)
 		col = ft_atoi(buf + 4);
-	else if (row > 10 && row < 100)
+	else if (row >= 10 && row < 100)
 		col = ft_atoi(buf + 5);
 	else if (row > 100)
 		col = ft_atoi(buf + 6);
@@ -62,7 +71,6 @@ static int	initialize_line_editor(t_line *line)
 	line->cursor.col = get_col(line->cursor.row + 1) - 1;
 	line->promptlen = line->cursor.col;
 	line->total_rows = 0;
-	/* line->alloced_cmd = 100; */
 	line->inputrow = 0;
 	line->escmode = 0;
 	g_current_line = line->inputrow;
@@ -94,16 +102,18 @@ int			read_input(t_msh *prog)
 	while (!send)
 	{
 		ft_bzero(buf, 6);
-		fill_buff(buf);
-		if (g_siggy == 1)
+		read(STDIN, buf, 6);
+		if (g_siggy > 0)
 		{
-			g_siggy = 0;
-			if (initialize_line_editor(line) == -1)
+			if (vecstr_reset(&line->cmd))
 				return (-1);
+			line->cursor.row += g_siggy +
+				(line->promptlen + vecstr_len(&line->cmd)) / line->max.col;
+			if (line->cursor.row >= line->max.row)
+				line->cursor.row = line->max.row - 1;
+			line->cursor.col = line->promptlen;
 			refresh_cursor(line);
-			if (vecstr_truncate(&line->cmd, 0))
-				return (-1);
-			line->promptlen = ft_no_ansi_strlen(line->prompt);
+			g_siggy = 0;
 		}
 		send = handle_input(line, buf);
 		if (send < 0)

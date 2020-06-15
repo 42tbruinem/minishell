@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:17:50 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/11 20:05:15 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/15 17:07:18 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ void		init_readline(t_msh *prog)
 
 void		termcmd(char *command, int p1, int p2, int lines_affected)
 {
+	/* ft_printf("str: %s\n", tgetstr(command, NULL)); */
+	/* ft_printf("row: %d\n", p2); */
 	tputs(tgoto(tgetstr(command, NULL), p1, p2),
 		lines_affected, &ft_putchar);
 }

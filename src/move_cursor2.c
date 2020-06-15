@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/30 16:37:19 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/11 21:49:45 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/15 13:15:59 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static void		cursor_word_left(t_line *line)
 
 	index = line->inputrow * line->max.col + line->cursor.col - line->promptlen;
 	original_row = line->inputrow;
-	if (line->inputrow == 0 && line->cursor.col == line->promptlen)
+	if (line->inputrow == 0 && line->cursor.col == (int)line->promptlen)
 		return ;
 	index = find_index(line, index, LEFT);
 	line->cursor.col = (index + line->promptlen) % line->max.col;

@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/04 17:31:19 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/15 13:41:42 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/15 20:24:06 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	sighandler(int signal)
 			i++;
 		}
 		ft_printf("%s", g_prompt);
-		g_siggy = 1;
+		g_siggy += 1;
 		i = 0;
 	}
 	while (i < g_pid.index)

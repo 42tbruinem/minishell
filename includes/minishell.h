@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/15 13:56:09 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/15 20:23:08 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ struct	s_var
 };
 
 typedef struct s_vec	t_vec;
-
+//
 struct	s_vec
 {
 	char			*store;
@@ -108,7 +108,7 @@ struct			s_cmd
 	t_cmd	*next;
 };
 
-typedef struct	s_tok	t_tok;
+typedef struct s_tok	t_tok;
 
 struct			s_tok
 {
@@ -134,8 +134,8 @@ typedef struct	s_lexer
 
 typedef struct	s_coord
 {
-	size_t		row;
-	size_t		col;
+	int			row;
+	int			col;
 }				t_coord;
 
 typedef struct	s_line
@@ -143,7 +143,6 @@ typedef struct	s_line
 	char			*prompt;
 	size_t			promptlen;
 	t_vecstr		cmd;
-	// size_t			alloced_cmd;
 	size_t			inputrow;
 	t_coord			max;
 	t_coord			cursor;
@@ -370,7 +369,10 @@ void			concatenate_input(char *line);
 
 void			sighandler(int signal);
 
-/* Troubleshooting */
+/*
+** Troubleshooting
+*/
+
 void			print_state(int c, t_lexer lex);
 
 #endif
