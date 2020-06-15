@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/04/12 11:11:07 by rlucas        #+#    #+#                  #
-#    Updated: 2020/06/11 21:55:01 by tbruinem      ########   odam.nl          #
+#    Updated: 2020/06/15 14:01:45 by tbruinem      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,6 +51,7 @@ SRC =	main.c \
 		redirection/close_all.c \
 		redirection/close_iostream.c \
 		redirection/in_out_redirection.c \
+		utils/ft_strsdup.c \
 		utils/ft_str2clear.c \
 		utils/ft_str2cmpstr.c \
 		utils/ft_str2print.c \

@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/15 12:56:36 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/15 16:21:45 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,15 @@ static int	initialize_line_editor(t_line *line)
 	return (0);
 }
 
+void		fill_buff(char *buff)
+{
+	int red;
+
+	red = 0;
+	while (red < 6)
+		red += read(STDIN, buff + red, 6);
+}
+
 int			read_input(t_msh *prog)
 {
 	t_line		*line;
@@ -85,15 +94,10 @@ int			read_input(t_msh *prog)
 	while (!send)
 	{
 		ft_bzero(buf, 6);
-		read(STDIN, buf, 6);
+		fill_buff(buf);
 		if (g_siggy == 1)
 		{
 			g_siggy = 0;
-			/* line->cursor.row += line->total_rows - line->inputrow + 1; */
-			/* line->promptlen = ft_no_ansi_strlen(line->prompt); */
-			/* line->cursor.col = line->promptlen; */
-			/* g_current_line = line->inputrow; */
-			/* g_total_lines = line->total_rows; */
 			if (initialize_line_editor(line) == -1)
 				return (-1);
 			refresh_cursor(line);

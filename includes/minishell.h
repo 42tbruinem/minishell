@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/15 12:55:53 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/15 13:56:09 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,6 +222,7 @@ typedef int		(*t_inputf)(t_line *line, char buf[6]);
 ** Utility functions in utils.c
 */
 
+char			*ft_strsdup(char *str, char *set);
 size_t			ft_str2len(char **str);
 char			**ft_str2clear(char **str);
 void			ft_str2print(char **str);

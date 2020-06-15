@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/06 21:08:08 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/15 12:39:06 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/15 13:01:15 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int		normal_state(int c)
 		return (OREDIRECT);
 	if (c == '<')
 		return (IREDIRECT);
-	if (c == '$')
+	if (c == '$' || c == '~')
 		return (ENV);
 	if (c == '|')
 		return (PIPE_PIPE);

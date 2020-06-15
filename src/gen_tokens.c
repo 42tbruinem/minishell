@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/26 13:10:59 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/15 12:37:48 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/15 14:22:45 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,35 @@ static int	state_action(char *line, t_lexer *lex)
 		lex->nexttype = INPUT_SENDER;
 	lex->state = WHITESPACE;
 	return (0);
+}
+
+void		add_tilde_value(t_lexer *lex, t_vecstr *line,
+							size_t env_name_len, t_msh *prog)
+{
+	char	*home;
+	char	*user;
+
+	home = env_val_get("HOME", prog->env);
+	ft_printf("HOME = %s\n", home);
+	if (!home)
+	{
+		vecstr_insert_str(line, lex->i, " ");
+		lex->state = checkstate(vecstr_val(line, lex->i), *lex);
+		vecstr_set(line, lex->i, '\0');
+		sleep(5);
+		return ;
+	}
+	vecstr_slice(line, lex->i, lex->i + env_name_len + 1);
+	if (env_name_len > 1)
+	{
+		user = ft_strsdup(&line->str[lex->i + 1], " \";<>.|\'");
+		home = ft_str3join("/Users", "/", user);
+		free(user);
+	}
+	vecstr_insert_str(line, lex->i, home);
+	lex->i = lex->i + ft_strlen(home) - ((env_name_len > 1) ? 0 : 1);
+	if (env_name_len > 1)
+		free(home);
 }
 
 void		add_env_value(t_lexer *lex, t_vecstr *line, size_t env_name_len,
@@ -107,11 +136,23 @@ void		expand_env_value(t_lexer *lex, t_vecstr *line, t_msh *prog)
 	add_env_value(lex, line, env_name_len, prog);
 }
 
+void		expand_tilde(t_lexer *lex, t_vecstr *line, t_msh *prog)
+{
+	char	*user;
+	size_t	username_len;
+
+	user = vecstr_get(line) + lex->i + 1;
+	username_len = env_strclen(user, " \";<>.|\'");
+	add_tilde_value(lex, line, username_len, prog);
+}
+
 void		evaluate_env(t_lexer *lex, t_vecstr *line, t_msh *prog)
 {
 	int		c;
 
 	c = vecstr_val(line, lex->i + 1);
+	if (vecstr_val(line, lex->i) == '~')
+		expand_tilde(lex, line, prog);
 	if (c == 0)
 		return ;
 	if (c == '(')
@@ -169,7 +210,8 @@ int		gen_tokens(t_tok **tokens, t_vecstr *line, t_msh *prog)
 				return (0);
 		if (lex.state != WHITESPACE && lex.prevstate == WHITESPACE)
 			create_token((*tokens) + lex.tokeni, &lex);
-		if (!lex.escape && vecstr_val(line, lex.i) == '$' &&
+		if (!lex.escape && (vecstr_val(line, lex.i) == '$' ||
+							vecstr_val(line, lex.i) == '~') &&
 				lex.state != INSINGLEQUOTE)
 			evaluate_env(&lex, line, prog);
 		if (lex.state == WHITESPACE)

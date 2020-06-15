@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/17 23:13:43 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/13 15:53:25 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/15 13:36:25 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int				env_init(t_msh *prog)
 		i++;
 	}
 	if (modify_shlvl(prog->env))
-			return (env_clear(prog->env, &free));
+		return (env_clear(prog->env, &free));
 	prog->envp = env_convert(prog->env);
 	if (!prog->envp)
 		return (env_clear(prog->env, &free));
