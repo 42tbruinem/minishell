@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/15 13:38:06 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/15 17:45:45 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void	refresh_cursor(t_line *line)
 			line->cursor.row++;
 		}
 	}
-	if (line->cursor.row >= line->max.row)
+	if (line->cursor.row >= line->max.row && g_siggy == 0)
 	{
 		line->cursor.row -= 1;
 		termcmd(SCROLL_LINE, 0, 0, 1);
@@ -47,7 +47,7 @@ static int	get_col(int row)
 	read(STDIN, buf, 10);
 	if (row < 10)
 		col = ft_atoi(buf + 4);
-	else if (row > 10 && row < 100)
+	else if (row >= 10 && row < 100)
 		col = ft_atoi(buf + 5);
 	else if (row > 100)
 		col = ft_atoi(buf + 6);
@@ -65,13 +65,10 @@ static int	get_row(void)
 	return (row);
 }
 
-static int	initialize_line_editor(t_line *line, int get_c_and_r)
+static int	initialize_line_editor(t_line *line)
 {
-	if (get_c_and_r)
-	{
-		line->cursor.row = get_row() - 1;
-		line->cursor.col = get_col(line->cursor.row + 1) - 1;
-	}
+	line->cursor.row = get_row() - 1;
+	line->cursor.col = get_col(line->cursor.row + 1) - 1;
 	line->promptlen = line->cursor.col;
 	line->total_rows = 0;
 	line->inputrow = 0;
@@ -89,7 +86,7 @@ int			read_input(t_msh *prog)
 
 	line = &prog->line;
 	ft_printf("%s", line->prompt);
-	if (initialize_line_editor(line, 1) == -1)
+	if (initialize_line_editor(line) == -1)
 		return (-1);
 	send = 0;
 	refresh_cursor(line);
@@ -97,22 +94,16 @@ int			read_input(t_msh *prog)
 	{
 		ft_bzero(buf, 6);
 		read(STDIN, buf, 6);
-		if (g_siggy == 1)
+		if (g_siggy > 0)
 		{
-			g_siggy = 0;
-			/* line->cursor.row += line->total_rows - line->inputrow + 1; */
-			/* line->promptlen = ft_no_ansi_strlen(line->prompt); */
-			/* line->cursor.col = line->promptlen; */
-			/* g_current_line = line->inputrow; */
-			/* g_total_lines = line->total_rows; */
-			line->cursor.row += line->total_rows - line->inputrow + 1;
-			if (initialize_line_editor(line, 0) == -1)
+			if (vecstr_reset(&line->cmd))
 				return (-1);
-			line->promptlen = ft_no_ansi_strlen(line->prompt);
+			line->cursor.row += g_siggy + (line->promptlen + vecstr_len(&line->cmd)) / line->max.col;
+			if (line->cursor.row >= line->max.row)
+				line->cursor.row = line->max.row - 1;
 			line->cursor.col = line->promptlen;
 			refresh_cursor(line);
-			if (vecstr_truncate(&line->cmd, 0))
-				return (-1);
+			g_siggy = 0;
 		}
 		send = handle_input(line, buf);
 		if (send < 0)

@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/15 13:38:22 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/15 15:58:57 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,6 @@ typedef struct	s_line
 	char			*prompt;
 	size_t			promptlen;
 	t_vecstr		cmd;
-	// size_t			alloced_cmd;
 	size_t			inputrow;
 	t_coord			max;
 	t_coord			cursor;
