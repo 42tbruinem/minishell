@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:37:30 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/11 21:04:41 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/15 13:15:41 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int			esc_delete(t_line *line)
 	size_t		index2;
 	int			charfound;
 
-	if (line->inputrow == 0 && line->cursor.col == line->promptlen)
+	if (line->inputrow == 0 && line->cursor.col == (int)line->promptlen)
 		return (0);
 	index = line->inputrow * line->max.col + line->cursor.col - line->promptlen;
 	index2 = 1;
@@ -59,7 +59,7 @@ int			delete_char(t_line *line)
 	size_t		row;
 	size_t		index;
 
-	if (line->inputrow == 0 && line->cursor.col == line->promptlen)
+	if (line->inputrow == 0 && line->cursor.col == (int)line->promptlen)
 		return (0);
 	if (vecstr_slice(&line->cmd, vecstr_len(&line->cmd) - 1,
 				vecstr_len(&line->cmd)))

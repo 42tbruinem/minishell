@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/13 23:08:12 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/15 13:14:27 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ struct	s_var
 };
 
 typedef struct s_vec	t_vec;
-
+//
 struct	s_vec
 {
 	char			*store;
@@ -134,8 +134,8 @@ typedef struct	s_lexer
 
 typedef struct	s_coord
 {
-	size_t		row;
-	size_t		col;
+	int			row;
+	int			col;
 }				t_coord;
 
 typedef struct	s_line
