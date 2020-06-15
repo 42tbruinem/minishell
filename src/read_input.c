@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/13 20:04:30 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/13 23:08:03 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static int	initialize_line_editor(t_line *line)
 	line->cursor.col = get_col(line->cursor.row + 1) - 1;
 	line->promptlen = line->cursor.col;
 	line->total_rows = 0;
-	line->alloced_cmd = 100;
+	/* line->alloced_cmd = 100; */
 	line->inputrow = 0;
 	line->escmode = 0;
 	g_current_line = line->inputrow;
@@ -88,6 +88,11 @@ int			read_input(t_msh *prog)
 		if (g_siggy == 1)
 		{
 			g_siggy = 0;
+			/* line->cursor.row += line->total_rows - line->inputrow + 1; */
+			/* line->promptlen = ft_no_ansi_strlen(line->prompt); */
+			/* line->cursor.col = line->promptlen; */
+			/* g_current_line = line->inputrow; */
+			/* g_total_lines = line->total_rows; */
 			if (initialize_line_editor(line) == -1)
 				return (-1);
 			refresh_cursor(line);
