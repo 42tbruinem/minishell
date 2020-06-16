@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/26 13:10:59 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/16 16:58:47 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/16 18:43:08 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,11 @@ void		evaluate_env(t_lexer *lex, t_vecstr *line, t_msh *prog)
 		(void)line;
 	if (c == '$')
 		(void)line;
+	if (c == '?')
+	{
+		env_exitstatus(lex, line, prog);
+		return ;
+	}
 	if (ft_isalpha(c) || c == '_')
 		expand_env_value(lex, line, prog);
 }

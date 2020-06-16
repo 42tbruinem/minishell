@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/16 17:41:37 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/16 18:27:34 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,6 +263,7 @@ typedef void		(*t_escapef)(t_lexer *lex, char *last);
 
 void				quote_toks(t_tok **tokens, t_lexer *lex, t_vecstr *line,
 					t_msh *prog);
+void				env_exitstatus(t_lexer *lex, t_vecstr *line, t_msh *prog);
 void				evaluate_env(t_lexer *lex, t_vecstr *line, t_msh *prog);
 int					parse_error(char c);
 size_t				env_strclen(char *line, const char *chars);

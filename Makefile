@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/04/12 11:11:07 by rlucas        #+#    #+#                  #
-#    Updated: 2020/06/16 17:43:53 by tbruinem      ########   odam.nl          #
+#    Updated: 2020/06/16 18:29:49 by tbruinem      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -97,6 +97,7 @@ SRC =	main.c \
 		tokens/check_esc_char.c \
 		tokens/create_token.c \
 		tokens/env_strclen.c \
+		tokens/env_exitstatus.c \
 		tokens/evaluate_env.c \
 		tokens/gen_tokens.c \
 		tokens/parse_error.c \
@@ -112,7 +113,7 @@ SRC := $(addprefix $(SRCDIR)/, $(SRC))
 
 FLAGS = -Wall -Wextra -Werror
 ifdef DEBUG
-FLAGS += -g -fsanitize=address
+	FLAGS += -g -fsanitize=address
 endif
 
 all: lft $(NAME)
