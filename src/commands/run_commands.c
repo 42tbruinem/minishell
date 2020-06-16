@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/11 21:50:53 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/16 18:52:41 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/16 19:34:09 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ static	void	collect_souls(t_msh *prog)
 		waitpid(-1, &status, 0);
 		if (WIFEXITED(status))
 			prog->exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			prog->exit_status = 128 + WTERMSIG(status);
 		i++;
 	}
 	vec_destroy(&g_pid, NULL);
