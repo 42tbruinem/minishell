@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/04/12 11:11:07 by rlucas        #+#    #+#                  #
-#    Updated: 2020/06/16 17:16:55 by tbruinem      ########   odam.nl          #
+#    Updated: 2020/06/16 17:43:53 by tbruinem      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -81,7 +81,6 @@ SRC =	main.c \
 		utils/ft_str2print.c \
 		utils/ft_str2len.c \
 		utils/ft_str3join.c \
-		utils/print_tokens.c \
 		utils/ft_no_ansi_strlen.c \
 		env/env_init.c \
 		env/env_clear.c \
@@ -105,7 +104,8 @@ SRC =	main.c \
 		tokens/lex_checkstate.c \
 		tokens/update_lexer.c \
 		tokens/init_lexer.c \
-		debug/print_state.c
+		debug/print_state.c \
+		debug/print_tokens.c
 
 OBJ := $(addprefix $(OBJDIR)/, $(SRC:%.c=%.o))
 SRC := $(addprefix $(SRCDIR)/, $(SRC))
