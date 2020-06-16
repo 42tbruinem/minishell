@@ -6,34 +6,12 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 16:42:01 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/13 19:36:26 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/16 15:09:54 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <minishell.h>
-
-size_t		ft_no_ansi_strlen(const char *str)
-{
-	size_t		i;
-	size_t		len;
-	int			inansi;
-
-	i = 0;
-	len = 0;
-	inansi = 0;
-	while (str[i])
-	{
-		if (str[i] == '\033')
-			inansi = 1;
-		if (!inansi)
-			len++;
-		if (inansi == 1 && str[i] == 'm')
-			inansi = 0;
-		i++;
-	}
-	return (len);
-}
 
 /*
 ** Creates the prompt for minishell using the USER environment variable - or

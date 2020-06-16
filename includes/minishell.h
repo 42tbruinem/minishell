@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/15 22:44:48 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/16 17:16:06 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,6 +221,7 @@ typedef int		(*t_inputf)(t_line *line, char buf[6]);
 ** Utility functions in utils.c
 */
 
+size_t			ft_no_ansi_strlen(const char *str);
 char			*ft_strsdup(char *str, char *set);
 size_t			ft_str2len(char **str);
 char			**ft_str2clear(char **str);
@@ -233,14 +234,12 @@ void			print_tokens(t_tok *tokens);
 ** Add a prompt to the shell, in prompt.c
 */
 
-size_t			ft_no_ansi_strlen(const char *str);
 char			*prompt(t_msh *prog, t_line *line);
 
 /*
 ** Initialise terminal, in terminal.c
 */
 
-int				init_term(struct termios *term);
 void			init_readline(t_msh *prog);
 
 /*
@@ -249,7 +248,7 @@ void			init_readline(t_msh *prog);
 */
 
 int				add_char(t_line *line, char c);
-int				esc_delete(t_line *line);
+int				delete_word(t_line *line);
 int				delete_char(t_line *line);
 void			cursor_left(t_line *line);
 void			cursor_right(t_line *line);
@@ -271,6 +270,11 @@ char			*error_lookup(int err);
 
 typedef void	(*t_escapef)(t_lexer *lex, char *last);
 
+void			quote_toks(t_tok **tokens, t_lexer *lex, t_vecstr *line,
+				t_msh *prog);
+void			evaluate_env(t_lexer *lex, t_vecstr *line, t_msh *prog);
+int				parse_error(char c);
+size_t			env_strclen(char *line, const char *chars);
 int				conv_tokens(t_msh *prog, t_tok *tokens, size_t totaltokens);
 
 int				execute(t_msh *prog, t_cmd *cmd);
@@ -328,7 +332,6 @@ void			ft_export(t_msh *prog, int argc, char **argv);
 */
 
 int				tokenizer(t_msh *prog, t_vecstr *line);
-size_t			sum_tokens(t_vecstr *line);
 int				gen_tokens(t_tok **tokens, t_vecstr *line, t_msh *prog);
 
 /*
@@ -337,6 +340,7 @@ int				gen_tokens(t_tok **tokens, t_vecstr *line, t_msh *prog);
 */
 
 int				handle_input(t_line *line, char buf[6]);
+int         	initialize_line_editor(t_line *line);
 void			refresh_cursor(t_line *line);
 int				read_input(t_msh *prog);
 int				send_eof(t_line *line, char buf[6]);
@@ -352,7 +356,7 @@ int				backspace(t_line *line, char buf[6]);
 ** Finite state machine function.
 */
 
-int				checkstate(int c, t_lexer lex);
+int				lex_checkstate(int c, t_lexer lex);
 
 /*
 ** Lexing utilities.

@@ -1,34 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   exit.c                                             :+:    :+:            */
+/*   init_lexer.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/04/16 11:54:12 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/16 14:46:27 by tbruinem      ########   odam.nl         */
+/*   Created: 2020/05/06 21:18:20 by rlucas        #+#    #+#                 */
+/*   Updated: 2020/06/16 17:01:43 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-#include <unistd.h>
 #include <libft.h>
 
-/*
-** Functions to free up everything before exiting the program.
-*/
-
-void		error_exit(t_msh *prog, int err, int stage)
+void		init_lexer(t_lexer *lex)
 {
-	ft_printf_fd(2, "Error %d - ", err);
-	ft_printf_fd(2, error_lookup(err));
-	if (stage == IN_ENV || stage == IN_TERM)
-		env_clear(prog->env, &free);
-	exit(err);
-}
-
-void		std_exit(t_msh *prog, int n)
-{
-	env_clear(prog->env, &free);
-	exit(n);
+	lex->i = 0;
+	lex->j = 0;
+	lex->state = WHITESPACE;
+	lex->escape = 0;
+	lex->tokeni = 0;
+	lex->nexttype = COMMAND;
+	lex->cmd_present = 0;
+	lex->cmd_num = 0;
+	lex->pipe = 0;
 }

@@ -1,34 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   exit.c                                             :+:    :+:            */
+/*   cursor_right.c                                     :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/04/16 11:54:12 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/16 14:46:27 by tbruinem      ########   odam.nl         */
+/*   Created: 2020/04/29 17:38:37 by rlucas        #+#    #+#                 */
+/*   Updated: 2020/06/16 14:59:42 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-#include <unistd.h>
 #include <libft.h>
+#include <msh_term.h>
 
-/*
-** Functions to free up everything before exiting the program.
-*/
-
-void		error_exit(t_msh *prog, int err, int stage)
+void	cursor_right(t_line *line)
 {
-	ft_printf_fd(2, "Error %d - ", err);
-	ft_printf_fd(2, error_lookup(err));
-	if (stage == IN_ENV || stage == IN_TERM)
-		env_clear(prog->env, &free);
-	exit(err);
-}
-
-void		std_exit(t_msh *prog, int n)
-{
-	env_clear(prog->env, &free);
-	exit(n);
+	if (line->inputrow * line->max.col + (line->cursor.col + 1) >
+			vecstr_len(&line->cmd) + line->promptlen)
+		return ;
+	line->cursor.col++;
+	if (line->cursor.col >= line->max.col)
+	{
+		line->cursor.col = 0;
+		line->cursor.row++;
+		line->inputrow++;
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:37:30 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/15 13:15:41 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/16 14:32:26 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,44 +21,32 @@
 ** remove the last character from it.
 */
 
-int			esc_delete(t_line *line)
+static void	visual_delete(t_line *line)
 {
-	size_t		index;
-	size_t		index2;
-	int			charfound;
+	size_t	row;
+	size_t	index;
 
-	if (line->inputrow == 0 && line->cursor.col == (int)line->promptlen)
-		return (0);
-	index = line->inputrow * line->max.col + line->cursor.col - line->promptlen;
-	index2 = 1;
-	charfound = 0;
-	while (1)
+	row = line->inputrow;
+	while (row < line->total_rows)
 	{
-		if (index - index2 == 0)
-		{
-			index2++;
+		termcmd(MOVE_COLROW, 0, line->cursor.row - line->inputrow + row + 1, 1);
+		termcmd(DELETE_START, 0, 0, 1);
+		termcmd(DELETE_CHAR, 0, 0, 1);
+		termcmd(DELETE_END, 0, 0, 1);
+		termcmd(MOVE_COLROW, line->max.col, line->cursor.row - line->inputrow +
+				row, 1);
+		index = row * line->max.col + line->max.col - line->promptlen - 1;
+		if (index > vecstr_len(&line->cmd))
 			break ;
-		}
-		if (vecstr_val(&line->cmd, index - index2) != ' ' && charfound == 0)
-			charfound = 1;
-		if (vecstr_val(&line->cmd, index - index2) == ' ' && charfound == 1)
-			break ;
-		index2++;
+		termcmd(INSERT_START, 0, 0, 1);
+		ft_printf("%c", vecstr_val(&line->cmd, index));
+		termcmd(INSERT_END, 0, 0, 1);
+		row++;
 	}
-	while (index2 > 1)
-	{
-		if (delete_char(line) == -1)
-			return (-1);
-		index2--;
-	}
-	return (0);
 }
 
 int			delete_char(t_line *line)
 {
-	size_t		row;
-	size_t		index;
-
 	if (line->inputrow == 0 && line->cursor.col == (int)line->promptlen)
 		return (0);
 	if (vecstr_slice(&line->cmd, vecstr_len(&line->cmd) - 1,
@@ -78,22 +66,6 @@ int			delete_char(t_line *line)
 	termcmd(DELETE_START, 0, 0, 1);
 	termcmd(DELETE_CHAR, 0, 0, 1);
 	termcmd(DELETE_END, 0, 0, 1);
-	row = line->inputrow;
-	while (row < line->total_rows)
-	{
-		termcmd(MOVE_COLROW, 0, line->cursor.row - line->inputrow + row + 1, 1);
-		termcmd(DELETE_START, 0, 0, 1);
-		termcmd(DELETE_CHAR, 0, 0, 1);
-		termcmd(DELETE_END, 0, 0, 1);
-		termcmd(MOVE_COLROW, line->max.col, line->cursor.row - line->inputrow +
-				row, 1);
-		index = row * line->max.col + line->max.col - line->promptlen - 1;
-		if (index > vecstr_len(&line->cmd))
-			break ;
-		termcmd(INSERT_START, 0, 0, 1);
-		ft_printf("%c", vecstr_val(&line->cmd, index));
-		termcmd(INSERT_END, 0, 0, 1);
-		row++;
-	}
+	visual_delete(line);
 	return (0);
 }

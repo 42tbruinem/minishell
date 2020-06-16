@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   terminal.c                                         :+:    :+:            */
+/*   init_readline.c                                    :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:17:50 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/15 17:07:18 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/16 14:43:56 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	init_caps(t_line *line)
 	return (0);
 }
 
-int			init_term(struct termios *term)
+static int	init_term(struct termios *term)
 {
 	if (!isatty(STDIN) || tcgetattr(STDIN, term) < 0)
 		return (1);
@@ -52,12 +52,4 @@ void		init_readline(t_msh *prog)
 		error_exit(prog, CAP_FAIL, IN_TERM);
 	prog->line.max.col = tgetnum("co");
 	prog->line.max.row = tgetnum("li");
-}
-
-void		termcmd(char *command, int p1, int p2, int lines_affected)
-{
-	/* ft_printf("str: %s\n", tgetstr(command, NULL)); */
-	/* ft_printf("row: %d\n", p2); */
-	tputs(tgoto(tgetstr(command, NULL), p1, p2),
-		lines_affected, &ft_putchar);
 }

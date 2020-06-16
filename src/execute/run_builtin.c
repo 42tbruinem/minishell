@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 22:22:24 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/11 21:20:24 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/16 17:30:44 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static	t_builtin	get_builtin(int id)
 	return (builtins[id]);
 }
 
-int		run_builtin(t_msh *prog, t_cmd *cmd, int id)
+int					run_builtin(t_msh *prog, t_cmd *cmd, int id)
 {
 	int	pid;
 

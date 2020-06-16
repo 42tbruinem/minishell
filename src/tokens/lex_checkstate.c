@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   finitestatemachine.c                               :+:    :+:            */
+/*   lex_checkstate.c                                   :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/06 21:08:08 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/15 13:01:15 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/16 16:58:47 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static int		quote_state(int c, t_lexer lex)
 	return (lex.state);
 }
 
-int				checkstate(int c, t_lexer lex)
+int				lex_checkstate(int c, t_lexer lex)
 {
 	if (lex.state == NORMAL || lex.state == WHITESPACE)
 		return (normal_state(c));

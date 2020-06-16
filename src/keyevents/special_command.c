@@ -1,34 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   exit.c                                             :+:    :+:            */
+/*   special_command.c                                  :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/04/16 11:54:12 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/16 14:46:27 by tbruinem      ########   odam.nl         */
+/*   Created: 2020/04/29 17:59:38 by rlucas        #+#    #+#                 */
+/*   Updated: 2020/06/16 14:54:44 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
-#include <unistd.h>
 #include <libft.h>
+#include <minishell.h>
+#include <termcap.h>
+#include <termios.h>
+#include <msh_term.h>
 
-/*
-** Functions to free up everything before exiting the program.
-*/
-
-void		error_exit(t_msh *prog, int err, int stage)
+int		special_command(t_line *line, char buf[6])
 {
-	ft_printf_fd(2, "Error %d - ", err);
-	ft_printf_fd(2, error_lookup(err));
-	if (stage == IN_ENV || stage == IN_TERM)
-		env_clear(prog->env, &free);
-	exit(err);
-}
-
-void		std_exit(t_msh *prog, int n)
-{
-	env_clear(prog->env, &free);
-	exit(n);
+	if (buf[1] == 127)
+		if (delete_word(line) == -1)
+			return (-1);
+	if (buf[1] == 0)
+		line->escmode = 1;
+	else if (buf[4] == 53)
+		cursor_move_word(line, buf[5]);
+	else if (buf[4] == 50)
+		cursor_move_row(line, buf[5]);
+	else
+		return (cursor_move(line, buf[2]));
+	return (0);
 }

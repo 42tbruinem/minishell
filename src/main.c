@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/15 12:25:28 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/16 15:10:34 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@
 #include <sys/wait.h>
 #include <signal.h>
 
-void	refresh_prog(t_msh *prog)
+static void	refresh_prog(t_msh *prog)
 {
 	if (vecstr_reset(&prog->line.cmd))
 		exit(-1);
 }
 
-void	msh_main(t_msh *prog)
+void		msh_main(t_msh *prog)
 {
 	init_readline(prog);
 	while (1)
@@ -46,7 +46,7 @@ void	msh_main(t_msh *prog)
 	}
 }
 
-int		main(void)
+int			main(void)
 {
 	t_msh	prog;
 

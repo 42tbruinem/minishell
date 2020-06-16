@@ -1,34 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   exit.c                                             :+:    :+:            */
+/*   send_eof.c                                         :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/04/16 11:54:12 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/16 14:46:27 by tbruinem      ########   odam.nl         */
+/*   Created: 2020/04/29 17:59:38 by rlucas        #+#    #+#                 */
+/*   Updated: 2020/06/16 14:57:01 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
-#include <unistd.h>
 #include <libft.h>
+#include <minishell.h>
+#include <termcap.h>
+#include <termios.h>
+#include <msh_term.h>
 
-/*
-** Functions to free up everything before exiting the program.
-*/
-
-void		error_exit(t_msh *prog, int err, int stage)
+int		send_eof(t_line *line, char buf[6])
 {
-	ft_printf_fd(2, "Error %d - ", err);
-	ft_printf_fd(2, error_lookup(err));
-	if (stage == IN_ENV || stage == IN_TERM)
-		env_clear(prog->env, &free);
-	exit(err);
-}
-
-void		std_exit(t_msh *prog, int n)
-{
-	env_clear(prog->env, &free);
-	exit(n);
+	(void)buf;
+	if (vecstr_len(&line->cmd) == 0)
+	{
+		ft_printf("exit\n");
+		return (CTRL_D);
+	}
+	return (0);
 }

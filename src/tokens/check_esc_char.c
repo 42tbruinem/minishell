@@ -1,40 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   lexutils.c                                         :+:    :+:            */
+/*   check_esc_char.c                                   :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/06 21:18:20 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/11 20:31:06 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/16 17:00:15 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <libft.h>
 
-void		init_lexer(t_lexer *lex)
-{
-	lex->i = 0;
-	lex->j = 0;
-	lex->state = WHITESPACE;
-	lex->escape = 0;
-	lex->tokeni = 0;
-	lex->nexttype = COMMAND;
-	lex->cmd_present = 0;
-	lex->cmd_num = 0;
-	lex->pipe = 0;
-}
-
-void		update_lexer(char *line, t_lexer *lex)
-{
-	lex->prevstate = lex->state;
-	lex->state = checkstate(line[lex->i], *lex);
-	if (lex->prevstate == NORMAL && lex->state != NORMAL)
-		lex->j = lex->i;
-}
-
-int			esc_double_quotes(t_vecstr *line, t_lexer *lex)
+static int	esc_double_quotes(t_vecstr *line, t_lexer *lex)
 {
 	int		c;
 
@@ -61,29 +40,4 @@ int			check_esc_char(t_vecstr *line, t_lexer *lex, int gen_true)
 		return (1);
 	}
 	return (0);
-}
-
-static void	assign_tok_type(t_tok *token, t_lexer *lex)
-{
-	if (lex->nexttype == COMMAND)
-	{
-		lex->cmd_present = 1;
-		if (lex->pipe == 1)
-			lex->nexttype = PIPEDCOMMAND;
-		lex->pipe = 0;
-	}
-	token->type = lex->nexttype;
-	if (lex->cmd_present == 0)
-		lex->nexttype = COMMAND;
-	else
-		lex->nexttype = STANDARD;
-}
-
-void	create_token(t_tok *token, t_lexer *lex)
-{
-	token->index = lex->i;
-	token->value = (char *)1;
-	token->cmd_num = lex->cmd_num;
-	assign_tok_type(token, lex);
-	lex->tokeni++;
 }

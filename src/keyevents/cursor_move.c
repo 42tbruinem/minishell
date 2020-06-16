@@ -1,34 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   exit.c                                             :+:    :+:            */
+/*   cursor_move.c                                      :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/04/16 11:54:12 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/16 14:46:27 by tbruinem      ########   odam.nl         */
+/*   Created: 2020/04/29 17:59:38 by rlucas        #+#    #+#                 */
+/*   Updated: 2020/06/16 15:04:43 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
-#include <unistd.h>
 #include <libft.h>
+#include <minishell.h>
+#include <termcap.h>
+#include <termios.h>
+#include <msh_term.h>
 
-/*
-** Functions to free up everything before exiting the program.
-*/
-
-void		error_exit(t_msh *prog, int err, int stage)
+int		cursor_move(t_line *line, int c)
 {
-	ft_printf_fd(2, "Error %d - ", err);
-	ft_printf_fd(2, error_lookup(err));
-	if (stage == IN_ENV || stage == IN_TERM)
-		env_clear(prog->env, &free);
-	exit(err);
-}
-
-void		std_exit(t_msh *prog, int n)
-{
-	env_clear(prog->env, &free);
-	exit(n);
+	if (c == HOME)
+		cursor_home(line);
+	if (c == END)
+		cursor_end(line);
+	if (c == RIGHT_KEY)
+		cursor_right(line);
+	if (c == LEFT_KEY)
+		cursor_left(line);
+	return (0);
 }

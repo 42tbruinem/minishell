@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   move_cursor.c                                      :+:    :+:            */
+/*   cursor_move_row.c                                  :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:38:37 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/15 13:18:10 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/16 15:01:21 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,52 +36,5 @@ void	cursor_move_row(t_line *line, int c)
 		if (line->inputrow * line->max.col + line->cursor.col < line->promptlen)
 			cursor_home(line);
 		return ;
-	}
-}
-
-void	cursor_home(t_line *line)
-{
-	line->cursor.row = line->cursor.row - line->inputrow;
-	line->cursor.col = line->promptlen;
-	line->inputrow = 0;
-}
-
-void	cursor_end(t_line *line)
-{
-	line->cursor.row = line->cursor.row - line->inputrow + line->total_rows;
-	line->cursor.col = (vecstr_len(&line->cmd) + line->promptlen)
-		% line->max.col;
-	line->inputrow = line->total_rows;
-}
-
-/*
-** cursor_left() moves the cursor one position to the left
-*/
-
-void	cursor_left(t_line *line)
-{
-	if (line->inputrow == 0 && line->cursor.col == (int)line->promptlen)
-		return ;
-	if (line->cursor.col == 0)
-	{
-		line->inputrow--;
-		line->cursor.col = line->max.col - 1;
-		line->cursor.row--;
-	}
-	else
-		line->cursor.col--;
-}
-
-void	cursor_right(t_line *line)
-{
-	if (line->inputrow * line->max.col + (line->cursor.col + 1) >
-			vecstr_len(&line->cmd) + line->promptlen)
-		return ;
-	line->cursor.col++;
-	if (line->cursor.col >= line->max.col)
-	{
-		line->cursor.col = 0;
-		line->cursor.row++;
-		line->inputrow++;
 	}
 }

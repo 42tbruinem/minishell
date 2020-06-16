@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/11 21:33:20 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/11 21:33:21 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/16 17:29:19 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <fcntl.h>
 #include <stdio.h>
 
-static	int	is_abspath(char **abspath, char *entry, char *program)
+static int	is_abspath(char **abspath, char *entry, char *program)
 {
 	char		*tmp;
 	struct stat	unused;
@@ -32,7 +32,7 @@ static	int	is_abspath(char **abspath, char *entry, char *program)
 	return (0);
 }
 
-void	get_abspath(char *program, char **abspath_to_exe, t_var *env)
+void		get_abspath(char *program, char **abspath_to_exe, t_var *env)
 {
 	char		*path;
 	char		**entries;

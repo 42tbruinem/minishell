@@ -1,34 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   exit.c                                             :+:    :+:            */
+/*   backspace.c                                        :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/04/16 11:54:12 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/16 14:46:27 by tbruinem      ########   odam.nl         */
+/*   Created: 2020/04/29 17:59:38 by rlucas        #+#    #+#                 */
+/*   Updated: 2020/06/16 14:52:57 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
-#include <unistd.h>
 #include <libft.h>
+#include <minishell.h>
+#include <termcap.h>
+#include <termios.h>
+#include <msh_term.h>
 
-/*
-** Functions to free up everything before exiting the program.
-*/
-
-void		error_exit(t_msh *prog, int err, int stage)
+int		backspace(t_line *line, char buf[6])
 {
-	ft_printf_fd(2, "Error %d - ", err);
-	ft_printf_fd(2, error_lookup(err));
-	if (stage == IN_ENV || stage == IN_TERM)
-		env_clear(prog->env, &free);
-	exit(err);
-}
-
-void		std_exit(t_msh *prog, int n)
-{
-	env_clear(prog->env, &free);
-	exit(n);
+	(void)buf;
+	if (line->escmode == 1)
+	{
+		if (delete_word(line) == -1)
+			return (-1);
+		line->escmode = 0;
+		return (0);
+	}
+	if (delete_char(line) == -1)
+		return (-1);
+	return (0);
 }
