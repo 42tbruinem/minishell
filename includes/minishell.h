@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/17 16:37:20 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/17 17:58:44 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ void					std_exit(t_msh *prog, int n);
 ** handle_input.c, and input*.c.
 */
 
+int						get_endstate(t_vecstr *line);
 char					*prompt(t_msh *prog, t_line *line);
 int						handle_input(t_line *line, char buf[6]);
 int						initialize_line_editor(t_line *line);
