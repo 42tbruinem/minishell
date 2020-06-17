@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/30 15:14:22 by rlucas        #+#    #+#                 */
-/*   Updated: 2019/11/04 11:32:43 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/17 18:12:50 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ char			**ft_split(char const *s, char c)
 			*(arr + m) = create_word(s + i, c);
 			if (!arr[m])
 				return (free_array_of_strings(arr, m));
-			i = i + word_length(s + i, c);
+			i = i + word_length(s + i, c) - 1;
 			m++;
 		}
 		i++;

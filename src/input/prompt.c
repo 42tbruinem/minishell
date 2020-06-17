@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 16:42:01 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/17 16:34:06 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 18:57:50 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char		*prompt(t_msh *prog, t_line *line)
 	char	*user;
 	char	*prompt;
 
-	user = env_val_get("USER", prog->env);
+	user = env_val_get("USER", prog->env, 4);
 	if (user != NULL)
 	{
 		line->promptlen = ft_strlen(user) + 4;

@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/17 14:48:07 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/17 17:59:03 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/17 18:49:56 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void				env_exitstatus(t_lexer *lex, t_vecstr *line,
 void				env_current_process(t_lexer *lex, t_vecstr *line,
 									t_msh *prog);
 void				evaluate_env(t_lexer *lex, t_vecstr *line, t_msh *prog);
-size_t				env_strclen(char *line, const char *chars);
+size_t				env_strclen(char *line);
 int					parse_error(char c);
 int					conv_tokens(t_msh *prog, t_tok *tokens,
 								size_t totaltokens);

@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/17 23:13:43 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/17 15:59:13 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 18:57:45 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,15 @@
 #include "libft.h"
 #include <msh_env.h>
 
-char	*env_val_get(const char *name, t_var *env)
+char	*env_val_get(const char *name, t_var *env, size_t len)
 {
 	while (env)
 	{
-		if (ft_strcmp(env->name, name) == 0)
-			return (env->val);
+		if (ft_strncmp(env->name, name, len) == 0)
+		{
+			if (ft_strlen(env->name) == len)
+				return (env->val);
+		}
 		env = env->next;
 	}
 	return (NULL);

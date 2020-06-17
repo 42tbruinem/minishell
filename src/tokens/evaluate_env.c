@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/26 13:10:59 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/17 15:59:52 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 19:01:46 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void		add_tilde_value(t_lexer *lex, t_vecstr *line,
 	char	*home;
 	char	*user;
 
-	home = env_val_get("HOME", prog->env);
+	home = env_val_get("HOME", prog->env, 4);
 	if (!home)
 	{
 		if (vecstr_insert_str(line, lex->i, " "))
@@ -51,7 +51,7 @@ static void		add_env_value(t_lexer *lex, t_vecstr *line, size_t env_name_len,
 	char		*env_value;
 
 	env_value = env_val_get(vecstr_get(line) + lex->i + 1,
-			prog->env);
+			prog->env, env_name_len);
 	if (vecstr_slice(line, lex->i, lex->i + env_name_len + 1))
 		error_exit(prog, MEM_FAIL);
 	if (!env_value)
@@ -69,7 +69,7 @@ static void		add_env_value(t_lexer *lex, t_vecstr *line, size_t env_name_len,
 		error_exit(prog, MEM_FAIL);
 	lex->i = lex->i + ft_strlen(env_value) - 1;
 	if (lex->state != INDOUBLEQUOTE)
-		lex->state = lex_checkstate(vecstr_val(line, lex->i), *lex);
+		lex->state = NORMAL;
 }
 
 static void		expand_tilde(t_lexer *lex, t_vecstr *line, t_msh *prog)
@@ -78,7 +78,7 @@ static void		expand_tilde(t_lexer *lex, t_vecstr *line, t_msh *prog)
 	size_t	username_len;
 
 	user = vecstr_get(line) + lex->i + 1;
-	username_len = env_strclen(user, " \";<>.|\'");
+	username_len = env_strclen(user);
 	add_tilde_value(lex, line, username_len, prog);
 }
 
@@ -88,7 +88,7 @@ static void		expand_env_value(t_lexer *lex, t_vecstr *line, t_msh *prog)
 	char		*env_name;
 
 	env_name = vecstr_get(line) + lex->i + 1;
-	env_name_len = env_strclen(env_name, " \";<>.|\'");
+	env_name_len = env_strclen(env_name);
 	if (lex->state == INDOUBLEQUOTE &&
 			ft_strclen(env_name, '"') < env_name_len)
 		env_name_len = ft_strclen(env_name, '"');

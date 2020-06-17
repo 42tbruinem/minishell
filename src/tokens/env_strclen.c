@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/16 16:53:42 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/17 15:08:55 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 18:49:23 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "libft.h"
 #include <msh_lex.h>
 
-size_t		env_strclen(char *line, const char *chars)
+size_t		env_strclen(char *line)
 {
 	size_t		i;
 
@@ -28,7 +28,7 @@ size_t		env_strclen(char *line, const char *chars)
 			i += 2;
 			continue;
 		}
-		if (ft_strchr(chars, line[i]))
+		if (!ft_isalpha(line[i]) && line[i] != '_')
 			return (i);
 		i++;
 	}
