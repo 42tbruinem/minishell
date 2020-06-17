@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/11 21:33:20 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/17 15:55:15 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 16:45:24 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,18 @@ static int	is_abspath(char **abspath, char *entry, char *program)
 	return (0);
 }
 
+static int	check_if_path(char *program, char **abspath)
+{
+	struct stat	unused;
+
+	if (stat(program, &unused) != -1)
+	{
+		*abspath = ft_strdup(program);
+		return (1);
+	}
+	return (0);
+}
+
 void		get_abspath(char *program, char **abspath_to_exe, t_var *env)
 {
 	char		*path;
@@ -41,6 +53,8 @@ void		get_abspath(char *program, char **abspath_to_exe, t_var *env)
 	size_t		i;
 
 	i = 0;
+	if (check_if_path(program, abspath_to_exe))
+		return ;
 	path = env_val_get("PATH", env);
 	if (!path)
 		exit(0);

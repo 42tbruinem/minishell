@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/17 14:48:07 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/17 15:38:44 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 16:39:10 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,11 @@ void				quote_toks(t_tok **tokens, t_lexer *lex, t_vecstr *line,
 int					tokenizer(t_msh *prog, t_vecstr *line);
 int					gen_tokens(t_tok **tokens, t_vecstr *line, t_msh *prog);
 int					lex_checkstate(int c, t_lexer lex);
-int					check_esc_char(t_vecstr *line, t_lexer *lex, int gen_true,
-									t_msh *prog);
+int					check_esc_char(t_vecstr *line, t_lexer *lex, int gen_true);
 void				init_lexer(t_lexer *lex);
 void				update_lexer(char *line, t_lexer *lex);
 void				create_token(t_tok *token, t_lexer *lex);
 void				concatenate_input(char *line);
+int					get_endstate(t_vecstr *line);
 
 #endif

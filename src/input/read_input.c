@@ -6,19 +6,21 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/17 16:21:15 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/17 16:58:23 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
-#include "minishell.h"
+#include <minishell.h>
 #include <termcap.h>
 #include <termios.h>
-#include "msh_term.h"
+#include <msh_term.h>
 #include <errno.h>
+#include <msh_lex.h>
 
-static int	signal_received(t_line *line)
+static int	signal_received(t_line *line, t_msh *prog)
 {
+	prog->exit_status = 1;
 	if (vecstr_reset(&line->cmd))
 		return (0);
 	line->cursor.row += g_siggy +
@@ -103,7 +105,7 @@ int			read_input(t_msh *prog)
 		ft_bzero(buf, 6);
 		read(STDIN, buf, 6);
 		if (g_siggy > 0)
-			if (!signal_received(line))
+			if (!signal_received(line, prog))
 				return (-1);
 		if (finished(prog, line, buf))
 			if (check_multiline(prog, line))
