@@ -6,13 +6,14 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 16:46:14 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/11 21:46:31 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 15:10:00 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <libft.h>
 #include <minishell.h>
+#include <msh_lex.h>
 
 void		print_tokens(t_tok *tokens)
 {

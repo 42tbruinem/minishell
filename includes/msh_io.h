@@ -1,34 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   debug_commands.c                                   :+:    :+:            */
+/*   msh_io.h                                           :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/06/11 21:52:11 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/17 15:43:55 by tbruinem      ########   odam.nl         */
+/*   Created: 2020/06/17 15:28:33 by tbruinem      #+#    #+#                 */
+/*   Updated: 2020/06/17 16:02:20 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "libft.h"
-#include <msh_cmd.h>
+#ifndef MSH_IO_H
+# define MSH_IO_H
 
-void	debug_commands(t_cmd *commands)
+# include <minishell.h>
+
+enum					e_pipe
 {
-	size_t	i;
+	READ,
+	WRITE,
+};
 
-	ft_printf("START OF DEBUG\n");
-	while (commands)
-	{
-		i = 0;
-		while (commands->args[i])
-		{
-			ft_printf("%s%c", commands->args[i],
-			(commands->args[i + 1]) ? ' ' : '\n');
-			i++;
-		}
-		commands = commands->next;
-	}
-	ft_printf("END OF DEBUG\n");
-}
+typedef struct s_cmd	t_cmd;
+
+int						in_out_redirection(t_msh *prog, t_cmd *command);
+void					close_all(t_vec *fd_arr);
+void					close_iostream(int *iostream);
+void					close_ifnot(t_vec *fd_arr, int *iostream);
+int						set_redirection(t_cmd *command, char **args,
+										int *types, t_vec *fd_arr);
+
+#endif

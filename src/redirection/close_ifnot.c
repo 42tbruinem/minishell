@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/04 19:35:57 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/11 21:42:59 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 16:03:02 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
+#include <unistd.h>
+#include <msh_io.h>
 
 void	close_ifnot(t_vec *fd_arr, int *iostream)
 {

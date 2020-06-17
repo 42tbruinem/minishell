@@ -6,11 +6,14 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/11 21:53:07 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/11 21:53:14 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 15:58:21 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <msh_lex.h>
+#include <msh_cmd.h>
+#include <msh_io.h>
 
 int		in_out_redirection(t_msh *prog, t_cmd *command)
 {

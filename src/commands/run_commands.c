@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/11 21:50:53 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/16 19:34:09 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 16:23:02 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <msh_cmd.h>
+#include <msh_io.h>
+#include <msh_exec.h>
 
 static	void	collect_souls(t_msh *prog)
 {
@@ -43,7 +46,7 @@ int				run_commands(t_msh *prog, t_cmd *commands)
 	{
 		if (!in_out_redirection(prog, commands))
 			return (0);
-		(void)execute(prog, commands);
+		execute(prog, commands);
 		del = commands;
 		commands = commands->next;
 		free(del);

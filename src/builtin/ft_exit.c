@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 23:02:16 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/15 12:49:40 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 15:03:47 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
+#include <msh_builtin.h>
 
 void	ft_exit(t_msh *prog, int argc, char **argv)
 {

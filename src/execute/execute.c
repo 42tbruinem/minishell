@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 22:22:24 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/11 21:34:19 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 16:20:02 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <stdio.h>
+#include <msh_builtin.h>
+#include <msh_cmd.h>
+#include <msh_exec.h>
 
 static	int	is_builtin(char *program)
 {
@@ -33,7 +36,7 @@ static	int	is_builtin(char *program)
 	return (ft_str2cmpstr(builtins, program));
 }
 
-int			execute(t_msh *prog, t_cmd *cmd)
+void		execute(t_msh *prog, t_cmd *cmd)
 {
 	char	*abspath;
 	int		builtin;

@@ -6,13 +6,14 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 11:54:12 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/17 11:11:43 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/17 15:53:07 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <unistd.h>
 #include <libft.h>
+#include <msh_env.h>
 
 /*
 ** Functions to free up everything before exiting the program.

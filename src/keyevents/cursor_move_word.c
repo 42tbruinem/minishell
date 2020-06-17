@@ -6,12 +6,13 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/30 16:37:19 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/16 15:02:57 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 14:26:33 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <minishell.h>
+#include <msh_keyevents.h>
 
 static size_t	find_index(t_line *line, size_t index, int dir)
 {

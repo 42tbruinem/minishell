@@ -1,34 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   debug_commands.c                                   :+:    :+:            */
+/*   vector.h                                           :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/06/11 21:52:11 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/17 15:43:55 by tbruinem      ########   odam.nl         */
+/*   Created: 2020/06/17 14:44:25 by tbruinem      #+#    #+#                 */
+/*   Updated: 2020/06/17 14:45:17 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "libft.h"
-#include <msh_cmd.h>
+#ifndef VECTOR_H
+# define VECTOR_H
 
-void	debug_commands(t_cmd *commands)
+# include <sys/types.h>
+
+typedef	struct		s_vec
 {
-	size_t	i;
+	char			*store;
+	size_t			type_size;
+	size_t			capacity;
+	size_t			index;
+}					t_vec;
 
-	ft_printf("START OF DEBUG\n");
-	while (commands)
-	{
-		i = 0;
-		while (commands->args[i])
-		{
-			ft_printf("%s%c", commands->args[i],
-			(commands->args[i + 1]) ? ' ' : '\n');
-			i++;
-		}
-		commands = commands->next;
-	}
-	ft_printf("END OF DEBUG\n");
-}
+int					vec_add(t_vec *vector, void *buffer);
+int					vec_new(t_vec *vector, size_t type_size);
+int					vec_destroy(t_vec *vector, void (*del)(void *));
+int					vec_get(t_vec *vector, void *buffer, size_t index);
+
+#endif

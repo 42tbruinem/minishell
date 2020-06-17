@@ -6,18 +6,15 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/28 01:36:41 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/15 11:42:38 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/17 15:42:10 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MSH_TERM_H
 # define MSH_TERM_H
 
-/*
-** Enter commands to the terminal with termcaps. In terminal.c.
-*/
-
-void	termcmd(char *command, int p1, int p2, int lines_affected);
+# include <termios.h>
+# include <msh_keyevents.h>
 
 /*
 **	TERMINAL COMMANDS:
@@ -40,5 +37,14 @@ void	termcmd(char *command, int p1, int p2, int lines_affected);
 # define SCROLL_LINE "sf"
 # define SCROLL_LINES "SF"
 # define SCROLL_UP "sr"
+
+int						clear_screen(t_line *line, char buf[6]);
+int						clear_input(t_line *line, char buf[6]);
+void					init_readline(t_msh *prog);
+void					termcmd(char *command, int p1, int p2,
+								int lines_affected);
+int						add_char(t_line *line, char c);
+int						delete_word(t_line *line);
+int						delete_char(t_line *line);
 
 #endif

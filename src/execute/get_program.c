@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 22:22:24 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/11 21:18:34 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 15:55:17 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <stdio.h>
+#include <msh_lex.h>
+#include <msh_exec.h>
 
 char	*get_program(char **args, int *types)
 {

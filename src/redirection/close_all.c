@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/04 19:35:57 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/11 21:43:15 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 15:07:42 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
+#include <unistd.h>
 
 void	close_all(t_vec *fd_arr)
 {

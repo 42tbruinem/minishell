@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:59:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/16 14:54:44 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 14:41:43 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <termcap.h>
 #include <termios.h>
 #include <msh_term.h>
+#include <msh_keyevents.h>
 
 int		special_command(t_line *line, char buf[6])
 {

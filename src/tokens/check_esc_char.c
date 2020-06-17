@@ -6,12 +6,13 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/06 21:18:20 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/17 11:34:08 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/17 15:09:38 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <libft.h>
+#include <msh_lex.h>
 
 static int	esc_double_quotes(t_vecstr *line, t_lexer *lex, t_msh *prog)
 {

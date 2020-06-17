@@ -6,12 +6,13 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/05 23:24:42 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/16 14:36:58 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 15:08:40 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <libft.h>
+#include <msh_lex.h>
 
 static int	add_arg(t_msh *prog, char *arg, int argtype)
 {

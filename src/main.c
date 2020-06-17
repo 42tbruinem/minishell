@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/17 11:03:25 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/17 15:52:55 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,10 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <signal.h>
+#include <msh_lex.h>
+#include <msh_cmd.h>
+#include <msh_env.h>
+#include <msh_term.h>
 
 static void	refresh_prog(t_msh *prog)
 {

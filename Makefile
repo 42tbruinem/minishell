@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/04/12 11:11:07 by rlucas        #+#    #+#                  #
-#    Updated: 2020/06/17 12:02:50 by rlucas        ########   odam.nl          #
+#    Updated: 2020/06/17 15:57:06 by tbruinem      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -65,7 +65,6 @@ SRC =	main.c \
 		builtin/ft_env.c \
 		commands/get_commands.c \
 		commands/clear_commands.c \
-		commands/print_command.c \
 		commands/new_command.c \
 		commands/push_command.c \
 		commands/debug_commands.c \

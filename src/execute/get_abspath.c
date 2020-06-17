@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/11 21:33:20 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/17 11:54:52 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/17 15:55:15 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <stdio.h>
+#include <msh_env.h>
+#include <msh_exec.h>
 
 static int	is_abspath(char **abspath, char *entry, char *program)
 {

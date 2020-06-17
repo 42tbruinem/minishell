@@ -1,6 +1,8 @@
 {
 	"files.associations": {
 		"termcap.h": "c",
-		"term.h": "c"
+		"term.h": "c",
+		"msh_lex.h": "c",
+		"msh_env.h": "c"
 	}
 }

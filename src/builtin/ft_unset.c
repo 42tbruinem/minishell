@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 23:02:16 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/11 20:55:31 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 15:56:48 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
+#include <msh_builtin.h>
+#include <msh_env.h>
 
 void	ft_unset(t_msh *prog, int argc, char **argv)
 {

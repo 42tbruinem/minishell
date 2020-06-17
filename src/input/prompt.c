@@ -6,12 +6,13 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 16:42:01 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/16 15:09:54 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 15:53:32 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <minishell.h>
+#include <msh_env.h>
 
 /*
 ** Creates the prompt for minishell using the USER environment variable - or

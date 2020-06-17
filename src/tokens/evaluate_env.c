@@ -6,12 +6,14 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/26 13:10:59 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/17 12:03:18 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/17 15:59:52 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <libft.h>
+#include <msh_lex.h>
+#include <msh_env.h>
 
 static void		add_tilde_value(t_lexer *lex, t_vecstr *line,
 							size_t env_name_len, t_msh *prog)

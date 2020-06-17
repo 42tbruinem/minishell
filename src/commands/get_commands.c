@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 19:22:44 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/11 21:01:53 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 15:43:52 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #include <stdlib.h>
 #include "libft.h"
 #include <stdio.h>
+#include <msh_lex.h>
+#include <msh_cmd.h>
 
 int			get_commands(t_msh *prog, t_tok *tokens, size_t totaltokens)
 {

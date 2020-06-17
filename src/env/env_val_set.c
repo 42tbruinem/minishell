@@ -6,12 +6,13 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/17 23:13:43 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/11 20:49:45 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 15:59:16 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
+#include <msh_env.h>
 
 t_var	*env_val_set(const char *name, t_var *env, const char *val)
 {

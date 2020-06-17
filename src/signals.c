@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/04 17:31:19 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/17 12:50:44 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/17 13:16:35 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <minishell.h>
 #include <sys/types.h>
 #include <stdio.h>
+#include <errno.h>
 
 static void		kill_processes(int signal)
 {
@@ -25,8 +26,7 @@ static void		kill_processes(int signal)
 	while (i < g_pid.index)
 	{
 		vec_get(&g_pid, &process, i);
-		if (kill(process, signal) == -1)
-			(void)i; // Change
+		kill(process, signal);
 		i++;
 	}
 }

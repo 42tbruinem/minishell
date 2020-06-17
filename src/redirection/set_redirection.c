@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/04 19:35:57 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/15 12:52:57 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 15:57:46 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
+#include <msh_lex.h>
+#include <msh_io.h>
+#include <msh_cmd.h>
 
 static	int		is_redir(int type)
 {

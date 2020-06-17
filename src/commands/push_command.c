@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 19:22:44 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/11 21:02:33 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 15:43:33 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include "libft.h"
 #include <stdio.h>
+#include <msh_cmd.h>
 
 t_cmd	*push_command(t_cmd **commands, t_cmd *new)
 {
