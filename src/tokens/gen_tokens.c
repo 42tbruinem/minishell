@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/26 13:10:59 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/17 19:02:23 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/18 01:09:12 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ static int	lexer(t_tok **tokens, t_vecstr *line, t_lexer *lex, t_msh *prog)
 		evaluate_env(lex, line, prog);
 	if (lex->state == WHITESPACE)
 		vecstr_set(line, lex->i, '\0');
+	lex->escape = 0;
 	return (1);
 }
 
@@ -73,7 +74,6 @@ int			gen_tokens(t_tok **tokens, t_vecstr *line, t_msh *prog)
 	{
 		if (!lexer(tokens, line, &lex, prog))
 			return (0);
-		lex.escape = 0;
 		lex.i++;
 	}
 	(*tokens)[lex.tokeni].value = NULL;

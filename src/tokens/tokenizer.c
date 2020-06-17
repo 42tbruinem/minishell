@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/05 23:24:42 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/17 22:43:24 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/18 01:29:58 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,14 @@ static size_t	sum_tokens(t_vecstr *line)
 	while (vecstr_val(line, lex.i))
 	{
 		check_esc_char(line, &lex, 0);
+		if (lex.escape == 1)
+		{
+			if (lex.i + 1 >= vecstr_len(line) && lex.state == WHITESPACE)
+				return (sum + 1);
+			if (lex.i + 1 >= vecstr_len(line))
+				return (sum);
+			lex.i++;
+		}
 		update_lexer(vecstr_get(line), &lex);
 		if (lex.state >= SEMICOLON && lex.state <= PIPE_PIPE)
 			lex.state = WHITESPACE;
