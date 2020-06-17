@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 11:54:12 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/16 14:46:27 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 11:11:43 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,11 @@
 ** Functions to free up everything before exiting the program.
 */
 
-void		error_exit(t_msh *prog, int err, int stage)
+void		error_exit(t_msh *prog, int err)
 {
+	env_clear(prog->env, &free);
 	ft_printf_fd(2, "Error %d - ", err);
 	ft_printf_fd(2, error_lookup(err));
-	if (stage == IN_ENV || stage == IN_TERM)
-		env_clear(prog->env, &free);
 	exit(err);
 }
 

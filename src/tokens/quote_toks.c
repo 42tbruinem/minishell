@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/26 13:10:59 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/16 16:48:03 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 11:36:02 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,13 @@
 void		quote_toks(t_tok **tokens, t_lexer *lex, t_vecstr *line,
 		t_msh *prog)
 {
-	vecstr_slice(line, lex->i, lex->i + 1);
+	if (vecstr_slice(line, lex->i, lex->i + 1))
+		error_exit(prog, MEM_FAIL);
 	if (lex->prevstate == WHITESPACE)
 		create_token((*tokens) + lex->tokeni, lex);
 	while (vecstr_val(line, lex->i))
 	{
-		if (check_esc_char(line, lex, 1))
+		if (check_esc_char(line, lex, 1, prog))
 			continue ;
 		if (!lex->escape && vecstr_val(line, lex->i) == '$' &&
 				lex->state != INSINGLEQUOTE)
@@ -37,6 +38,7 @@ void		quote_toks(t_tok **tokens, t_lexer *lex, t_vecstr *line,
 		lex->escape = 0;
 		lex->i++;
 	}
-	vecstr_slice(line, lex->i, lex->i + 1);
+	if (vecstr_slice(line, lex->i, lex->i + 1))
+		error_exit(prog, MEM_FAIL);
 	lex->i--;
 }

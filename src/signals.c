@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/04 17:31:19 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/16 19:35:46 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 12:50:44 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,24 @@
 #include <sys/types.h>
 #include <stdio.h>
 
-void	sighandler(int signal)
+static void		kill_processes(int signal)
 {
 	size_t		i;
 	pid_t		process;
+
+	i = 0;
+	while (i < g_pid.index)
+	{
+		vec_get(&g_pid, &process, i);
+		if (kill(process, signal) == -1)
+			(void)i; // Change
+		i++;
+	}
+}
+
+void			sighandler(int signal)
+{
+	size_t		i;
 
 	i = 0;
 	if (g_pid.index == 0)
@@ -35,13 +49,6 @@ void	sighandler(int signal)
 		}
 		ft_printf("%s", g_prompt);
 		g_siggy += 1;
-		i = 0;
 	}
-	while (i < g_pid.index)
-	{
-		vec_get(&g_pid, &process, i);
-		if (kill(process, signal) == -1)
-			(void)i;
-		i++;
-	}
+	kill_processes(signal);
 }

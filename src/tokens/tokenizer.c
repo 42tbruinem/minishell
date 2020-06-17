@@ -6,14 +6,14 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/05 23:24:42 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/16 17:44:59 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 11:44:49 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <libft.h>
 
-static size_t	sum_tokens(t_vecstr *line)
+static size_t	sum_tokens(t_vecstr *line, t_msh *prog)
 {
 	t_lexer		lex;
 	size_t		sum;
@@ -22,7 +22,7 @@ static size_t	sum_tokens(t_vecstr *line)
 	sum = 0;
 	while (vecstr_val(line, lex.i))
 	{
-		if (check_esc_char(line, &lex, 0))
+		if (check_esc_char(line, &lex, 0, prog))
 			continue ;
 		update_lexer(vecstr_get(line), &lex);
 		if (lex.state >= SEMICOLON && lex.state <= PIPE_PIPE)
@@ -52,7 +52,7 @@ int				tokenizer(t_msh *prog, t_vecstr *line)
 	t_tok		*tokens;
 	size_t		totaltokens;
 
-	totaltokens = sum_tokens(line);
+	totaltokens = sum_tokens(line, prog);
 	tokens = (t_tok *)malloc(sizeof(t_tok) * (totaltokens + 1));
 	if (!tokens)
 		return (0);

@@ -6,26 +6,11 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/11/24 17:21:27 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/05/30 12:51:18 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/17 11:57:58 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
-
-/* static void	*ft_realloc(char *existing, int newsize) */
-/* { */
-/* 	char		*new; */
-/*  */
-/* 	new = (char *)malloc(newsize); */
-/* 	if (!new) */
-/* 	{ */
-/* 		free(existing); */
-/* 		return (NULL); */
-/* 	} */
-/* 	ft_strlcpy(new, existing, newsize); */
-/* 	free(existing); */
-/* 	return (new); */
-/* } */
 
 static char	*line_from_buf(char **line, char *buf, char **store)
 {

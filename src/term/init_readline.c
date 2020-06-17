@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:17:50 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/16 14:43:56 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 11:03:43 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,12 @@ void		init_readline(t_msh *prog)
 {
 	prog->line = (t_line){0};
 	if (init_term(&prog->line.term) || init_caps(&prog->line) == -1)
-		error_exit(prog, CAP_FAIL, IN_TERM);
+		error_exit(prog, CAP_FAIL);
 	prog->line.prompt = prompt(prog, &prog->line);
 	if (!prog->line.prompt)
-		error_exit(prog, MEM_FAIL, IN_TERM);
+		error_exit(prog, MEM_FAIL);
 	if (vecstr_init(&prog->line.cmd))
-		error_exit(prog, CAP_FAIL, IN_TERM);
+		error_exit(prog, CAP_FAIL);
 	prog->line.max.col = tgetnum("co");
 	prog->line.max.row = tgetnum("li");
 }

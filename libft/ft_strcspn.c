@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/15 14:43:34 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/04/15 14:43:46 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/17 11:58:31 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,3 @@ size_t	ft_strcspn(const char *s, const char *reject)
 	}
 	return (i);
 }
-

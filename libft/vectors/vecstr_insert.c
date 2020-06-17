@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/01 20:59:07 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/13 12:44:30 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/17 11:57:40 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,3 @@ int		vecstr_insert_str(t_vecstr *v, size_t index, const char *str2)
 	v->len += ft_strlen(str2);
 	return (0);
 }
-

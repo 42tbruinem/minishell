@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/16 19:34:40 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 12:02:25 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,6 +264,8 @@ typedef void		(*t_escapef)(t_lexer *lex, char *last);
 void				quote_toks(t_tok **tokens, t_lexer *lex, t_vecstr *line,
 					t_msh *prog);
 void				env_exitstatus(t_lexer *lex, t_vecstr *line, t_msh *prog);
+void				env_current_process(t_lexer *lex, t_vecstr *line,
+		t_msh *prog);
 void				evaluate_env(t_lexer *lex, t_vecstr *line, t_msh *prog);
 int					parse_error(char c);
 size_t				env_strclen(char *line, const char *chars);
@@ -291,7 +293,7 @@ int					get_commands(t_msh *prog, t_tok *tokens,
 								size_t totaltokens);
 void				print_command(t_cmd *command);
 
-void				error_exit(t_msh *prog, int err, int stage);
+void				error_exit(t_msh *prog, int err);
 void				std_exit(t_msh *prog, int n);
 
 int					vec_add(t_vec *vector, void *buffer);
@@ -356,7 +358,8 @@ int					lex_checkstate(int c, t_lexer lex);
 ** Lexing utilities.
 */
 
-int					check_esc_char(t_vecstr *line, t_lexer *lex, int gen_true);
+int					check_esc_char(t_vecstr *line, t_lexer *lex, int gen_true,
+		t_msh *prog);
 void				init_lexer(t_lexer *lex);
 void				update_lexer(char *line, t_lexer *lex);
 void				create_token(t_tok *token, t_lexer *lex);

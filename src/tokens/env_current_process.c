@@ -1,35 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_realloc.c                                       :+:    :+:            */
+/*   env_current_process.c                              :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/05/29 18:41:57 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/17 11:58:47 by rlucas        ########   odam.nl         */
+/*   Created: 2020/06/17 12:01:12 by rlucas        #+#    #+#                 */
+/*   Updated: 2020/06/17 12:03:29 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
+#include <minishell.h>
 
-/*
-** ft_realloc() creates a new allocated region of memory, copies the
-** contents from the previous memory, then frees the previous memory.
-*/
-
-void	*ft_realloc(void *ptr, size_t oldsize, size_t newsize)
+void		env_current_process(t_lexer *lex, t_vecstr *line, t_msh *prog)
 {
-	char	*new;
+	pid_t		current;
+	char		*pid_string;
 
-	new = (char *)ft_calloc(1, newsize);
-	if (!new)
-	{
-		free(ptr);
-		return (NULL);
-	}
-	if (!ptr)
-		return (new);
-	ft_memcpy(new, ptr, oldsize);
-	free(ptr);
-	return (new);
+	current = getpid();
+	pid_string = ft_itoa((int)current);
+	if (!pid_string)
+		error_exit(prog, MEM_FAIL);
+	if (vecstr_slice(line, lex->i, lex->i + 2))
+		error_exit(prog, MEM_FAIL);
+	if (vecstr_insert_str(line, lex->i, pid_string))
+		error_exit(prog, MEM_FAIL);
+	free(pid_string);
 }

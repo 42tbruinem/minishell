@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/11 21:33:20 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/16 17:29:19 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 11:54:52 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,6 @@ void		get_abspath(char *program, char **abspath_to_exe, t_var *env)
 		i++;
 	}
 	ft_str2clear(entries);
+	if (*abspath_to_exe == NULL)
+		ft_printf_fd(STDERR, "%s: command not found\n", program);
 }

@@ -6,16 +6,16 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/28 15:16:43 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/13 12:44:43 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/17 11:57:04 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 
-#include <stdlib.h>
-#include <unistd.h>
-#include <libft_types.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <libft_types.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 32

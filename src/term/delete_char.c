@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:37:30 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/16 14:32:26 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 12:14:53 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,13 @@ static void	visual_delete(t_line *line)
 
 int			delete_char(t_line *line)
 {
+	size_t		index;
+
+	index = line->inputrow * line->max.col + line->cursor.col - line->promptlen;
 	if (line->inputrow == 0 && line->cursor.col == (int)line->promptlen)
 		return (0);
-	if (vecstr_slice(&line->cmd, vecstr_len(&line->cmd) - 1,
-				vecstr_len(&line->cmd)))
+	if (vecstr_slice(&line->cmd, index - 1,
+				index))
 		return (-1);
 	line->total_rows = (vecstr_len(&line->cmd) + line->promptlen) /
 		line->max.col;
