@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/17 14:48:07 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/17 16:36:56 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 17:59:03 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,5 +84,6 @@ void				init_lexer(t_lexer *lex);
 void				update_lexer(char *line, t_lexer *lex);
 void				create_token(t_tok *token, t_lexer *lex);
 void				concatenate_input(char *line);
+int					get_endstate(t_vecstr *line);
 
 #endif

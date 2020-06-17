@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 22:22:24 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/17 16:22:43 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 16:52:30 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ static void	run(t_msh *prog, t_cmd *cmd, char *abspath)
 		dup2(cmd->iostream[WRITE], STDOUT) == -1)
 		exit(1);
 	if (abspath && execve(abspath, cmd->args, prog->envp) == -1)
-		exit(1);
-	if (!abspath && execve(cmd->args[0], cmd->args, prog->envp) == -1)
 		exit(1);
 	close_iostream(cmd->iostream);
 	exit(0);
