@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 16:42:01 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/16 15:09:54 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 13:27:06 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ char		*prompt(t_msh *prog, t_line *line)
 	else
 	{
 		prompt = ft_strdup(":~$ ");
+		if (!prompt)
+			return (NULL);
 		g_prompt = prompt;
 		return (prompt);
 	}

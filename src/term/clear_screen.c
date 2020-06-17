@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:59:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/16 14:56:26 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 14:54:16 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,18 @@ int		clear_screen(t_line *line, char buf[6])
 	(void)buf;
 	termcmd(CLEAR_SCREEN, 0, 0, 1);
 	termcmd(MOVE_COLROW, 0, 0, 1);
-	ft_printf("%s%s", line->prompt, vecstr_get(&line->cmd));
+	if (line->multiline_len > 0)
+	{
+		ft_printf("%s%s", line->multiline_prompt, vecstr_get(&line->cmd) +
+				line->multiline_len);
+		line->promptlen = ft_strlen(line->multiline_prompt);
+	}
+	else
+	{
+		ft_printf("%s%s", line->prompt, vecstr_get(&line->cmd));
+		line->promptlen = ft_no_ansi_strlen(line->prompt);
+	}
 	line->cursor.row = line->inputrow;
-	line->promptlen = ft_no_ansi_strlen(line->prompt);
 	line->cursor.col = (index + line->promptlen) % (line->max.col);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/16 12:57:46 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/16 17:30:31 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 13:09:32 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ int			initialize_line_editor(t_line *line)
 	line->promptlen = line->cursor.col;
 	line->total_rows = 0;
 	line->inputrow = 0;
+	line->multiline_len = 0;
 	line->escmode = 0;
 	g_current_line = line->inputrow;
 	g_total_lines = line->total_rows;

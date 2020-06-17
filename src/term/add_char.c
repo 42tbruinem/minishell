@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:34:51 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/16 13:13:52 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 14:50:13 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,14 @@ static void	scroll_lines(t_line *line)
 
 int			add_char(t_line *line, char c)
 {
-	if (c == '\n')
-		c = ' ';
+	size_t		index;
+
 	line->total_rows = (vecstr_len(&line->cmd) + line->promptlen)
 		/ line->max.col;
 	scroll_lines(line);
-	if (vecstr_insert_c(&line->cmd, line->inputrow * line->max.col
-				+ line->cursor.col - line->promptlen, c))
+	index = line->inputrow * line->max.col + line->cursor.col - line->promptlen
+		+ line->multiline_len;
+	if (vecstr_insert_c(&line->cmd, index, c))
 		return (-1);
 	termcmd(INSERT_START, 0, 0, 1);
 	ft_printf("%c", c);

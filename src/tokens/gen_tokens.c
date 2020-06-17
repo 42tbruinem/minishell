@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/26 13:10:59 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/17 11:35:53 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/17 15:59:06 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ static int	state_action(char *line, t_lexer *lex)
 
 static int	lexer(t_tok **tokens, t_vecstr *line, t_lexer *lex, t_msh *prog)
 {
-	if (check_esc_char(line, lex, 1, prog))
-		return (1);
+	if (check_esc_char(line, lex, 1))
+		return (0);
 	update_lexer(vecstr_get(line), lex);
 	if (!lex->escape && lex->state >= INDOUBLEQUOTE &&
 			lex->state <= INSINGLEQUOTE)

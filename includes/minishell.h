@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/17 12:02:25 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/17 15:57:39 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,8 @@ typedef struct		s_line
 {
 	char			*prompt;
 	size_t			promptlen;
+	char			*multiline_prompt;
+	size_t			multiline_len;
 	t_vecstr		cmd;
 	size_t			inputrow;
 	t_coord			max;
@@ -338,6 +340,7 @@ int					gen_tokens(t_tok **tokens, t_vecstr *line, t_msh *prog);
 int					handle_input(t_line *line, char buf[6]);
 int					initialize_line_editor(t_line *line);
 void				refresh_cursor(t_line *line);
+int					get_endstate(t_vecstr *line);
 int					read_input(t_msh *prog);
 int					send_eof(t_line *line, char buf[6]);
 int					clear_screen(t_line *line, char buf[6]);
@@ -358,8 +361,7 @@ int					lex_checkstate(int c, t_lexer lex);
 ** Lexing utilities.
 */
 
-int					check_esc_char(t_vecstr *line, t_lexer *lex, int gen_true,
-		t_msh *prog);
+int					check_esc_char(t_vecstr *line, t_lexer *lex, int gen_true);
 void				init_lexer(t_lexer *lex);
 void				update_lexer(char *line, t_lexer *lex);
 void				create_token(t_tok *token, t_lexer *lex);
