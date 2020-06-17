@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/17 17:58:44 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/17 18:43:42 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,7 @@ void					sighandler(int signal);
 ** Troubleshooting
 */
 
+void					debug_commands(t_cmd *commands);
 void					print_state(int c, t_lexer lex);
 void					print_tokens(t_tok *tokens);
 
