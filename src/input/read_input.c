@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/17 17:59:26 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/17 18:21:34 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static int	signal_received(t_line *line, t_msh *prog)
 	if (line->cursor.row >= line->max.row)
 		line->cursor.row = line->max.row - 1;
 	line->cursor.col = line->promptlen;
+	line->promptlen = ft_no_ansi_strlen(line->prompt);
 	refresh_cursor(line);
 	g_siggy = 0;
 	return (1);
