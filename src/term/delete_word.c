@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/16 14:15:21 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/16 14:39:52 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 15:31:01 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@ static size_t	get_start_of_word(size_t cursor, t_line *line)
 			start_of_word++;
 			break ;
 		}
-		if (vecstr_val(&line->cmd, cursor - start_of_word) != ' ' &&
+		if (!ft_is_whitespace(vecstr_val(&line->cmd, cursor - start_of_word)) &&
 			charfound == 0)
 			charfound = 1;
-		if (vecstr_val(&line->cmd, cursor - start_of_word) == ' ' &&
+		if (ft_is_whitespace(vecstr_val(&line->cmd, cursor - start_of_word)) &&
 			charfound == 1)
 			break ;
 		start_of_word++;
@@ -47,7 +47,7 @@ int				delete_word(t_line *line)
 	if (line->inputrow == 0 && line->cursor.col == (int)line->promptlen)
 		return (0);
 	cursor = line->inputrow * line->max.col +
-			line->cursor.col - line->promptlen;
+			line->cursor.col - line->promptlen + line->multiline_len;
 	start_of_word = get_start_of_word(cursor, line);
 	while (start_of_word > 1)
 	{

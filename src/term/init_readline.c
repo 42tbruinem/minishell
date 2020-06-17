@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:17:50 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/17 11:03:43 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/17 13:33:22 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,9 @@ void		init_readline(t_msh *prog)
 		error_exit(prog, CAP_FAIL);
 	prog->line.prompt = prompt(prog, &prog->line);
 	if (!prog->line.prompt)
+		error_exit(prog, MEM_FAIL);
+	prog->line.multiline_prompt = ft_strdup("> ");
+	if (!prog->line.multiline_prompt)
 		error_exit(prog, MEM_FAIL);
 	if (vecstr_init(&prog->line.cmd))
 		error_exit(prog, CAP_FAIL);

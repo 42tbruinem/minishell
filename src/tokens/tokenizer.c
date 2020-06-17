@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/05 23:24:42 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/17 15:59:35 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 16:34:32 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <msh_lex.h>
 #include <msh_cmd.h>
 
-static size_t	sum_tokens(t_vecstr *line, t_msh *prog)
+static size_t	sum_tokens(t_vecstr *line)
 {
 	t_lexer		lex;
 	size_t		sum;
@@ -24,8 +24,7 @@ static size_t	sum_tokens(t_vecstr *line, t_msh *prog)
 	sum = 0;
 	while (vecstr_val(line, lex.i))
 	{
-		if (check_esc_char(line, &lex, 0, prog))
-			continue ;
+		check_esc_char(line, &lex, 0);
 		update_lexer(vecstr_get(line), &lex);
 		if (lex.state >= SEMICOLON && lex.state <= PIPE_PIPE)
 			lex.state = WHITESPACE;
@@ -54,7 +53,7 @@ int				tokenizer(t_msh *prog, t_vecstr *line)
 	t_tok		*tokens;
 	size_t		totaltokens;
 
-	totaltokens = sum_tokens(line, prog);
+	totaltokens = sum_tokens(line);
 	tokens = (t_tok *)malloc(sizeof(t_tok) * (totaltokens + 1));
 	if (!tokens)
 		return (0);

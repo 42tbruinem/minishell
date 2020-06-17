@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/17 11:03:06 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/17 16:21:15 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,46 @@ static int	finished(t_msh *prog, t_line *line, char *buf)
 	return (0);
 }
 
+int				get_endstate(t_vecstr *line)
+{
+	t_lexer		lex;
+
+	init_lexer(&lex);
+	while (vecstr_val(line, lex.i))
+	{
+		if (check_esc_char(line, &lex, 0))
+			return (-1);
+		update_lexer(vecstr_get(line), &lex);
+		lex.escape = 0;
+		lex.i++;
+	}
+	return (lex.state);
+}
+
+static int		check_multiline(t_msh *prog, t_line *line)
+{
+	int			endstate;
+
+	endstate = get_endstate(&line->cmd);
+	if (endstate == INDOUBLEQUOTE || endstate == INSINGLEQUOTE)
+	{
+		if (add_char(line, '\n') == -1)
+			error_exit(prog, MEM_FAIL);
+		line->multiline_len = vecstr_len(&line->cmd);
+		line->total_rows = 0;
+		line->inputrow = 0;
+		line->promptlen = ft_strlen(line->multiline_prompt);
+		line->cursor.row += 1;
+		if (line->cursor.row >= line->max.row)
+			line->cursor.row -= 1;
+		line->cursor.col = line->promptlen;
+		ft_printf("%s", line->multiline_prompt);
+		refresh_cursor(line);
+		return (0);
+	}
+	return (1);
+}
+
 int			read_input(t_msh *prog)
 {
 	t_line		*line;
@@ -66,7 +106,8 @@ int			read_input(t_msh *prog)
 			if (!signal_received(line))
 				return (-1);
 		if (finished(prog, line, buf))
-			break ;
+			if (check_multiline(prog, line))
+				break ;
 	}
 	line->cursor.row = line->cursor.row + line->total_rows + 1;
 	line->cursor.col = 0;
