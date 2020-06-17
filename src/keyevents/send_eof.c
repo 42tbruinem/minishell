@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:59:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/17 16:20:15 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/17 16:39:30 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <termcap.h>
 #include <termios.h>
 #include <msh_term.h>
+#include <msh_lex.h>
 
 int		send_eof(t_line *line, char buf[6])
 {

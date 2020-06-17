@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/26 13:10:59 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/17 15:09:16 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 16:39:55 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void		quote_toks(t_tok **tokens, t_lexer *lex, t_vecstr *line,
 		create_token((*tokens) + lex->tokeni, lex);
 	while (vecstr_val(line, lex->i))
 	{
-		if (check_esc_char(line, lex, 1, prog))
+		if (check_esc_char(line, lex, 1))
 			continue ;
 		if (!lex->escape && vecstr_val(line, lex->i) == '$' &&
 				lex->state != INSINGLEQUOTE)

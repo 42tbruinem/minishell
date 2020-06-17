@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/17 16:21:15 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/17 16:40:52 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <termcap.h>
 #include <termios.h>
 #include "msh_term.h"
+#include <msh_lex.h>
 #include <errno.h>
 
 static int	signal_received(t_line *line)
@@ -48,7 +49,7 @@ static int	finished(t_msh *prog, t_line *line, char *buf)
 	return (0);
 }
 
-int				get_endstate(t_vecstr *line)
+int			get_endstate(t_vecstr *line)
 {
 	t_lexer		lex;
 
@@ -64,7 +65,7 @@ int				get_endstate(t_vecstr *line)
 	return (lex.state);
 }
 
-static int		check_multiline(t_msh *prog, t_line *line)
+static int	check_multiline(t_msh *prog, t_line *line)
 {
 	int			endstate;
 
