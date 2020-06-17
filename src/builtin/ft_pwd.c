@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 23:02:16 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/17 15:03:53 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 17:59:08 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ void	ft_pwd(t_msh *prog, int argc, char **argv)
 	(void)prog;
 	size = 20;
 	path = malloc(sizeof(char) * (size + 1));
+	if (!path)
+		exit(1);
 	res = getcwd(path, size + 1);
 	while (!res && errno == ERANGE)
 	{
@@ -38,7 +40,7 @@ void	ft_pwd(t_msh *prog, int argc, char **argv)
 		free(path);
 		path = malloc(sizeof(char) * (size + 1));
 		if (!path)
-			return ;
+			exit(1);
 		res = getcwd(path, size + 1);
 	}
 	if (res)

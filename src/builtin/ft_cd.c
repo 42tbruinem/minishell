@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 23:02:16 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/17 15:55:59 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 17:58:27 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ static	char	*get_cwd(void)
 
 	size = 20;
 	path = malloc(sizeof(char) * (size + 1));
+	if (!path)
+		exit(1);
 	res = getcwd(path, size + 1);
 	while (!res && errno == ERANGE)
 	{
@@ -36,7 +38,7 @@ static	char	*get_cwd(void)
 		free(path);
 		path = malloc(sizeof(char) * (size + 1));
 		if (!path)
-			return (NULL);
+			exit(1);
 		res = getcwd(path, size + 1);
 	}
 	return (path);

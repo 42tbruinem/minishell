@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/04/12 11:11:07 by rlucas        #+#    #+#                  #
-#    Updated: 2020/06/17 15:57:06 by tbruinem      ########   odam.nl          #
+#    Updated: 2020/06/17 17:11:48 by tbruinem      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -120,7 +120,7 @@ all: lft $(NAME)
 
 $(NAME): $(OBJ)
 	@echo "Compiling shell..."
-	gcc $(FLAGS) $(OBJ) -o $(NAME) $(INCLUDES) -L $(LIBDIR)/ -lft -ltermcap
+	@gcc $(FLAGS) $(OBJ) -o $(NAME) $(INCLUDES) -L $(LIBDIR)/ -lft -ltermcap
 
 lft:
 	@$(MAKE) -sC $(LIBDIR)/
@@ -129,7 +129,7 @@ obj/%.o: src/%.c
 	@mkdir -p $(@D)
 	@echo "Compiling $@"
 	@gcc -c $(INCLUDES) $(FLAGS) $< -o $@
-
+ 
 clean:
 	@echo "Removing objects of libraries..."
 	@$(MAKE) -sC $(LIBDIR)/ clean -j
