@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 22:22:24 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/17 16:30:47 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 20:03:39 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,16 +44,14 @@ static void			nofork(t_msh *prog, t_cmd *cmd, int id)
 	std[1] = dup(STDOUT);
 	if (std[0] == -1 || std[1] == -1)
 		exit(1);
-	if (cmd->iostream[0] != -1)
-		if (dup2(STDIN, cmd->iostream[0]) == -1)
-			exit(1);
-	if (cmd->iostream[1] != -1)
-		if (dup2(STDOUT, cmd->iostream[1] == -1))
-			exit(1);
-	get_builtin(id)(prog, ft_str2len(cmd->args), cmd->args);
-	if (dup2(STDIN, std[0]) == -1)
+	if (cmd->iostream[0] != -1 && dup2(cmd->iostream[0], STDIN) == -1)
 		exit(1);
-	if (dup2(STDOUT, std[1]) == -1)
+	if (cmd->iostream[1] != -1 && dup2(cmd->iostream[1], STDOUT) == -1)
+		exit(1);
+	get_builtin(id)(prog, ft_str2len(cmd->args), cmd->args);
+	if (dup2(std[0], STDIN) == -1)
+		exit(1);
+	if (dup2(std[1], STDOUT) == -1)
 		exit(1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/11 21:50:53 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/17 16:23:02 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 18:47:30 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ int				run_commands(t_msh *prog, t_cmd *commands)
 		commands = commands->next;
 		free(del);
 	}
-	vec_destroy(&prog->args, NULL);
-	vec_destroy(&prog->argtypes, NULL);
 	close_all(&prog->file_arr);
 	vec_destroy(&prog->file_arr, NULL);
 	collect_souls(prog);

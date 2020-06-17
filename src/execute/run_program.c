@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 22:22:24 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/17 16:52:30 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/17 20:09:54 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 #include <stdio.h>
 #include <msh_exec.h>
 #include <msh_io.h>
+
+#include <stdio.h>
 
 static void	run(t_msh *prog, t_cmd *cmd, char *abspath)
 {

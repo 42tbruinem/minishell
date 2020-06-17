@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/04/12 11:11:07 by rlucas        #+#    #+#                  #
-#    Updated: 2020/06/17 17:11:48 by tbruinem      ########   odam.nl          #
+#    Updated: 2020/06/17 18:44:10 by tbruinem      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,7 +67,6 @@ SRC =	main.c \
 		commands/clear_commands.c \
 		commands/new_command.c \
 		commands/push_command.c \
-		commands/debug_commands.c \
 		commands/run_commands.c \
 		redirection/set_redirection.c \
 		redirection/close_ifnot.c \
@@ -106,6 +105,7 @@ SRC =	main.c \
 		tokens/update_lexer.c \
 		tokens/init_lexer.c \
 		debug/print_state.c \
+		debug/debug_commands.c \
 		debug/print_tokens.c
 
 OBJ := $(addprefix $(OBJDIR)/, $(SRC:%.c=%.o))
