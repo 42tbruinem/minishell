@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/04/12 11:11:07 by rlucas        #+#    #+#                  #
-#    Updated: 2020/06/17 18:44:10 by tbruinem      ########   odam.nl          #
+#    Updated: 2020/06/17 20:12:25 by tbruinem      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -129,7 +129,7 @@ obj/%.o: src/%.c
 	@mkdir -p $(@D)
 	@echo "Compiling $@"
 	@gcc -c $(INCLUDES) $(FLAGS) $< -o $@
- 
+
 clean:
 	@echo "Removing objects of libraries..."
 	@$(MAKE) -sC $(LIBDIR)/ clean -j
