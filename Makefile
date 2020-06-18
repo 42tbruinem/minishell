@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/04/12 11:11:07 by rlucas        #+#    #+#                  #
-#    Updated: 2020/06/18 13:52:16 by tbruinem      ########   odam.nl          #
+#    Updated: 2020/06/18 15:33:13 by tbruinem      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,6 +56,7 @@ SRC =	main.c \
 		execute/get_abspath.c \
 		execute/run_builtin.c \
 		execute/run_program.c \
+		builtin/builtin_error.c \
 		builtin/ft_cd.c \
 		builtin/ft_export.c \
 		builtin/ft_unset.c \

@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/11 21:33:20 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/18 12:22:45 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/18 14:56:28 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void		get_abspath(char *program, char **abspath_to_exe, t_var *env)
 	i = 0;
 	if (check_if_path(program, abspath_to_exe))
 		return ;
-	path = env_val_get("PATH", env);
+	path = env_val_get("PATH", env, 4);
 	if (!path)
 		exit(1);
 	entries = ft_split(path, ':');

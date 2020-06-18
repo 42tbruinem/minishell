@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/16 18:20:45 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/17 15:08:52 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/17 23:09:40 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ void	env_exitstatus(t_lexer *lex, t_vecstr *line, t_msh *prog)
 		error_exit(prog, MEM_FAIL);
 	if (vecstr_insert_str(line, lex->i, number))
 		error_exit(prog, MEM_FAIL);
-	free(number);
 	lex->i += ft_strlen(number) - 1;
+	free(number);
 	if (lex->state != INDOUBLEQUOTE)
-		lex->state = lex_checkstate(vecstr_val(line, lex->i), *lex);
+		lex->state = NORMAL;
 }

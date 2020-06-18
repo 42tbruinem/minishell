@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/30 11:20:13 by rlucas        #+#    #+#                 */
-/*   Updated: 2019/10/30 11:27:15 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/17 18:04:52 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,6 @@ char		*ft_strdup(const char *s1)
 		*(newptr + i) = s1[i];
 		i++;
 	}
-	*(newptr + i) = '\0';
+	newptr[len] = '\0';
 	return (newptr);
 }

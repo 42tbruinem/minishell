@@ -1,29 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   env_val_get.c                                      :+:    :+:            */
+/*   builtin_error.c                                    :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/04/17 23:13:43 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/17 18:57:45 by rlucas        ########   odam.nl         */
+/*   Created: 2020/06/18 15:14:03 by tbruinem      #+#    #+#                 */
+/*   Updated: 2020/06/18 15:38:41 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "libft.h"
-#include <msh_env.h>
+#include <minishell.h>
+#include <msh_builtin.h>
+#include <errno.h>
+#include <libft.h>
+#include <string.h>
 
-char	*env_val_get(const char *name, t_var *env, size_t len)
+void			builtin_error(char **argv)
 {
-	while (env)
-	{
-		if (ft_strncmp(env->name, name, len) == 0)
-		{
-			if (ft_strlen(env->name) == len)
-				return (env->val);
-		}
-		env = env->next;
-	}
-	return (NULL);
+	int	i;
+
+	i = 0;
+	ft_printf_fd(2, "%s: ", argv[i]);
+	ft_printf_fd(2, "%s: ", strerror(errno));
+	ft_str2print(&argv[i + 1]);
 }

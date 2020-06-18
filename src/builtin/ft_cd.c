@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 23:02:16 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/18 13:51:05 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/18 15:32:48 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void		cd_home(t_msh *prog)
 {
 	char	*home;
 
-	home = env_val_get("HOME", prog->env);
+	home = env_val_get("HOME", prog->env, 4);
 	if (!home)
 	{
 		ft_printf_fd(2, "msh: cd: HOME not set\n");
@@ -33,11 +33,10 @@ static void		cd_home(t_msh *prog)
 	}
 	if (chdir(home) == -1)
 	{
-		free(home);
-		ft_printf_fd(2, "msh: %s\n", strerror(errno));
+		ft_printf_fd(2, "msh: %s %s\n", home, strerror(errno));
 		return ;
 	}
-	env_val_set("OLDPWD", &prog->env, env_val_get("PWD", prog->env));
+	env_val_set("OLDPWD", &prog->env, env_val_get("PWD", prog->env, 3));
 	env_val_set("PWD", &prog->env, home);
 	env_update(prog);
 }
@@ -55,10 +54,9 @@ void			ft_cd(t_msh *prog, int argc, char **argv)
 	if (chdir(path) == -1)
 	{
 		free(path);
-		ft_printf_fd(2, "msh: %s\n", strerror(errno));
-		return ;
+		return (builtin_error(argv));
 	}
-	env_val_set("OLDPWD", &prog->env, env_val_get("PWD", prog->env));
+	env_val_set("OLDPWD", &prog->env, env_val_get("PWD", prog->env, 3));
 	newpwd = get_cwd();
 	env_val_set("PWD", &prog->env, newpwd);
 	env_update(prog);
