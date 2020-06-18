@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/17 23:13:43 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/17 15:58:57 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/18 13:37:00 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,19 +77,32 @@ int				modify_shlvl(t_var *env)
 		}
 		current = current->next;
 	}
+	if (current)
+		current->next = env_new("SHLVL", "1");
 	return (0);
+}
+
+static int		env_init_head(t_msh *prog, char **environ)
+{
+	prog->env = NULL;
+	if (!environ || !environ[0])
+		return (1);
+	prog->env = var_init(environ[0]);
+	if (!prog->env)
+		return (env_clear(prog->env, &free));
+	return (-1);
 }
 
 int				env_init(t_msh *prog)
 {
 	extern char	**environ;
 	t_var		*env;
-	size_t		i;
+	int			i;
 
-	i = 0;
-	prog->env = var_init(environ[i]);
-	if (!prog->env)
-		return (env_clear(prog->env, &free));
+	i = env_init_head(prog, environ);
+	if (i != -1)
+		return (i);
+	i = 1;
 	env = prog->env;
 	while (environ[i])
 	{

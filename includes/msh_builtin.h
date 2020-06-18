@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/17 14:20:00 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/17 14:22:00 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/18 13:52:04 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ enum					e_builtins
 
 typedef void			(*t_builtin)(t_msh *prog, int argc, char **argv);
 
+char					*get_cwd(void);
 void					ft_cd(t_msh *prog, int argc, char **argv);
 void					ft_pwd(t_msh *prog, int argc, char **argv);
 void					ft_env(t_msh *prog, int argc, char **argv);

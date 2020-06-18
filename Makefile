@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/04/12 11:11:07 by rlucas        #+#    #+#                  #
-#    Updated: 2020/06/17 20:12:25 by tbruinem      ########   odam.nl          #
+#    Updated: 2020/06/18 13:52:16 by tbruinem      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,6 +63,7 @@ SRC =	main.c \
 		builtin/ft_echo.c \
 		builtin/ft_exit.c \
 		builtin/ft_env.c \
+		builtin/get_cwd.c \
 		commands/get_commands.c \
 		commands/clear_commands.c \
 		commands/new_command.c \
@@ -90,6 +91,7 @@ SRC =	main.c \
 		env/env_update.c \
 		env/env_convert.c \
 		env/env_unset.c \
+		env/pwd_set.c \
 		tokens/tokenizer.c \
 		tokens/conv_tokens.c \
 		tokens/check_esc_char.c \

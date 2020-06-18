@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/17 18:47:42 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/18 13:49:25 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 static void	refresh_prog(t_msh *prog)
 {
 	if (vecstr_reset(&prog->line.cmd))
-		exit(-1);
+		exit(1);
 }
 
 void		msh_main(t_msh *prog)
@@ -62,6 +62,8 @@ int			main(void)
 	signal(SIGINT, sighandler);
 	signal(SIGQUIT, sighandler);
 	if (!env_init(&prog))
+		return (1);
+	if (!pwd_set(&prog.env))
 		return (1);
 	msh_main(&prog);
 	return (0);

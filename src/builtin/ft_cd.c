@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 23:02:16 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/17 17:58:27 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/18 13:51:05 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,29 +20,6 @@
 #include <string.h>
 #include <msh_builtin.h>
 #include <msh_env.h>
-
-static	char	*get_cwd(void)
-{
-	char	*path;
-	char	*res;
-	size_t	size;
-
-	size = 20;
-	path = malloc(sizeof(char) * (size + 1));
-	if (!path)
-		exit(1);
-	res = getcwd(path, size + 1);
-	while (!res && errno == ERANGE)
-	{
-		size += 20;
-		free(path);
-		path = malloc(sizeof(char) * (size + 1));
-		if (!path)
-			exit(1);
-		res = getcwd(path, size + 1);
-	}
-	return (path);
-}
 
 static void		cd_home(t_msh *prog)
 {
@@ -60,8 +37,8 @@ static void		cd_home(t_msh *prog)
 		ft_printf_fd(2, "msh: %s\n", strerror(errno));
 		return ;
 	}
-	env_val_set("OLDPWD", prog->env, env_val_get("PWD", prog->env));
-	env_val_set("PWD", prog->env, home);
+	env_val_set("OLDPWD", &prog->env, env_val_get("PWD", prog->env));
+	env_val_set("PWD", &prog->env, home);
 	env_update(prog);
 }
 
@@ -81,9 +58,9 @@ void			ft_cd(t_msh *prog, int argc, char **argv)
 		ft_printf_fd(2, "msh: %s\n", strerror(errno));
 		return ;
 	}
-	env_val_set("OLDPWD", prog->env, env_val_get("PWD", prog->env));
+	env_val_set("OLDPWD", &prog->env, env_val_get("PWD", prog->env));
 	newpwd = get_cwd();
-	env_val_set("PWD", prog->env, newpwd);
+	env_val_set("PWD", &prog->env, newpwd);
 	env_update(prog);
 	free(newpwd);
 	free(path);

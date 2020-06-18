@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/17 13:25:16 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/17 14:22:23 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/18 13:50:08 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,11 @@ void					env_print(t_var *env);
 void					env_update(t_msh *prog);
 void					env_unset(t_var **env, char *name);
 char					**env_convert(t_var *env);
-t_var					*env_val_set(const char *name, t_var *env,
+t_var					*env_val_set(const char *name, t_var **env,
 									const char *val);
 int						env_init(t_msh *prog);
 char					*env_val_get(const char *name, t_var *env);
 int						env_clear(t_var *env, void (*del)(void *));
+int						pwd_set(t_var **env);
 
 #endif

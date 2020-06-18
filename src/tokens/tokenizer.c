@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/05 23:24:42 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/17 20:11:40 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/18 12:23:33 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int				tokenizer(t_msh *prog, t_vecstr *line)
 	if (!get_commands(prog, tokens, totaltokens))
 	{
 		free(tokens);
-		exit(0);
+		exit(1);
 	}
 	free(tokens);
 	return (1);

@@ -1,43 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   env_unset.c                                        :+:    :+:            */
+/*   pwd_set.c                                          :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/04/17 23:13:43 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/18 12:31:11 by tbruinem      ########   odam.nl         */
+/*   Created: 2020/06/18 13:41:12 by tbruinem      #+#    #+#                 */
+/*   Updated: 2020/06/18 13:54:34 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "libft.h"
+#include <minishell.h>
 #include <msh_env.h>
+#include <msh_builtin.h>
+#include <stdlib.h>
 
-void	env_unset(t_var **env, char *name)
+int		pwd_set(t_var **env)
 {
-	t_var	*iter;
-	t_var	*last;
+	char		*pwd;
 
-	iter = *env;
-	last = iter;
-	if (!*env)
-		return ;
-	if (ft_strcmp(name, (*env)->name) == 0)
+	pwd = get_cwd();
+	if (!pwd)
+		return (0);
+	if (!env_val_set("PWD", env, pwd))
 	{
-		*env = (*env)->next;
-		env_del(iter);
-		return ;
+		free(pwd);
+		return (0);
 	}
-	while (iter)
-	{
-		if (ft_strcmp(name, iter->name) == 0)
-		{
-			last->next = iter->next;
-			env_del(iter);
-			iter = last;
-		}
-		last = iter;
-		iter = iter->next;
-	}
+	free(pwd);
+	return (1);
 }
