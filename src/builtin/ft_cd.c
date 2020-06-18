@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 23:02:16 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/18 15:32:48 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/18 15:44:45 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,12 @@ static void		cd_home(t_msh *prog)
 	home = env_val_get("HOME", prog->env, 4);
 	if (!home)
 	{
-		ft_printf_fd(2, "msh: cd: HOME not set\n");
+		ft_printf_fd(2, "cd: HOME not set\n");
 		return ;
 	}
 	if (chdir(home) == -1)
 	{
-		ft_printf_fd(2, "msh: %s %s\n", home, strerror(errno));
+		ft_printf_fd(2, "cd: %s: %s\n", strerror(errno), home);
 		return ;
 	}
 	env_val_set("OLDPWD", &prog->env, env_val_get("PWD", prog->env, 3));
