@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/05 23:24:42 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/22 14:07:58 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/22 19:13:07 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ static size_t	sum_tokens(t_vecstr *line)
 			lex.i++;
 		}
 		update_lexer(vecstr_get(line), &lex);
+
 		if (lex.state >= SEMICOLON && lex.state <= PIPE_PIPE)
 			lex.state = WHITESPACE;
 		if (lex.state != WHITESPACE && lex.prevstate == WHITESPACE)

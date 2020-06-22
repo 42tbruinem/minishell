@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/26 13:10:59 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/22 14:14:30 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/22 19:12:17 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,9 @@ static void		add_env_value(t_lexer *lex, t_vecstr *line, size_t env_name_len,
 	{
 		if (lex->state != INDOUBLEQUOTE)
 		{
-			if (vecstr_insert_str(line, lex->i, " "))
-				error_exit(prog, MEM_FAIL);
+			if (vecstr_val(line, lex->i) == '\0')
+				lex->i--;
 			lex->state = lex_checkstate(vecstr_val(line, lex->i), *lex);
-			vecstr_set(line, lex->i, '\0');
 		}
 		return ;
 	}
