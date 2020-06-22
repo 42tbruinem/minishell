@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/06 21:18:20 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/18 01:28:12 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/22 22:50:35 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	esc_double_quotes(t_vecstr *line, t_lexer *lex)
 	int		c;
 
 	c = vecstr_val(line, lex->i + 1);
-	if (c == '\0' || c == '$' || c == '"' || c == '`' || c == 'n' || c == '\\')
+	if (c == '\0' || c == '$' || c == '"' || c == '`' || c == '\\')
 	{
 		if (vecstr_slice(line, lex->i, lex->i + 1))
 			return (1);
