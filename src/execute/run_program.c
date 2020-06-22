@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 22:22:24 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/18 12:21:32 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/22 14:35:41 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ static void	run(t_msh *prog, t_cmd *cmd, char *abspath)
 		exit(1);
 	if (abspath && execve(abspath, cmd->args, prog->envp) == -1)
 		exit(1);
+	exit(1);
 }
 
 void		run_program(t_msh *prog, t_cmd *cmd, char *abspath)
