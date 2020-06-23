@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/18 01:26:43 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/23 18:36:59 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,14 @@
 #include <msh_term.h>
 #include <msh_lex.h>
 #include <errno.h>
-#include <msh_lex.h>
 
 static int	signal_received(t_line *line, t_msh *prog)
 {
+	if (line->multiline_len > 0)
+	{
+		line->multiline_len = 0;
+		line->promptlen = ft_no_ansi_strlen(line->prompt);
+	}
 	prog->exit_status = 1;
 	if (vecstr_reset(&line->cmd))
 		return (0);
@@ -52,34 +56,13 @@ static int	finished(t_msh *prog, t_line *line, char *buf)
 	return (0);
 }
 
-int			get_endstate(t_vecstr *line)
-{
-	t_lexer		lex;
-
-	init_lexer(&lex);
-	while (vecstr_val(line, lex.i))
-	{
-		if (check_esc_char(line, &lex, 0))
-			return (-1);
-		if (lex.escape == 1)
-		{
-			if (lex.i + 1 >= vecstr_len(line))
-				return (lex.state);
-			lex.i++;
-		}
-		update_lexer(vecstr_get(line), &lex);
-		lex.escape = 0;
-		lex.i++;
-	}
-	return (lex.state);
-}
-
 static int	check_multiline(t_msh *prog, t_line *line)
 {
 	int			endstate;
 
 	endstate = get_endstate(&line->cmd);
-	if (endstate == INDOUBLEQUOTE || endstate == INSINGLEQUOTE)
+	if (endstate == INDOUBLEQUOTE || endstate == INSINGLEQUOTE ||
+			endstate == PIPE_PIPE)
 	{
 		if (add_char(line, '\n') == -1)
 			error_exit(prog, MEM_FAIL);

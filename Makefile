@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/04/12 11:11:07 by rlucas        #+#    #+#                  #
-#    Updated: 2020/06/18 15:33:13 by tbruinem      ########   odam.nl          #
+#    Updated: 2020/06/23 18:38:51 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ SRC =	main.c \
 		tables.c \
 		signals.c \
 		input/read_input.c \
+		input/get_endstate.c \
 		input/initialize_line_editor.c \
 		input/refresh_cursor.c \
 		input/prompt.c \
