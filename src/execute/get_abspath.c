@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/11 21:33:20 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/18 14:56:28 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/24 14:58:35 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <stdio.h>
 #include <msh_env.h>
 #include <msh_exec.h>
 

@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/04/12 11:11:07 by rlucas        #+#    #+#                  #
-#    Updated: 2020/06/24 14:50:04 by tbruinem      ########   odam.nl          #
+#    Updated: 2020/06/24 15:00:00 by tbruinem      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -121,7 +121,7 @@ SRC +=	main.c \
 		tokens/evaluate_env.c \
 		term/init_readline.c \
 		input/read_input.c
-endif	
+endif
 
 OBJ := $(addprefix $(OBJDIR)/, $(SRC:%.c=%.o))
 SRC := $(addprefix $(SRCDIR)/, $(SRC))

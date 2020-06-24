@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/04 17:31:19 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/24 13:26:49 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/24 14:59:14 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <libft.h>
 #include <minishell.h>
 #include <sys/types.h>
-#include <stdio.h>
 #include <errno.h>
 
 static void		kill_processes(int signal)
