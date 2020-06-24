@@ -3,6 +3,7 @@
 		"termcap.h": "c",
 		"term.h": "c",
 		"msh_lex.h": "c",
-		"msh_env.h": "c"
+		"msh_env.h": "c",
+		"errno.h": "c"
 	}
 }

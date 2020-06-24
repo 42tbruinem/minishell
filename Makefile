@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/04/12 11:11:07 by rlucas        #+#    #+#                  #
-#    Updated: 2020/06/23 18:38:51 by rlucas        ########   odam.nl          #
+#    Updated: 2020/06/24 14:50:04 by tbruinem      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,11 +18,8 @@ OBJDIR = obj
 HEADERS = minishell.h msh_term.h
 INCLUDES = -I includes/ -I $(LIBDIR)/includes/
 
-SRC =	main.c \
-		exit.c \
+SRC =	exit.c \
 		tables.c \
-		signals.c \
-		input/read_input.c \
 		input/get_endstate.c \
 		input/initialize_line_editor.c \
 		input/refresh_cursor.c \
@@ -45,7 +42,6 @@ SRC =	main.c \
 		term/add_char.c \
 		term/delete_char.c \
 		term/delete_word.c \
-		term/init_readline.c \
 		term/termcmd.c \
 		vector/vec_add.c \
 		vector/vec_getref.c \
@@ -101,16 +97,31 @@ SRC =	main.c \
 		tokens/env_strclen.c \
 		tokens/env_exitstatus.c \
 		tokens/env_current_process.c \
-		tokens/evaluate_env.c \
-		tokens/gen_tokens.c \
 		tokens/parse_error.c \
-		tokens/quote_toks.c \
 		tokens/lex_checkstate.c \
 		tokens/update_lexer.c \
 		tokens/init_lexer.c \
 		debug/print_state.c \
 		debug/debug_commands.c \
 		debug/print_tokens.c
+
+ifdef WITHBONUS
+SRC +=	main_bonus.c \
+		signals_bonus.c \
+		tokens/quote_toks_bonus.c \
+		tokens/gen_tokens_bonus.c \
+		tokens/evaluate_env_bonus.c \
+		term/init_readline_bonus.c \
+		input/read_input_bonus.c
+else
+SRC +=	main.c \
+		signals.c \
+		tokens/quote_toks.c \
+		tokens/gen_tokens.c \
+		tokens/evaluate_env.c \
+		term/init_readline.c \
+		input/read_input.c
+endif	
 
 OBJ := $(addprefix $(OBJDIR)/, $(SRC:%.c=%.o))
 SRC := $(addprefix $(SRCDIR)/, $(SRC))
@@ -121,6 +132,9 @@ ifdef DEBUG
 endif
 
 all: lft $(NAME)
+
+bonus:
+	$(MAKE) WITHBONUS=1 all
 
 $(NAME): $(OBJ)
 	@echo "Compiling shell..."

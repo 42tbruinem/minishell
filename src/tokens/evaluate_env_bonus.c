@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   evaluate_env.c                                     :+:    :+:            */
+/*   evaluate_env_bonus.c                               :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/26 13:10:59 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/24 14:48:02 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/24 14:47:54 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void			evaluate_env(t_lexer *lex, t_vecstr *line, t_msh *prog)
 	if (c == '(')
 		(void)line;
 	if (c == '$')
-		(void)line;
+		env_current_process(lex, line, prog);
 	if (c == '?')
 		env_exitstatus(lex, line, prog);
 	if (c == '0')

@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/24 14:31:16 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/18 13:49:25 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,12 @@
 #include <msh_env.h>
 #include <msh_term.h>
 
+static void	refresh_prog(t_msh *prog)
+{
+	if (vecstr_reset(&prog->line.cmd))
+		exit(1);
+}
+
 void		msh_main(t_msh *prog)
 {
 	init_readline(prog);
@@ -29,14 +35,20 @@ void		msh_main(t_msh *prog)
 	{
 		if (read_input(prog) == -1)
 			error_exit(prog, MEM_FAIL);
+		prog->line.term.c_lflag |= ECHO;
+		prog->line.term.c_lflag |= ICANON;
+		tcsetattr(STDIN, TCSAFLUSH, &prog->line.term);
 		if (tokenizer(prog, &prog->line.cmd))
 		{
 			if (!run_commands(prog, prog->commands))
 				error_exit(prog, MEM_FAIL);
 		}
-		free(prog->line.cmd.str);
 		vec_destroy(&prog->args, NULL);
 		vec_destroy(&prog->argtypes, NULL);
+		refresh_prog(prog);
+		prog->line.term.c_lflag &= ~(ECHO | ICANON);
+		tcsetattr(STDIN, TCSAFLUSH, &prog->line.term);
+		tcflush(STDIN, TCIFLUSH);
 	}
 }
 

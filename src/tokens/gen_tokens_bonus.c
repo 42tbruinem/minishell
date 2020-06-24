@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   gen_tokens.c                                       :+:    :+:            */
+/*   gen_tokens_bonus.c                                 :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/26 13:10:59 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/24 13:59:03 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/24 14:41:16 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,7 @@ static int	lexer(t_tok **tokens, t_vecstr *line, t_lexer *lex, t_msh *prog)
 	update_lexer(vecstr_get(line), lex);
 	if (!lex->escape && lex->state >= INDOUBLEQUOTE &&
 			lex->state <= INSINGLEQUOTE)
-	{
 		quote_toks(tokens, lex, line, prog);
-		return (1);
-	}
 	if (!lex->escape && lex->state >= SEMICOLON && lex->state <= PIPE_PIPE)
 		if (state_action(vecstr_get(line), lex))
 			return (0);

@@ -1,25 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   quote_toks.c                                       :+:    :+:            */
+/*   quote_toks__bonus.c                                :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/26 13:10:59 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/24 13:47:19 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/24 13:43:42 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <libft.h>
 #include <msh_lex.h>
-
-static void	slice(t_msh *prog, t_lexer *lex, t_vecstr *line)
-{
-	if (vecstr_slice(line, lex->i, lex->i + 1))
-		error_exit(prog, MEM_FAIL);
-	lex->i--;
-}
 
 void		quote_toks(t_tok **tokens, t_lexer *lex, t_vecstr *line,
 		t_msh *prog)
@@ -40,8 +33,11 @@ void		quote_toks(t_tok **tokens, t_lexer *lex, t_vecstr *line,
 		}
 		update_lexer(vecstr_get(line), lex);
 		if (lex->state == NORMAL)
-			return (slice(prog, lex, line));
+			break ;
 		lex->escape = 0;
 		lex->i++;
 	}
+	if (vecstr_slice(line, lex->i, lex->i + 1))
+		error_exit(prog, MEM_FAIL);
+	lex->i--;
 }

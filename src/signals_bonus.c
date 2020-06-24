@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   signals.c                                          :+:    :+:            */
+/*   signals_bonus.c                                    :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/04 17:31:19 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/24 14:32:22 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/24 13:26:49 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,16 @@ void			sighandler(int signal)
 	i = 0;
 	if (g_pid.index == 0)
 	{
+		if (signal == SIGINT)
+			ft_printf("^C");
+		if (signal == SIGQUIT)
+			ft_printf("^\\");
+		while ((int)i < g_total_lines - g_current_line + 1)
+		{
+			ft_printf("\n");
+			i++;
+		}
+		ft_printf("%s", g_prompt);
 		g_siggy += 1;
 	}
 	kill_processes(signal);
