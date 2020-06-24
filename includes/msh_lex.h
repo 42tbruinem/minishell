@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/17 14:48:07 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/24 10:32:06 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/24 13:14:43 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ enum					e_fsm
 	IREDIRECT,
 	OAPPEND,
 	PIPE_PIPE,
-	ENV
+	ENV,
 };
 
 enum				e_toktype
