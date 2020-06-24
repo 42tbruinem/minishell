@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/24 13:40:34 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/25 00:30:20 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 #include <msh_term.h>
 #include <msh_lex.h>
 #include <errno.h>
+#include <signal.h>
+#include <sys/types.h>
 
 int			read_input(t_msh *prog)
 {
