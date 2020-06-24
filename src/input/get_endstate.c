@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/23 18:36:37 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/24 10:48:18 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/24 13:32:31 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int			get_endstate(t_vecstr *line)
 		if (lex.escape == 1)
 		{
 			if (lex.i + 1 >= vecstr_len(line))
-				return (lex.state);
+				return (INDOUBLEQUOTE);
 			lex.i++;
 		}
 		update_lexer(vecstr_get(line), &lex);
