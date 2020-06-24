@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/06 21:08:08 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/22 14:07:26 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/24 10:48:16 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,25 @@ static int		quote_state(int c, t_lexer lex)
 	return (lex.state);
 }
 
+static int		env_state(int c, t_lexer lex)
+{
+	if (c == ' ')
+		return (NORMAL);
+	if (c == '>')
+		return (OREDIRECT);
+	if (c == '<')
+		return (IREDIRECT);
+	if (c == ';')
+		return (SEMICOLON);
+	if (c == '|')
+		return (PIPE_PIPE);
+	if (c == '\"')
+		return (INDOUBLEQUOTE);
+	if (c == '\'')
+		return (INSINGLEQUOTE);
+	return (lex.state);
+}
+
 static int		special_state(int c, t_lexer lex)
 {
 	if (ft_is_whitespace(c))
@@ -64,16 +83,8 @@ static int		special_state(int c, t_lexer lex)
 		return (NORMAL);
 	if (lex.state == OAPPEND && c == '>')
 		return (-1);
-	if (lex.state == ENV && c == ' ')
-		return (NORMAL);
-	if (lex.state == ENV && c == '>')
-		return (OREDIRECT);
-	if (lex.state == ENV && c == '<')
-		return (IREDIRECT);
-	if (lex.state == ENV && c == ';')
-		return (SEMICOLON);
-	if (lex.state == ENV && c == '|')
-		return (PIPE_PIPE);
+	if (lex.state == ENV)
+		return (env_state(c, lex));
 	return (lex.state);
 }
 

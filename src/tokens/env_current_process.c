@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/17 12:01:12 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/17 15:08:49 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/24 10:52:01 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,12 @@ void		env_current_process(t_lexer *lex, t_vecstr *line, t_msh *prog)
 	if (vecstr_insert_str(line, lex->i, pid_string))
 		error_exit(prog, MEM_FAIL);
 	free(pid_string);
+}
+
+void		env_zero(t_lexer *lex, t_vecstr *line, t_msh *prog)
+{
+	if (vecstr_slice(line, lex->i, lex->i + 2))
+		error_exit(prog, MEM_FAIL);
+	if (vecstr_insert_str(line, lex->i, "minishell"))
+		error_exit(prog, MEM_FAIL);
 }

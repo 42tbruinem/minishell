@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/26 13:10:59 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/22 19:12:17 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/24 10:26:00 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,10 +108,12 @@ void			evaluate_env(t_lexer *lex, t_vecstr *line, t_msh *prog)
 	if (c == '$')
 		env_current_process(lex, line, prog);
 	if (c == '?')
-	{
 		env_exitstatus(lex, line, prog);
+	if (c == '0')
+	{
+		env_zero(lex, line, prog);
 		return ;
 	}
-	if (ft_isalnum(c) || c == '_')
+	if (ft_isalpha(c) || c == '_')
 		expand_env_value(lex, line, prog);
 }
