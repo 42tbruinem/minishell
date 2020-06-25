@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/17 23:13:43 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/17 18:00:43 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/25 15:20:40 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,5 +19,8 @@ void	env_update(t_msh *prog)
 	ft_str2clear(prog->envp);
 	prog->envp = env_convert(prog->env);
 	if (!prog->envp)
-		return (void)(env_clear(prog->env, &free));
+	{
+		(env_clear(prog->env, &free));
+		exit(1);
+	}
 }

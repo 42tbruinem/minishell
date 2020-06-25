@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 23:02:16 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/25 14:59:17 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/25 15:23:54 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,10 @@ void		ft_exit(t_msh *prog, int argc, char **argv)
 		n = ft_atoi(argv[1]);
 	if (argc > 2)
 	{
-		ft_printf("msh: too many arguments to exit.\n");
+		ft_printf("msh: exit: too many arguments to exit.\n");
 		return ;
 	}
 	if (!str_isdigit(argv[1], &n))
-		ft_printf("msh: numeric argument reguired.\n");
+		ft_printf("msh: exit: numeric argument reguired.\n");
 	std_exit(prog, (n % 256));
 }

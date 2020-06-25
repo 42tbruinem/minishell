@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/17 23:13:43 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/17 15:58:41 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/25 15:19:30 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	env_clear(t_var *env, void (*del)(void *))
 		env = env->next;
 		del(delete->name);
 		del(delete->val);
+		del(delete);
 	}
 	return (0);
 }

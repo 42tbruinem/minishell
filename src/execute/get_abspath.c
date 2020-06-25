@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/11 21:33:20 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/25 14:23:54 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/25 15:09:21 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ static int	is_abspath(char **abspath, char *entry, char *program)
 	struct stat	unused;
 
 	tmp = ft_str3join(entry, "/", program);
+	if (!tmp)
+		exit(1);
 	if (stat(tmp, &unused) != -1)
 	{
 		*abspath = tmp;
@@ -40,6 +42,8 @@ static int	check_if_path(char *program, char **abspath)
 	if (stat(program, &unused) != -1)
 	{
 		*abspath = ft_strdup(program);
+		if (!*abspath)
+			exit(1);
 		return (1);
 	}
 	return (0);
