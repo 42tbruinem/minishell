@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/11 21:33:20 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/24 14:58:35 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/25 13:59:51 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,12 @@ static int	check_if_path(char *program, char **abspath)
 	return (0);
 }
 
+static void	command_not_found(char *program)
+{
+	ft_printf_fd(STDERR, "%s: command not found\n", program);
+	return ;
+}
+
 void		get_abspath(char *program, char **abspath_to_exe, t_var *env)
 {
 	char		*path;
@@ -56,17 +62,19 @@ void		get_abspath(char *program, char **abspath_to_exe, t_var *env)
 		return ;
 	path = env_val_get("PATH", env, 4);
 	if (!path)
-		exit(1);
+		return (command_not_found(program));
 	entries = ft_split(path, ':');
 	if (!entries)
 		exit(1);
+	ft_printf("PROGRAM: %s\n", program);
 	while (entries[i])
 	{
 		if (is_abspath(abspath_to_exe, entries[i], program))
 			break ;
 		i++;
 	}
+	ft_printf("ABS: %s\n", *abspath_to_exe);
 	ft_str2clear(entries);
 	if (*abspath_to_exe == NULL)
-		ft_printf_fd(STDERR, "%s: command not found\n", program);
+		return (command_not_found(program));
 }

@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/25 13:27:21 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/25 14:04:45 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,9 @@ int			read_input(t_msh *prog)
 	ret = get_next_line(STDIN, &tmp);
 	while (ret >= 0)
 	{
+		if (g_siggy)
+			if (vecstr_reset(&prog->line.cmd))
+				exit(1);
 		if (ret == 0 && ((tmp) ? ft_strlen(tmp) : 0) + line->cmd.len == 0)
 		{
 			ft_printf("exit\n");
