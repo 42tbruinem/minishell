@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/25 00:30:20 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/25 13:27:21 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,28 @@
 int			read_input(t_msh *prog)
 {
 	t_line		*line;
+	char		*tmp;
+	int			ret;
 
 	line = &prog->line;
 	ft_printf("%s", line->prompt);
-	if (get_next_line(STDIN, &line->cmd.str) <= 0)
+	tmp = NULL;
+	ret = get_next_line(STDIN, &tmp);
+	while (ret >= 0)
 	{
-		ft_printf("exit\n");
-		exit(0);
+		if (ret == 0 && ((tmp) ? ft_strlen(tmp) : 0) + line->cmd.len == 0)
+		{
+			ft_printf("exit\n");
+			exit(0);
+		}
+		if (vecstr_append_str(&prog->line.cmd, tmp))
+			exit(1);
+		free(tmp);
+		tmp = NULL;
+		if (ret == 1)
+			break ;
+		else
+			ret = get_next_line(STDIN, &tmp);
 	}
-	line->cmd.capacity = ft_strlen(line->cmd.str) + 1;
-	line->cmd.len = line->cmd.capacity;
 	return (1);
 }

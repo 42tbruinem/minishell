@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/24 14:58:53 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/25 13:09:50 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ void		msh_main(t_msh *prog)
 			if (!run_commands(prog, prog->commands))
 				error_exit(prog, MEM_FAIL);
 		}
-		free(prog->line.cmd.str);
+		if (vecstr_reset(&prog->line.cmd))
+			exit(1);
 		vec_destroy(&prog->args, NULL);
 		vec_destroy(&prog->argtypes, NULL);
 	}
