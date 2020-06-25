@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 23:02:16 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/24 14:58:02 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/25 14:59:17 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,29 @@
 #include <string.h>
 #include <msh_builtin.h>
 
-void	ft_exit(t_msh *prog, int argc, char **argv)
+static int	str_isdigit(char *str, int *n)
+{
+	size_t	i;
+
+	i = 0;
+	if (!str[i])
+	{
+		*n = -1;
+		return (0);
+	}
+	while (str[i])
+	{
+		if (!ft_isdigit(str[i]))
+		{
+			*n = -1;
+			return (0);
+		}
+		i++;
+	}
+	return (1);
+}
+
+void		ft_exit(t_msh *prog, int argc, char **argv)
 {
 	int n;
 
@@ -31,5 +53,7 @@ void	ft_exit(t_msh *prog, int argc, char **argv)
 		ft_printf("msh: too many arguments to exit.\n");
 		return ;
 	}
+	if (!str_isdigit(argv[1], &n))
+		ft_printf("msh: numeric argument reguired.\n");
 	std_exit(prog, (n % 256));
 }
