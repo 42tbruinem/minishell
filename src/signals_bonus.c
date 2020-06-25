@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/04 17:31:19 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/25 13:53:06 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/25 14:08:32 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ static void		kill_processes(int signal)
 
 static void		ignore_suspension(void)
 {
-	ft_printf("\n");
+	if (g_pid.index)
+		ft_printf("\n");
 	kill_processes(SIGKILL);
 	return ;
 }

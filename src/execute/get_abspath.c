@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/11 21:33:20 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/25 13:59:51 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/25 14:09:19 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,14 +66,12 @@ void		get_abspath(char *program, char **abspath_to_exe, t_var *env)
 	entries = ft_split(path, ':');
 	if (!entries)
 		exit(1);
-	ft_printf("PROGRAM: %s\n", program);
 	while (entries[i])
 	{
 		if (is_abspath(abspath_to_exe, entries[i], program))
 			break ;
 		i++;
 	}
-	ft_printf("ABS: %s\n", *abspath_to_exe);
 	ft_str2clear(entries);
 	if (*abspath_to_exe == NULL)
 		return (command_not_found(program));
