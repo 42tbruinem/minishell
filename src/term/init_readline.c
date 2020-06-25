@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:17:50 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/24 14:29:30 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/25 13:09:18 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,4 +22,6 @@ void		init_readline(t_msh *prog)
 	prog->line.prompt = prompt(prog, &prog->line);
 	if (!prog->line.prompt)
 		error_exit(prog, MEM_FAIL);
+	if (vecstr_init(&prog->line.cmd))
+		exit(1);
 }

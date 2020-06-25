@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/01 20:59:07 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/17 11:57:40 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/25 13:22:06 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,16 @@
 /*
 ** Return 1 on error. 0 on success.
 */
+
+int		vecstr_append_str(t_vecstr *v, char *str2)
+{
+	while (v->len + ft_strlen(str2) >= v->capacity)
+		if (vecstr_resize(v, v->capacity * 2))
+			return (1);
+	ft_strlcpy(&v->str[v->len], str2, v->capacity);
+	v->len += ft_strlen(str2);
+	return (0);
+}
 
 int		vecstr_append_c(t_vecstr *v, int c)
 {
