@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/24 14:58:50 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/25 13:52:41 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ int			main(void)
 	g_current_line = 0;
 	signal(SIGINT, sighandler);
 	signal(SIGQUIT, sighandler);
+	signal(SIGTSTP, sighandler);
 	if (!env_init(&prog))
 		return (1);
 	if (!pwd_set(&prog.env))
