@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/04 17:31:19 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/25 12:44:54 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/29 13:07:18 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static void		kill_processes(int signal)
 
 void			sighandler(int signal)
 {
-	if (g_pid.index == 0)
+	if (g_pid.index == 0 && signal != SIGQUIT)
 	{
 		g_siggy += 1;
 	}

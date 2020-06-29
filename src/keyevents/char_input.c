@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:59:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/16 14:52:46 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/29 13:31:04 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,11 @@ int		char_input(t_line *line, char buf[6])
 			return (-1);
 	while (buf[i])
 	{
+		if (buf[0] == '\n')
+			return (handle_input(line, buf));
 		refresh_cursor(line);
 		if (!(buf[i] >= 32 && buf[i] <= 126))
-		{
-			handle_input(line, buf);
-			break ;
-		}
+			return (handle_input(line, buf));
 		if (add_char(line, buf[i]) == -1)
 			return (-1);
 		i++;

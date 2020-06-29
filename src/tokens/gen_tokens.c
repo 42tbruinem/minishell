@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/26 13:10:59 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/29 10:57:13 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/29 12:30:30 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ static int	semicolon_pipe_changes(char *line, t_lexer *lex)
 	lex->nexttype = COMMAND;
 	if (lex->state == PIPE_PIPE)
 		lex->pipe = 1;
+	lex->state = WHITESPACE;
 	return (0);
 }
 

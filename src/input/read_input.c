@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/25 15:35:55 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/29 13:02:12 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,11 @@
 static void	signal_received(t_msh *prog)
 {
 	if (g_siggy)
+	{
+		g_siggy = 0;
 		if (vecstr_reset(&prog->line.cmd))
 			exit(1);
+	}
 }
 
 int			read_input(t_msh *prog)

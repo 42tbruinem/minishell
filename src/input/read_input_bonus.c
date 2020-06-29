@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/25 13:39:14 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/29 13:39:27 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int			read_input(t_msh *prog)
 			if (check_multiline(prog, line))
 				break ;
 	}
-	line->cursor.row = line->cursor.row + line->total_rows + 1;
+	line->cursor.row = line->cursor.row + line->total_rows - line->inputrow + 1;
 	line->cursor.col = 0;
 	refresh_cursor(line);
 	return (1);

@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/04 17:31:19 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/25 14:08:32 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/29 12:37:41 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,10 @@ void			sighandler(int signal)
 	i = 0;
 	if (signal == SIGTSTP)
 		return (ignore_suspension());
-	if (g_pid.index == 0)
+	if (g_pid.index == 0 && signal == SIGINT)
 	{
 		if (signal == SIGINT)
 			ft_printf("^C");
-		if (signal == SIGQUIT)
-			ft_printf("^\\");
 		while ((int)i < g_total_lines - g_current_line + 1)
 		{
 			ft_printf("\n");
@@ -59,7 +57,9 @@ void			sighandler(int signal)
 		}
 		ft_printf("%s", g_prompt);
 	}
-	else
+	else if (signal != SIGQUIT)
+		ft_printf("\n");
+	else if (signal == SIGQUIT && g_pid.index > 0)
 		ft_printf("\n");
 	kill_processes(signal);
 }
