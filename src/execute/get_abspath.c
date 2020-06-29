@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/11 21:33:20 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/25 15:09:21 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/29 20:51:36 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <fcntl.h>
 #include <msh_env.h>
 #include <msh_exec.h>
+#include <msh_builtin.h>
 
 static int	is_abspath(char **abspath, char *entry, char *program)
 {
@@ -38,6 +39,8 @@ static int	is_abspath(char **abspath, char *entry, char *program)
 static int	check_if_path(char *program, char **abspath)
 {
 	struct stat	unused;
+	char		*cd;
+	char		*path;
 
 	if (stat(program, &unused) != -1)
 	{
@@ -46,6 +49,19 @@ static int	check_if_path(char *program, char **abspath)
 			exit(1);
 		return (1);
 	}
+	cd = get_cwd();
+	path = ft_str3join(cd, "/", program);
+	free(cd);
+	if (!path)
+		exit(1);
+	if (stat(path, &unused) != -1)
+	{
+		*abspath = path;
+		if (!*abspath)
+			exit(1);
+		return (1);
+	}
+	free(path);
 	return (0);
 }
 
@@ -62,8 +78,6 @@ void		get_abspath(char *program, char **abspath_to_exe, t_var *env)
 	size_t		i;
 
 	i = 0;
-	if (check_if_path(program, abspath_to_exe))
-		return ;
 	path = env_val_get("PATH", env, 4);
 	if (!path)
 		return (command_not_found(program));
@@ -77,6 +91,8 @@ void		get_abspath(char *program, char **abspath_to_exe, t_var *env)
 		i++;
 	}
 	ft_str2clear(entries);
+	if (!*abspath_to_exe && check_if_path(program, abspath_to_exe))
+		return ;
 	if (ft_strlen(program) == 0 || *abspath_to_exe == NULL)
 		return (command_not_found(program));
 }
