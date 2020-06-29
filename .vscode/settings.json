@@ -1,9 +1,0 @@
-{
-	"files.associations": {
-		"msh_builtin.h": "c",
-		"types.h": "c",
-		"stat.h": "c",
-		"msh_io.h": "c",
-		"msh_exec.h": "c"
-	}
-}
