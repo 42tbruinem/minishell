@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/16 16:48:45 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/17 15:09:14 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/29 10:44:02 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 
 int			parse_error(char c)
 {
-	ft_printf("msh: syntax error near unexpected token `%c'\n", c);
+	if (c == '\n')
+		ft_printf("msh: syntax error near unexpected token `\\n'\n", c);
+	else
+		ft_printf("msh: syntax error near unexpected token `%c'\n", c);
 	return (1);
 }

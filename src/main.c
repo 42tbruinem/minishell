@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/25 13:09:50 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/29 10:30:06 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 void		msh_main(t_msh *prog)
 {
 	init_readline(prog);
+	prog->args.store = NULL;
+	prog->argtypes.store = NULL;
 	while (1)
 	{
 		if (read_input(prog) == -1)
@@ -35,8 +37,10 @@ void		msh_main(t_msh *prog)
 		}
 		if (vecstr_reset(&prog->line.cmd))
 			exit(1);
-		vec_destroy(&prog->args, NULL);
-		vec_destroy(&prog->argtypes, NULL);
+		if (prog->args.store)
+			vec_destroy(&prog->args, NULL);
+		if (prog->argtypes.store)
+			vec_destroy(&prog->argtypes, NULL);
 	}
 }
 

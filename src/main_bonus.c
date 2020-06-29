@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/25 13:52:41 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/29 10:30:07 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ static void	refresh_prog(t_msh *prog)
 void		msh_main(t_msh *prog)
 {
 	init_readline(prog);
+	prog->args.store = NULL;
+	prog->argtypes.store = NULL;
 	while (1)
 	{
 		if (read_input(prog) == -1)
@@ -42,8 +44,10 @@ void		msh_main(t_msh *prog)
 			if (!run_commands(prog, prog->commands))
 				error_exit(prog, MEM_FAIL);
 		}
-		vec_destroy(&prog->args, NULL);
-		vec_destroy(&prog->argtypes, NULL);
+		if (prog->args.store)
+			vec_destroy(&prog->args, NULL);
+		if (prog->argtypes.store)
+			vec_destroy(&prog->argtypes, NULL);
 		refresh_prog(prog);
 		prog->line.term.c_lflag &= ~(ECHO | ICANON);
 		tcsetattr(STDIN, TCSAFLUSH, &prog->line.term);

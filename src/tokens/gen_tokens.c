@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/26 13:10:59 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/24 13:59:03 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/29 10:57:13 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,23 @@
 #include <libft.h>
 #include <msh_lex.h>
 
+static int	semicolon_pipe_changes(char *line, t_lexer *lex)
+{
+	if (lex->nexttype != PIPEDCOMMAND && lex->nexttype != COMMAND &&
+			lex->nexttype != STANDARD)
+		return (parse_error(line[lex->i]));
+	lex->cmd_num++;
+	lex->cmd_present = 0;
+	lex->nexttype = COMMAND;
+	if (lex->state == PIPE_PIPE)
+		lex->pipe = 1;
+	return (0);
+}
+
 static int	state_action(char *line, t_lexer *lex)
 {
 	if (lex->state == SEMICOLON || lex->state == PIPE_PIPE)
-	{
-		lex->cmd_num++;
-		lex->cmd_present = 0;
-		lex->nexttype = COMMAND;
-		if (lex->state == PIPE_PIPE)
-			lex->pipe = 1;
-	}
+		return (semicolon_pipe_changes(line, lex));
 	if (line[lex->i] == '>')
 	{
 		if (lex->nexttype == WRITEFILE || lex->nexttype == APPENDFILE)
@@ -79,6 +86,9 @@ int			gen_tokens(t_tok **tokens, t_vecstr *line, t_msh *prog)
 			return (0);
 		lex.i++;
 	}
+	if (lex.nexttype != PIPEDCOMMAND && lex.nexttype != COMMAND &&
+			lex.nexttype != STANDARD)
+		return (!parse_error('\n'));
 	(*tokens)[lex.tokeni].value = NULL;
 	return (1);
 }
