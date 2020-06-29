@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/05 23:24:42 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/29 15:43:19 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/29 16:05:09 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ int				tokenizer(t_msh *prog, t_vecstr *line)
 		return (0);
 	}
 	assign_token_indexes(vecstr_get(&prog->line.cmd), tokens);
-	print_tokens(tokens);
 	if (!get_commands(prog, tokens, totaltokens))
 	{
 		free(tokens);
