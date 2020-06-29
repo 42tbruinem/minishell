@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/16 13:02:50 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/16 17:30:12 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/29 13:56:16 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	refresh_cursor(t_line *line)
 	if (line->cursor.row >= line->max.row && g_siggy == 0)
 	{
 		line->cursor.row -= 1;
+		termcmd(MOVE_COLROW, 0, line->max.row, 1);
 		termcmd(SCROLL_LINE, 0, 0, 1);
 	}
 	termcmd(MOVE_COLROW, line->cursor.col, line->cursor.row, 1);

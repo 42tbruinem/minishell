@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/04 17:31:19 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/29 12:37:41 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/29 14:19:03 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,16 @@ void			sighandler(int signal)
 	{
 		if (signal == SIGINT)
 			ft_printf("^C");
-		while ((int)i < g_total_lines - g_current_line + 1)
+		if (g_siggy == 0)
+			while ((int)i < g_total_lines - g_current_line + 1)
+			{
+				ft_printf("\n");
+				i++;
+				g_siggy += 1;
+			}
+		else
 		{
 			ft_printf("\n");
-			i++;
 			g_siggy += 1;
 		}
 		ft_printf("%s", g_prompt);

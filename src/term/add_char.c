@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:34:51 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/17 14:50:13 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/29 14:47:24 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ static void	reprint_row(size_t row, t_line *line)
 	while (row < line->total_rows)
 	{
 		termcmd(MOVE_COLROW, 0, line->cursor.row - line->inputrow + row + 1, 1);
-		index = row * line->max.col + line->max.col - line->promptlen;
+		index = row * line->max.col + line->max.col - line->promptlen -
+			line->multiline_len;
 		if (index > vecstr_len(&line->cmd))
 			break ;
 		termcmd(INSERT_START, 0, 0, 1);
@@ -70,8 +71,8 @@ int			add_char(t_line *line, char c)
 {
 	size_t		index;
 
-	line->total_rows = (vecstr_len(&line->cmd) + line->promptlen)
-		/ line->max.col;
+	line->total_rows = (vecstr_len(&line->cmd) + line->promptlen -
+			line->multiline_len) / line->max.col;
 	scroll_lines(line);
 	index = line->inputrow * line->max.col + line->cursor.col - line->promptlen
 		+ line->multiline_len;

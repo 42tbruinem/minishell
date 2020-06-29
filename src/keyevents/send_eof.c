@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 17:59:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/23 18:26:00 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/29 14:33:24 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@ static int	restart_input(t_line *line, char buf[6])
 	endstate = get_endstate(&line->cmd);
 	if (endstate == INDOUBLEQUOTE)
 		ft_printf_fd(STDERR, "msh: unexpected EOF while looking for"
-				"matching `\"\'\n");
+				" matching `\"\'\n");
 	else if (endstate == PIPE_PIPE)
 		ft_printf_fd(STDERR, "msh: unexpected EOF while looking for"
-				"matching `|\'\n");
+				" matching `|\'\n");
 	else
 		ft_printf_fd(STDERR, "msh: unexpected EOF while looking for"
-				"matching `\'\'\n");
+				" matching `\'\'\n");
 	line->cursor.row += 1;
 	if (line->cursor.row >= line->max.row)
 		line->cursor.row -= 1;

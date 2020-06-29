@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/29 13:39:27 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/29 14:46:14 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,16 @@ static int	signal_received(t_line *line, t_msh *prog)
 	prog->exit_status = 1;
 	if (vecstr_reset(&line->cmd))
 		return (0);
-	line->cursor.row += g_siggy +
-		(line->promptlen + vecstr_len(&line->cmd)) / line->max.col;
-	if (line->cursor.row >= line->max.row)
-		line->cursor.row = line->max.row - 1;
+	if (line->cursor.row < line->max.row)
+		line->cursor.row += g_siggy +
+			(line->promptlen + vecstr_len(&line->cmd)) / line->max.col;
+	/* if (line->cursor.row >= line->max.row) */
+	/* 	line->cursor.row = line->max.row - 1; */
 	line->promptlen = ft_no_ansi_strlen(line->prompt);
 	line->cursor.col = line->promptlen;
 	refresh_cursor(line);
+	line->inputrow = 0;
+	line->total_rows = 0;
 	g_siggy = 0;
 	return (1);
 }
@@ -67,15 +70,16 @@ static int	check_multiline(t_msh *prog, t_line *line)
 		if (add_char(line, '\n') == -1)
 			error_exit(prog, MEM_FAIL);
 		line->multiline_len = vecstr_len(&line->cmd);
-		line->total_rows = 0;
-		line->inputrow = 0;
 		line->promptlen = ft_strlen(line->multiline_prompt);
-		line->cursor.row += 1;
+		line->cursor.row = line->cursor.row + line->total_rows -
+			line->inputrow + 1;
 		if (line->cursor.row >= line->max.row)
 			line->cursor.row -= 1;
 		line->cursor.col = line->promptlen;
 		ft_printf("%s", line->multiline_prompt);
 		refresh_cursor(line);
+		line->total_rows = 0;
+		line->inputrow = 0;
 		return (0);
 	}
 	return (1);

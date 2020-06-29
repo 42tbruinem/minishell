@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 23:02:16 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/29 13:53:06 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/29 14:49:47 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include <msh_builtin.h>
 #include <msh_env.h>
 
-static int		scd_home(t_msh *prog)
+static int		cd_home(t_msh *prog)
 {
 	char	*home;
 
