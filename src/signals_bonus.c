@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/04 17:31:19 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/29 14:19:03 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/29 15:30:37 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,25 @@ static void		ignore_suspension(void)
 	return ;
 }
 
+static void		no_process_signal(int signal)
+{
+	if (signal == SIGINT)
+		ft_printf("^C");
+	if (g_siggy == 0)
+		while ((int)i < g_total_lines - g_current_line + 1)
+		{
+			ft_printf("\n");
+			i++;
+			g_siggy += 1;
+		}
+	else
+	{
+		ft_printf("\n");
+		g_siggy += 1;
+	}
+	ft_printf("%s", g_prompt);
+}
+
 void			sighandler(int signal)
 {
 	size_t		i;
@@ -46,23 +65,7 @@ void			sighandler(int signal)
 	if (signal == SIGTSTP)
 		return (ignore_suspension());
 	if (g_pid.index == 0 && signal == SIGINT)
-	{
-		if (signal == SIGINT)
-			ft_printf("^C");
-		if (g_siggy == 0)
-			while ((int)i < g_total_lines - g_current_line + 1)
-			{
-				ft_printf("\n");
-				i++;
-				g_siggy += 1;
-			}
-		else
-		{
-			ft_printf("\n");
-			g_siggy += 1;
-		}
-		ft_printf("%s", g_prompt);
-	}
+		no_process_signal(signal);
 	else if (signal != SIGQUIT)
 		ft_printf("\n");
 	else if (signal == SIGQUIT && g_pid.index > 0)
