@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/04 17:31:19 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/29 15:30:37 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/29 16:15:40 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,9 @@ static void		ignore_suspension(void)
 
 static void		no_process_signal(int signal)
 {
+	size_t		i;
+
+	i = 0;
 	if (signal == SIGINT)
 		ft_printf("^C");
 	if (g_siggy == 0)
@@ -59,9 +62,6 @@ static void		no_process_signal(int signal)
 
 void			sighandler(int signal)
 {
-	size_t		i;
-
-	i = 0;
 	if (signal == SIGTSTP)
 		return (ignore_suspension());
 	if (g_pid.index == 0 && signal == SIGINT)
