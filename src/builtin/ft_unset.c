@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 23:02:16 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/24 14:58:13 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/29 13:43:35 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,15 @@
 #include <msh_builtin.h>
 #include <msh_env.h>
 
-void	ft_unset(t_msh *prog, int argc, char **argv)
+int		ft_unset(t_msh *prog, int argc, char **argv)
 {
 	size_t	i;
 
 	if (argc == 1)
-		return ;
+	{
+		ft_printf("msh: unset: not enough arguments\n");
+		return (1);
+	}
 	i = 1;
 	while (argv[i])
 	{
@@ -33,4 +36,5 @@ void	ft_unset(t_msh *prog, int argc, char **argv)
 		i++;
 	}
 	env_update(prog);
+	return (0);
 }

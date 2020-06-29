@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/17 14:20:00 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/18 15:32:16 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/29 13:35:00 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,16 @@ enum					e_builtins
 	B_EXIT,
 };
 
-typedef void			(*t_builtin)(t_msh *prog, int argc, char **argv);
+typedef int				(*t_builtin)(t_msh *prog, int argc, char **argv);
 
-void					builtin_error(char **argv);
+int						builtin_error(char **argv);
 char					*get_cwd(void);
-void					ft_cd(t_msh *prog, int argc, char **argv);
-void					ft_pwd(t_msh *prog, int argc, char **argv);
-void					ft_env(t_msh *prog, int argc, char **argv);
-void					ft_echo(t_msh *prog, int argc, char **argv);
-void					ft_unset(t_msh *prog, int argc, char **argv);
-void					ft_exit(t_msh *prog, int argc, char **argv);
-void					ft_export(t_msh *prog, int argc, char **argv);
+int						ft_cd(t_msh *prog, int argc, char **argv);
+int						ft_pwd(t_msh *prog, int argc, char **argv);
+int						ft_env(t_msh *prog, int argc, char **argv);
+int						ft_echo(t_msh *prog, int argc, char **argv);
+int						ft_unset(t_msh *prog, int argc, char **argv);
+int						ft_exit(t_msh *prog, int argc, char **argv);
+int						ft_export(t_msh *prog, int argc, char **argv);
 
 #endif

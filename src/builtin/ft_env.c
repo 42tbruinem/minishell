@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 23:02:16 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/24 14:57:51 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/29 13:45:01 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,10 @@
 #include <msh_builtin.h>
 #include <msh_env.h>
 
-void	ft_env(t_msh *prog, int argc, char **argv)
+int		ft_env(t_msh *prog, int argc, char **argv)
 {
 	if (argc != 1 || !argv)
-		return ;
+		return (1);
 	env_print(prog->env);
+	return (0);
 }

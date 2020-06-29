@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 23:02:16 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/24 14:57:59 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/29 13:38:16 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #include <string.h>
 #include <msh_builtin.h>
 
-void	ft_echo(t_msh *prog, int argc, char **argv)
+int		ft_echo(t_msh *prog, int argc, char **argv)
 {
 	int	i;
 
@@ -37,4 +37,5 @@ void	ft_echo(t_msh *prog, int argc, char **argv)
 	}
 	if (argc == 1 || ft_strncmp(argv[1], "-n", 2) != 0)
 		write(1, "\n", 1);
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 22:22:24 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/24 14:58:41 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/29 13:52:29 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,10 @@ static	t_builtin	get_builtin(int id)
 	return (builtins[id]);
 }
 
-static void			nofork(t_msh *prog, t_cmd *cmd, int id)
+static int			nofork(t_msh *prog, t_cmd *cmd, int id)
 {
 	int		std[2];
+	int		ret;
 
 	std[0] = dup(STDIN);
 	std[1] = dup(STDOUT);
@@ -47,17 +48,20 @@ static void			nofork(t_msh *prog, t_cmd *cmd, int id)
 		exit(1);
 	if (cmd->iostream[1] != -1 && dup2(cmd->iostream[1], STDOUT) == -1)
 		exit(1);
-	get_builtin(id)(prog, ft_str2len(cmd->args), cmd->args);
+	ret = get_builtin(id)(prog, ft_str2len(cmd->args), cmd->args);
 	if (dup2(std[0], STDIN) == -1)
 		exit(1);
 	if (dup2(std[1], STDOUT) == -1)
 		exit(1);
+	return (ret);
 }
 
-void				run_builtin(t_msh *prog, t_cmd *cmd, int id)
+int					run_builtin(t_msh *prog, t_cmd *cmd, int id)
 {
 	int	pid;
+	int	ret;
 
+	ret = 0;
 	if (cmd->cmdtype != PIPEDCOMMAND &&
 		(!cmd->next || cmd->next->cmdtype != PIPEDCOMMAND))
 		return (nofork(prog, cmd, id));
@@ -71,10 +75,11 @@ void				run_builtin(t_msh *prog, t_cmd *cmd, int id)
 		if (cmd->iostream[WRITE] != -1 &&
 			dup2(cmd->iostream[WRITE], STDOUT) == -1)
 			exit(1);
-		get_builtin(id)(prog, ft_str2len(cmd->args), cmd->args);
+		ret = get_builtin(id)(prog, ft_str2len(cmd->args), cmd->args);
 		close_iostream(cmd->iostream);
 		exit(0);
 	}
 	vec_add(&g_pid, &pid);
 	close_iostream(cmd->iostream);
+	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 23:02:16 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/24 14:58:09 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/29 13:42:24 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #include <string.h>
 #include <msh_builtin.h>
 
-void	ft_pwd(t_msh *prog, int argc, char **argv)
+int		ft_pwd(t_msh *prog, int argc, char **argv)
 {
 	char	*path;
 	char	*res;
@@ -45,4 +45,5 @@ void	ft_pwd(t_msh *prog, int argc, char **argv)
 	if (res)
 		ft_printf("%s\n", path);
 	free(path);
+	return (0);
 }

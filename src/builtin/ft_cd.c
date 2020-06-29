@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 23:02:16 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/24 14:57:56 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/29 13:53:06 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include <msh_builtin.h>
 #include <msh_env.h>
 
-static void		cd_home(t_msh *prog)
+static int		scd_home(t_msh *prog)
 {
 	char	*home;
 
@@ -28,19 +28,20 @@ static void		cd_home(t_msh *prog)
 	if (!home)
 	{
 		ft_printf_fd(2, "cd: HOME not set\n");
-		return ;
+		return (1);
 	}
 	if (chdir(home) == -1)
 	{
 		ft_printf_fd(2, "cd: %s: %s\n", strerror(errno), home);
-		return ;
+		return (1);
 	}
 	env_val_set("OLDPWD", &prog->env, env_val_get("PWD", prog->env, 3));
 	env_val_set("PWD", &prog->env, home);
 	env_update(prog);
+	return (0);
 }
 
-void			ft_cd(t_msh *prog, int argc, char **argv)
+int				ft_cd(t_msh *prog, int argc, char **argv)
 {
 	char	*path;
 	char	*newpwd;
@@ -61,4 +62,5 @@ void			ft_cd(t_msh *prog, int argc, char **argv)
 	env_update(prog);
 	free(newpwd);
 	free(path);
+	return (0);
 }

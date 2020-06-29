@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 23:02:16 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/24 14:58:05 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/29 13:40:30 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@
 #include <msh_builtin.h>
 #include <msh_env.h>
 
-void	ft_export(t_msh *prog, int argc, char **argv)
+int		ft_export(t_msh *prog, int argc, char **argv)
 {
 	size_t	i;
 	size_t	tmp;
 
 	if (argc == 1)
-		return ;
+		return (ft_env(prog, argc, argv));
 	i = 1;
 	while (argv[i])
 	{
@@ -36,7 +36,7 @@ void	ft_export(t_msh *prog, int argc, char **argv)
 			if (ft_isdigit(argv[i][0]))
 			{
 				ft_printf("msh: export: %s: not a valid identifier\n", argv[i]);
-				return ;
+				return (1);
 			}
 			argv[i][tmp] = '\0';
 			(void)env_val_set(argv[i], &prog->env, &argv[i][tmp + 1]);
@@ -44,4 +44,5 @@ void	ft_export(t_msh *prog, int argc, char **argv)
 		i++;
 	}
 	env_update(prog);
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 22:22:24 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/24 14:58:32 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/29 13:36:55 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,10 @@ void		execute(t_msh *prog, t_cmd *cmd)
 	abspath = NULL;
 	builtin = is_builtin(cmd->args[0]);
 	if (builtin >= 0)
-		return (run_builtin(prog, cmd, builtin));
+	{
+		prog->exit_status = run_builtin(prog, cmd, builtin);
+		return ;
+	}
 	get_abspath(cmd->args[0], &abspath, prog->env);
 	return (run_program(prog, cmd, abspath));
 }

@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/17 15:36:19 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/17 16:23:21 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/29 13:32:55 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ typedef struct s_var	t_var;
 
 void					execute(t_msh *prog, t_cmd *cmd);
 char					*get_program(char **args, int *types);
-void					run_builtin(t_msh *prog, t_cmd *cmd, int id);
+int						run_builtin(t_msh *prog, t_cmd *cmd, int id);
 void					run_program(t_msh *prog, t_cmd *cmd, char *abspath);
 void					get_abspath(char *program, char **abspath_to_exe,
 								t_var *env);

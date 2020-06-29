@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/18 15:14:03 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/18 15:38:41 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/29 13:31:39 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <libft.h>
 #include <string.h>
 
-void			builtin_error(char **argv)
+int				builtin_error(char **argv)
 {
 	int	i;
 
@@ -24,4 +24,5 @@ void			builtin_error(char **argv)
 	ft_printf_fd(2, "%s: ", argv[i]);
 	ft_printf_fd(2, "%s: ", strerror(errno));
 	ft_str2print(&argv[i + 1]);
+	return (1);
 }
