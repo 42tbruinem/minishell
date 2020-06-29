@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:51:49 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/17 18:43:42 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/28 20:38:36 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ typedef	struct			s_msh
 	t_var				*env;
 	t_line				line;
 	size_t				argc;
+	t_vec				*history;
 }						t_msh;
 
 enum					e_error

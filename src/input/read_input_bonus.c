@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   read_input.c                                       :+:    :+:            */
+/*   read_input_bonus.c                                 :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:50:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/23 18:36:59 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/28 20:47:03 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ int			read_input(t_msh *prog)
 	{
 		ft_bzero(buf, 6);
 		read(STDIN, buf, 6);
+		dprintf(2, "[%d][%d][%d][%d][%d][%d]\n", buf[0], buf[1], buf[2], buf[3], buf[4], buf[5]);
 		if (g_siggy > 0)
 			if (!signal_received(line, prog))
 				return (-1);
