@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 19:22:44 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/29 15:53:34 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/06/29 15:59:53 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ int			get_commands(t_msh *prog, t_tok *tokens, size_t totaltokens)
 	prog->commands = NULL;
 	while (i < totaltokens)
 	{
+		while (cmd < tokens[i].cmd_num)
+			cmd++;
 		if (cmd == tokens[i].cmd_num)
 		{
 			if (!push_command(&prog->commands,

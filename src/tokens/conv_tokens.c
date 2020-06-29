@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/05 23:24:42 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/17 15:08:40 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/29 16:02:06 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,14 @@ int			conv_tokens(t_msh *prog, t_tok *tokens, size_t totaltokens)
 		return (0);
 	while (i < totaltokens)
 	{
-		if (cmd != tokens[i].cmd_num)
+		while (cmd != tokens[i].cmd_num)
 		{
 			if (!add_arg(prog, NULL, SEPARATOR))
 				return (0);
 			cmd++;
 		}
-		if (!add_arg(prog, tokens[i].value, tokens[i].type))
+		if (cmd == tokens[i].cmd_num &&
+			!add_arg(prog, tokens[i].value, tokens[i].type))
 			return (0);
 		i++;
 	}
