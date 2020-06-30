@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 22:22:24 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/29 13:52:29 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/06/30 18:45:20 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ static int			nofork(t_msh *prog, t_cmd *cmd, int id)
 		exit(1);
 	if (dup2(std[1], STDOUT) == -1)
 		exit(1);
+	close_iostream(std);
 	return (ret);
 }
 
