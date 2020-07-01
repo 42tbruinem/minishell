@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/16 10:35:55 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/06/29 10:30:06 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/07/01 13:10:38 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,7 @@ void		msh_main(t_msh *prog)
 		if (read_input(prog) == -1)
 			error_exit(prog, MEM_FAIL);
 		if (tokenizer(prog, &prog->line.cmd))
-		{
-			if (!run_commands(prog, prog->commands))
-				error_exit(prog, MEM_FAIL);
-		}
+			run_commands(prog, prog->commands);
 		if (vecstr_reset(&prog->line.cmd))
 			exit(1);
 		if (prog->args.store)

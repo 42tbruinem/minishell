@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/05/04 19:35:57 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/24 14:59:11 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/07/01 13:14:26 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <msh_lex.h>
 #include <msh_io.h>
 #include <msh_cmd.h>
+#include <string.h>
 
 static	int		is_redir(int type)
 {
@@ -27,11 +28,17 @@ static	int		is_redir(int type)
 		type == INPUT_SENDER);
 }
 
-static	int		new_file(t_cmd *command, char **args, int type, t_vec *fd_arr)
+static int		cant_open_file(char *file)
+{
+	ft_printf("msh: %s: %s\n", file, strerror(errno));
+	return (0);
+}
+
+static int		new_file(t_cmd *command, char **args, int type, t_vec *fd_arr)
 {
 	int	fd;
 
-	fd = -1;
+	fd = -5;
 	if (!args[0])
 		return (0);
 	if (type == WRITEFILE)
@@ -39,9 +46,11 @@ static	int		new_file(t_cmd *command, char **args, int type, t_vec *fd_arr)
 	else if (type == APPENDFILE)
 		fd = open(args[0], O_CREAT | O_WRONLY | O_APPEND, 0644);
 	else if (type == INPUT_SENDER)
-		fd = open(args[0], O_RDONLY);
-	if (fd == -1 || !vec_add(fd_arr, &fd))
-		return (0);
+		fd = open(args[0], O_RDONLY, 0644);
+	if (fd == -1)
+		return (cant_open_file(args[0]));
+	if (!vec_add(fd_arr, &fd))
+		exit(1);
 	if (type == INPUT_SENDER)
 		command->iostream[READ] = fd;
 	else

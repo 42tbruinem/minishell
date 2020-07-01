@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 22:22:24 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/07/01 12:52:17 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/07/01 13:00:25 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,10 @@ static void	run(t_msh *prog, t_cmd *cmd, char *abspath)
 	if (abspath && execve(abspath, cmd->args, prog->envp) == -1)
 	{
 		ft_printf("msh: %s: %s\n", abspath, strerror(errno));
-		exit(1);
+		exit(126);
 	}
+	if (!abspath)
+		exit(127);
 	exit(1);
 }
 
