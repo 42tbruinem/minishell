@@ -6,7 +6,7 @@
 /*   By: tbruinem <tbruinem@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/04/29 22:22:24 by tbruinem      #+#    #+#                 */
-/*   Updated: 2020/06/24 14:58:46 by tbruinem      ########   odam.nl         */
+/*   Updated: 2020/07/01 12:52:17 by tbruinem      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 #include <fcntl.h>
 #include <msh_exec.h>
 #include <msh_io.h>
+#include <stdio.h>
+#include <errno.h>
+#include <string.h>
 
 static void	run(t_msh *prog, t_cmd *cmd, char *abspath)
 {
@@ -28,7 +31,10 @@ static void	run(t_msh *prog, t_cmd *cmd, char *abspath)
 		dup2(cmd->iostream[WRITE], STDOUT) == -1)
 		exit(1);
 	if (abspath && execve(abspath, cmd->args, prog->envp) == -1)
+	{
+		ft_printf("msh: %s: %s\n", abspath, strerror(errno));
 		exit(1);
+	}
 	exit(1);
 }
 
